@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "681933456177",
+    "project_id": "toptech-1dc04",
+    "storage_bucket": "toptech-1dc04.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:681933456177:android:e6cad17da8ea84046ae610",
+        "android_client_info": {
+          "package_name": "com.example.toptech"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfDKlCvFmJs7Fk5qwrVtpew4lhgPKoIjw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
