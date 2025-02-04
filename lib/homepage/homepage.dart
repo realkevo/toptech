@@ -101,7 +101,7 @@ Center(child: Headerstate())
                       ),
 
                     ),
-
+//service main container toppest
                     Container(
                       width: 350,
                       color: Colors.white12,
@@ -110,7 +110,19 @@ Center(child: Headerstate())
 
                           Container(
                             height: 300,
-                              color: Colors.pink,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                                color: Colors.pink,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.blue.withOpacity(0.5),
+                                    blurRadius: 30,
+                                    spreadRadius: 10,
+                                    offset: Offset(4, 8),
+                                  ),
+                                ],
+                              ),
+
                               child: Column(
                                 spacing: 3,
                                 children: [
@@ -132,12 +144,25 @@ Center(child: Headerstate())
                     Container(
                       width: 350,
                       color: Colors.white12,
+
                       child:
 
 
                       Container(
                           height: 300,
-                          color: Colors.pink,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(6),
+                            color: Colors.pink,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.blue.withOpacity(0.5),
+                                blurRadius: 30,
+                                spreadRadius: 10,
+                                offset: Offset(4, 8),
+                              ),
+                            ],
+                          ),
+
                           child: Column(
                             spacing: 3,
                             children: [
