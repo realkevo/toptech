@@ -46,7 +46,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '681933456177',
     projectId: 'toptech-1dc04',
     authDomain: 'toptech-1dc04.firebaseapp.com',
-    storageBucket: 'toptech-1dc04.firebasestorage.app',
+
+
+    storageBucket: 'https://toptech-1dc04-default-rtdb.firebaseio.com/',
+    //storageBucket: 'toptech-1dc04.firebasestorage.app',
     measurementId: 'G-WE12KWCLH6',
   );
 

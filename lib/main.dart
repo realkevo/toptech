@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:toptech/databaseservice/databaseservice.dart';
+import 'package:toptech/stateTv/headerstate.dart';
 import 'package:toptech/stateTv/servicestate.dart';
+import 'package:toptech/uploaddata/headerdata/headerdata.dart';
 import 'package:toptech/uploaddata/uploaddata.dart';
 import 'package:toptech/widgets/uploadcontactscreen.dart';
 import 'firebase_options.dart';
 import '../widgets/uploadservicescreen.dart';
 
 import 'homepage/homepage.dart';
+import 'labcode/serviceformpage.dart';
+import 'labcode/ui/servicedisplaypage.dart';
 
 void main() async {
 
@@ -53,10 +57,18 @@ debugShowCheckedModeBanner: false,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:Homepage(),
-
-     // UploadServiceScreen(),
+      home:
+      //UploadHeaderService(),
+     // DisplayHeaderService(),
+      ServiceFormPage(),
+      //ServiceDisplayPage(),
+     //ServiceFormPage(),
+      //ServiceList(),
+     // Uploaddata(),
       //Homepage(),
+    // UploadServiceScreen(),
+      //Homepage(),
+      //ServiceDisplayPage( ),
     );
   }
 }

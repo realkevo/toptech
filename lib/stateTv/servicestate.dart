@@ -1,37 +1,5 @@
-/*import 'package:flutter/material.dart';
-import 'package:toptech/databaseservice/databaseservice.dart';
-class Servicestate extends StatelessWidget {
-  const Servicestate({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final Databaseservice databaseservice = Databaseservice();
-return Container(
-  height: 400,
-
-  color: Colors.white12,
-  child: Column(
-
-    children: <Widget> [
-      Text("services", style:
-      TextStyle(
-        fontSize: 28,
-        fontWeight: FontWeight.bold,
-      ),),
-
-      //todo insert the services cardviews here
-
-    ],
-  ),
-);
-  }
-}*/
-
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-
 
 class ServiceList extends StatelessWidget {
   const ServiceList({Key? key}) : super(key: key);
@@ -41,78 +9,136 @@ class ServiceList extends StatelessWidget {
     // Reference to Firestore collection
     final servicesCollection = FirebaseFirestore.instance.collection('services');
 
-    return
-      StreamBuilder<QuerySnapshot>(
-        stream: servicesCollection.snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            //todo implement custom loading bar from github
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return const Center(child: Text('No services found.'));
-          }
+    return StreamBuilder<QuerySnapshot>(
+      stream: servicesCollection.snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          //todo implement custom loading bar from github
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return const Center(child: Text('No services found.'));
+        }
 
-          final serviceList = snapshot.data!.docs.map((doc) {
-            return Databaseservice.fromDocument(doc);
-          }).toList();
+        final serviceList = snapshot.data!.docs.map((doc) {
+          return Databaseservice.fromDocument(doc);
+        }).toList();
 
-          return ListView.builder(
-            itemCount: serviceList.length,
-            itemBuilder: (context, index) {
-              final service = serviceList[index];
+        return GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, // Two columns
+            crossAxisSpacing: 10, // Horizontal spacing between items
+            mainAxisSpacing: 10, // Vertical spacing between items
+            childAspectRatio: 0.8, // Adjust item size (width/height ratio)
+          ),
+          itemCount: serviceList.length,
+          itemBuilder: (context, index) {
+            final service = serviceList[index];
 
-              return Container(
-                margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white12,
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      spreadRadius: 2,
-                      blurRadius: 4,
-                      offset: const Offset(0, 2), // changes position of shadow
+            return Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6),
+                color: Colors.deepPurple,
+                //  boxShadow: [
+                //    BoxShadow(
+                //      color: Colors.blue.withOpacity(0.5),
+                //      blurRadius: 30,
+                //      spreadRadius: 10,
+                //      offset: Offset(4, 8),
+                //    ),
+                //  ],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    service.service_title ?? 'No Title',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      service.service_title ?? 'No Title',
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(1.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(3),
+                          color: Colors.white,
+                          boxShadow: [],
+                        ),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Text(
+                            //  overflow: TextOverflow.ellipsis,
+                              service.service_description ?? 'No Description',
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      service.service_description ?? 'No Description',
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                    const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Price (Ksh): ${service.service_priceKsh ?? 'N/A'}',
-                          style: const TextStyle(fontSize: 14),
+                  ),
+                  // Prices row for services
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        "price",
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
                         ),
-                        Text(
-                          'Price (USD): ${service.service_priceUsd ?? 'N/A'}',
-                          style: const TextStyle(fontSize: 14),
+                      ),
+                      Text(
+                        'ksh: ${service.service_priceKsh ?? 'N/A'}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
                         ),
-                      ],
+                      ),
+                      Text(
+                        'usd: ${service.service_priceUsd ?? 'N/A'}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Align(
+                      alignment: Alignment.bottomRight,
+                      child: Container(
+                        color: Colors.orange,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "INQUIRE",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-                  ],
-                ),
-              );
-            },
-          );
-        },
-      );
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 }
 
