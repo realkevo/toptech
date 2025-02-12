@@ -35,7 +35,8 @@ class ServiceList extends StatelessWidget {
           itemBuilder: (context, index) {
             final service = serviceList[index];
 
-            return Container(
+            return
+              Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6),
                 color: Colors.deepPurple,
@@ -48,7 +49,8 @@ class ServiceList extends StatelessWidget {
                 //    ),
                 //  ],
               ),
-              child: Column(
+              child:
+              Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
