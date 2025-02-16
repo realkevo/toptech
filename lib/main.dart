@@ -60,8 +60,15 @@ debugShowCheckedModeBanner: false,
       home:
       //UploadHeaderService(),
      // DisplayHeaderService(),
-      //ServiceFormPage(),
-      ServiceDisplayPage(),
+
+
+
+     // ServiceFormPage(),
+    ServiceDisplayPage(),
+
+     // ServicePage(),
+
+
      //ServiceFormPage(),
       //ServiceList(),
      // Uploaddata(),
