@@ -578,18 +578,9 @@ class ServiceDisplayPage extends StatelessWidget {
                             ],
                           ),
                         ),
+                        _buildFooter(context),
                       ],
                     ),
-                  ),
-                ),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width * 1,
-                color: Colors.blue,
-                child: Center(
-                  child: Text(
-                    "enter footer data here",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
                 ),
               ),
@@ -599,7 +590,30 @@ class ServiceDisplayPage extends StatelessWidget {
       ),
     );
   }
+Widget _buildFooter(BuildContext context) {
+    return
+Container(
+  color: Colors.orange,
+  width: MediaQuery.sizeOf(context).width * 1,
+  child:       Row(
+    mainAxisSize: MainAxisSize.max,
+    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    children: [
+      Container(
+        height: 140,
+        width: 200,
+        color: Colors.black,
+      ),
+      Container(
+        height: 140,
+        width: 200,
+        color: Colors.black,
+      ),
 
+    ],
+  ),
+  );
+}
   // Header Section
   Widget _buildHeader(
       Databaseservice serviceData, List<DocumentSnapshot> services) {

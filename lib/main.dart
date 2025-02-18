@@ -62,9 +62,9 @@ debugShowCheckedModeBanner: false,
      // DisplayHeaderService(),
 
 
-
-     // ServiceFormPage(),
-    ServiceDisplayPage(),
+     // ReviewsPagination(),
+      //ServiceFormPage(),
+   ServiceDisplayPage(),
 
      // ServicePage(),
 

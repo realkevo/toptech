@@ -1,106 +1,180 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-class DisplayHeaderService extends StatelessWidget {
+
+
+class ReviewsPagination extends StatefulWidget {
+  @override
+  _ReviewsPaginationState createState() => _ReviewsPaginationState();
+}
+
+class _ReviewsPaginationState extends State<ReviewsPagination> {
+  List<Databaseservice> reviews = [];
+  int currentIndex = 0;
+  int pageSize = 5; // Number of reviews per page
+
+  @override
+  void initState() {
+    super.initState();
+    fetchReviews();
+  }
+
+  Future<void> fetchReviews() async {
+    DocumentSnapshot doc = await FirebaseFirestore.instance
+        .collection('services')
+        .doc('96BlTao190AlIPj3Erms') // Replace with actual document ID
+        .get();
+
+    if (doc.exists) {
+      List<dynamic> fetchedItems = doc['items']; // Get array data
+      List<Databaseservice> reviewList = fetchedItems.map((item) {
+        return Databaseservice(
+          ReviewCustomerName: item['ReviewCustomerName'],
+          ReviewCustomerRemark: item['ReviewCustomerRemark'],
+        );
+      }).toList();
+
+      setState(() {
+        reviews = reviewList;
+      });
+    }
+  }
+
+  List<Databaseservice> getCurrentPageItems() {
+    int start = currentIndex;
+    int end = (currentIndex + pageSize) > reviews.length ? reviews.length : (currentIndex + pageSize);
+    return reviews.sublist(start, end);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return
-      StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('services').snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
-        }
+    List<Databaseservice> displayedItems = getCurrentPageItems();
 
-        if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        }
-
-        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-          return Center(child: Text('No header service data available.'));
-        }
-
-        // Get the latest document
-        var docData = snapshot.data!.docs.first.data()
-        as Map<String, dynamic>;
-
-        String? bannerImage = docData['HeadBannerImage'];
-        String? locationIcon = docData['HeadLocationIconUrl'];
-        String? whatsappIcon = docData['HeadWhatsappIconUrl'];
-        String? gmailIcon = docData['HeadGmailIconUrl'];
-        String? locationText = docData['HeadLocationText'];
-        String? phoneNumber = docData['HeadPhoneNumber'];
-
-        return Container(
-          padding: EdgeInsets.all(16.0),
-          child:
-          Column(
-            children: [
-              // Display Banner Image
-              if (bannerImage != null && bannerImage.isNotEmpty)
-                Image.network(
-                  bannerImage,
-                  height: 200,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                )
-              else
-                Container(
-                  height: 200,
-                  width: double.infinity,
-                  color: Colors.grey[300],
-                  child: Center(child: Text('No Banner Image',
-        style: TextStyle(fontSize: 10),),
-        )),
-
-
-              SizedBox(height: 20),
-
-              // Display icons in a Row
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  // Location Icon
-                  Column(
+    return Scaffold(
+      appBar: AppBar(title: Text('Paginated Reviews')),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: displayedItems.length,
+              itemBuilder: (context, index) {
+                var review = displayedItems[index];
+                return Container(
+                  margin: EdgeInsets.all(10),
+                  padding: EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                    color: Colors.blueAccent,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (locationIcon != null && locationIcon.isNotEmpty)
-                        Image.network(locationIcon, height: 50, width: 50)
-                      else
-                        Text("location icon not found",
-                        style: TextStyle(fontSize: 10),
-                        ),
+                      Text(
+                        review.ReviewCustomerName ?? 'Anonymous',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
                       SizedBox(height: 5),
-                      Text(locationText ?? 'No Location',
-                        style: TextStyle(fontSize: 10),
+                      Text(
+                        review.ReviewCustomerRemark ?? 'No review provided.',
+                        style: TextStyle(fontSize: 16, color: Colors.white70),
                       ),
                     ],
                   ),
-
-                  // WhatsApp Icon
-                  if (whatsappIcon != null && whatsappIcon.isNotEmpty)
-                    Image.network(whatsappIcon, height: 50, width: 50)
-                  else
-                    Icon(Icons.add, size: 50),
-
-                  // Gmail Icon
-                  if (gmailIcon != null && gmailIcon.isNotEmpty)
-                    Image.network(gmailIcon, height: 50, width: 50)
-                  else
-                    Icon(Icons.email, size: 50),
-                ],
+                );
+              },
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ElevatedButton(
+                onPressed: currentIndex == 0 ? null : () {
+                  setState(() {
+                    currentIndex -= pageSize;
+                    if (currentIndex < 0) currentIndex = 0;
+                  });
+                },
+                child: Text('Previous'),
               ),
-
-              SizedBox(height: 10),
-
-              // Display Phone Number
-              Text(
-                phoneNumber ?? 'No Phone Number',
-                style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+              ElevatedButton(
+                onPressed: (currentIndex + pageSize) >= reviews.length ? null : () {
+                  setState(() {
+                    currentIndex += pageSize;
+                  });
+                },
+                child: Text('Next'),
               ),
             ],
           ),
-        );
-      },
+        ],
+      ),
+    );
+  }
+}
+
+class Databaseservice {
+  String? service_title;
+  String? service_description;
+  String? service_priceKsh;
+  String? service_priceUsd;
+  String? HeadLocationText;
+  String? HeadPhoneNumber;
+  String? HeadWhatsappIconUrl;
+  String? HeadLocationIconUrl;
+  String? HeadBannerImage;
+  String? HeadGmailIconUrl;
+
+  // Review Fields
+  String? ReviewCustomerName;
+  String? ReviewCustomerRemark;
+
+  Databaseservice({
+    this.service_title,
+    this.service_description,
+    this.service_priceKsh,
+    this.service_priceUsd,
+    this.HeadLocationText,
+    this.HeadPhoneNumber,
+    this.HeadWhatsappIconUrl,
+    this.HeadLocationIconUrl,
+    this.HeadGmailIconUrl,
+    this.HeadBannerImage,
+    this.ReviewCustomerName,
+    this.ReviewCustomerRemark,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'service_title': service_title,
+      'service_description': service_description,
+      'service_priceKsh': service_priceKsh,
+      'service_priceUsd': service_priceUsd,
+      'HeadLocationText': HeadLocationText,
+      'HeadPhoneNumber': HeadPhoneNumber,
+      'HeadWhatsappIconUrl': HeadWhatsappIconUrl,
+      'HeadLocationIconUrl': HeadLocationIconUrl,
+      'HeadGmailIconUrl': HeadGmailIconUrl,
+      'HeadBannerImage': HeadBannerImage,
+      'ReviewCustomerName': ReviewCustomerName,
+      'ReviewCustomerRemark': ReviewCustomerRemark,
+    };
+  }
+
+  factory Databaseservice.fromDocument(DocumentSnapshot doc) {
+    return Databaseservice(
+      service_title: doc['service_title'],
+      service_description: doc['service_description'],
+      service_priceKsh: doc['service_priceKsh'],
+      service_priceUsd: doc['service_priceUsd'],
+      HeadLocationText: doc['HeadLocationText'],
+      HeadPhoneNumber: doc['HeadPhoneNumber'],
+      HeadWhatsappIconUrl: doc['HeadWhatsappIconUrl'],
+      HeadLocationIconUrl: doc['HeadLocationIconUrl'],
+      HeadGmailIconUrl: doc['HeadGmailIconUrl'],
+      HeadBannerImage: doc['HeadBannerImage'],
+      ReviewCustomerRemark: doc['ReviewCustomerRemark'],
+      ReviewCustomerName: doc['ReviewCustomerName'],
     );
   }
 }
