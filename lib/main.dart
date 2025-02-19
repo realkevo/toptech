@@ -60,11 +60,11 @@ debugShowCheckedModeBanner: false,
       home:
       //UploadHeaderService(),
      // DisplayHeaderService(),
-
+     // ReviewsClass(),
 
      // ReviewsPagination(),
       //ServiceFormPage(),
-   ServiceDisplayPage(),
+ ServiceDisplayPage(),
 
      // ServicePage(),
 

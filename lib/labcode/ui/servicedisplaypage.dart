@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:toptech/labcode/serviceformpage.dart';
 import 'package:toptech/stateTv/servicestate.dart';
+
+import '../../stateTv/headerstate.dart';
 /*
 class ServiceDisplayPage extends StatelessWidget {
   @override
@@ -546,38 +548,7 @@ class ServiceDisplayPage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Container(
-                          height: 200,
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          color: Colors.pink,
-                          child: Row(
-                            children: [
-                              ElevatedButton(
-                                  onPressed: () {}, child: Text("<<")),
-                              Expanded(
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.center,
-                                      spacing: 10,
-                                      children: List.generate(
-                                        services.length,
-                                            (index) => _builderRemarkItem(
-                                            Databaseservice.fromDocument(
-                                                services[index])),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              ElevatedButton(
-                                  onPressed: () {}, child: Text(">>")),
-                            ],
-                          ),
-                        ),
+                        ReviewsClass(),
                         _buildFooter(context),
                       ],
                     ),
