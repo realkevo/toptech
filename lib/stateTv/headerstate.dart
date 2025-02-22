@@ -46,40 +46,50 @@ class _ReviewsClassState extends State<ReviewsClass> {
     Databaseservice currentReview = _reviews.isNotEmpty ? _reviews[_currentIndex] : Databaseservice();
 
     return
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            currentReview.ReviewCustomerName ?? 'No Name',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
-          ),
-          SizedBox(height: 5),
-          Text(currentReview.ReviewCustomerRemark ?? 'No Remark',
-            style:  TextStyle(
-              fontSize: 12,
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Container(
-            width: 250,
-            color: Colors.black,
-            child: Row(
-mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                ElevatedButton(
-                    onPressed: _prevReview, child: Text("<<")),
-                SizedBox(width: 30,),
-                ElevatedButton(
-                    onPressed: _nextReview, child: Text(">>")),
+      Container(
+        padding: EdgeInsets.all(16.0), // Padding inside the container
+        margin: EdgeInsets.all(16.0),
+        width: MediaQuery.sizeOf(context).width * 0.6,// Margin outside the container
+        decoration: BoxDecoration(
+          color: Colors.lightBlueAccent, // Background color of the container
+          borderRadius: BorderRadius.circular(10.0), // Rounded corners
+        ),
+        child:
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(onPressed: _prevReview,
+                icon: Icon(
+                    Icons.
+                    navigate_before_outlined)),
 
-              ],
-            ),
-          ),
+    Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+    Text(
+    currentReview.ReviewCustomerName ?? 'No Name',
+    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+    ),
+    SizedBox(height: 5),
+    Text(currentReview.ReviewCustomerRemark ?? 'No Remark',
+    style:  TextStyle(
+    fontSize: 12,
+    color: Colors.black,
+    fontWeight: FontWeight.bold,
+    ),
+    ),
 
 
-        ],
+    ],
+    ),
+
+            IconButton(onPressed: _nextReview,
+                icon: Icon(Icons.navigate_next)),
+
+          ],
+        ),
       );
+
 
 
 

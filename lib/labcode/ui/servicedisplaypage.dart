@@ -548,6 +548,8 @@ class ServiceDisplayPage extends StatelessWidget {
                             ),
                           ),
                         ),
+
+                        _buildContact(context),
                         ReviewsClass(),
                         _buildFooter(context),
                       ],
@@ -561,30 +563,153 @@ class ServiceDisplayPage extends StatelessWidget {
       ),
     );
   }
+  Widget _buildContact(BuildContext context){
+    return
+      Container(
+      padding: EdgeInsets.all(16.0), // Padding inside the container
+      margin: EdgeInsets.all(16.0),
+      width: MediaQuery.sizeOf(context).width * 0.6,// Margin outside the container
+      decoration: BoxDecoration(
+        color: Colors.lightBlueAccent, // Background color of the container
+        borderRadius: BorderRadius.circular(10.0), // Rounded corners
+      ),
+      child:
+      Row(
+mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(onPressed: (){},
+              icon: Icon(
+                  Icons.
+                  navigate_before_outlined)),
+
+          Column(
+            mainAxisSize: MainAxisSize.min, // Size of the column
+            crossAxisAlignment: CrossAxisAlignment.center, // Align children to the start
+            children: [
+              Text( "Angela Francis",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10), // Space between items
+              Text(
+                'Graphics Designer ',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 10), // Space between items
+              Text(
+                ' 5 years Experience',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+
+          IconButton(onPressed: (){},
+              icon: Icon(Icons.navigate_next)),
+
+        ],
+      ),
+    );
+  }
 Widget _buildFooter(BuildContext context) {
     return
-Container(
-  color: Colors.orange,
-  width: MediaQuery.sizeOf(context).width * 1,
-  child:       Row(
-    mainAxisSize: MainAxisSize.max,
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    children: [
       Container(
-        height: 140,
-        width: 200,
-        color: Colors.black,
-      ),
-      Container(
-        height: 140,
-        width: 200,
-        color: Colors.black,
-      ),
+        width: MediaQuery.sizeOf(context).width * 1,
+        color: Colors.pink,
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text("whatsapp"),
+                Text("reddit"),
+                Text("x"),
+                Text("youtube"),
+                Text("Discord"),
 
-    ],
-  ),
-  );
-}
+              ],
+            ),
+            //todo Add Sponsors container details in her
+            Row(
+              spacing: 10,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Container(
+                  width: MediaQuery.sizeOf(context).width * 0.4,
+                  padding: EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    color: Colors.orange,
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Copyright",
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 10), // Add some space between title and image
+                   /*   Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Image.asset(
+                            'assets/partner1.png', // Replace with your image asset path
+                            width: 100,
+                            height: 100,
+                          ),
+                          SizedBox(width: 10), // Add space between images
+                          Image.asset(
+                            'assets/partner2.png', // Replace with your image asset path
+                            width: 100,
+                            height: 100,
+                          ),
+                        ],
+                      ),*/
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.all(16.0),
+                    decoration: BoxDecoration(
+                      color: Colors.orange,
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Partners and Sponsors",
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 10), // Add some space between title and image
+                        /*   Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Image.asset(
+                              'assets/partner1.png', // Replace with your image asset path
+                              width: 100,
+                              height: 100,
+                            ),
+                            SizedBox(width: 10), // Add space between images
+                            Image.asset(
+                              'assets/partner2.png', // Replace with your image asset path
+                              width: 100,
+                              height: 100,
+                            ),
+                          ],
+                        ),*/
+                      ],
+                    ),
+                  ),
+                ),
+
+              ],
+            ),
+          ],
+        ),
+      );
+  }
   // Header Section
   Widget _buildHeader(
       Databaseservice serviceData, List<DocumentSnapshot> services) {
@@ -740,7 +865,7 @@ Container(
     );
   }
 
-  Widget _builderRemarkItem(Databaseservice serviceData) {
+  /*Widget _builderRemarkItem(Databaseservice serviceData) {
     return Container(
       color: Colors.orange,
       child: Column(
@@ -765,7 +890,7 @@ Container(
         ],
       ),
     );
-  }
+  }*/
 
 }
 
