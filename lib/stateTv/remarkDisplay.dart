@@ -9,7 +9,6 @@ class RemarkDisplayClass extends StatefulWidget {
 class _RemarkDisplayClassState extends State<RemarkDisplayClass> {
   List<DocumentSnapshot> _remarks = []; // Store fetched remarks
   ScrollController _scrollController = ScrollController();
-  bool _isScrollingForward = true; // Track scrolling direction
 
   @override
   void initState() {
@@ -28,26 +27,12 @@ class _RemarkDisplayClassState extends State<RemarkDisplayClass> {
 
   void _scrollToNextRemark() {
     if (_scrollController.hasClients) {
-      double targetOffset;
+      double targetOffset = _scrollController.offset + 250; // Adjust this value based on your item width
 
-      if (_isScrollingForward) {
-        // Scroll forward
-        targetOffset = _scrollController.offset + 300; // Adjust this value based on your item width
-
-        if (targetOffset >= _scrollController.position.maxScrollExtent) {
-          // If we reach the end, switch direction
-          targetOffset = _scrollController.position.maxScrollExtent;
-          _isScrollingForward = false;
-        }
-      } else {
-        // Scroll backward
-        targetOffset = _scrollController.offset - 300; // Adjust this value based on your item width
-
-        if (targetOffset <= 0) {
-          // If we reach the start, switch direction
-          targetOffset = 0;
-          _isScrollingForward = true;
-        }
+      if (targetOffset >= _scrollController.position.maxScrollExtent) {
+        // If we reach the end, reset to the start
+        _scrollController.jumpTo(0);
+        targetOffset = 250; // Move to the first item in the second list
       }
 
       // Animate to the target offset
@@ -78,35 +63,44 @@ class _RemarkDisplayClassState extends State<RemarkDisplayClass> {
           // Store the fetched remarks
           _remarks = snapshot.data!.docs;
 
-          return ListView.builder(
+          // Create a duplicated list for seamless scrolling
+          List<DocumentSnapshot> duplicatedRemarks = [..._remarks, ..._remarks];
+
+          return SingleChildScrollView(
             controller: _scrollController,
             scrollDirection: Axis.horizontal,
-            itemCount: _remarks.length,
-            itemBuilder: (context, index) {
-              var currentRemark = _remarks[index];
-              var name = currentRemark['remarkName'];
-              var description = currentRemark['remarkDescription'];
-              var date = currentRemark['remarkDate'];
+            child: Row(
+              children: duplicatedRemarks.map((currentRemark) {
+                var name = currentRemark['remarkName'];
+                var description = currentRemark['remarkDescription'];
+                var date = currentRemark['remarkDate'];
 
-              return Container(
-                width: 250, // Set the width of each item
-                margin: EdgeInsets.all(8),
-                child: Card(
-                  elevation: 4,
-                  child: ListTile(
-                    title: Text(name),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Description: $description'),
-                        Text('Date: $date'),
-                        Text('Remark Name: $name'),
-                      ],
+                return Container(
+                  width: 250,
+                  height: 200,// Set the width of each item
+                  margin: EdgeInsets.all(8),
+                  child: Card(
+                    elevation: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            name,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 4),
+                          Text('Description: $description'),
+                          SizedBox(height: 4),
+                          Text('Date: $date'),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
+                );
+              }).toList(),
+            ),
           );
         },
       ),

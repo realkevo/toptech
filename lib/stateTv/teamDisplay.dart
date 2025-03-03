@@ -9,7 +9,6 @@ class TeamDisplay extends StatefulWidget {
 class _TeamDisplayState extends State<TeamDisplay> {
   List<DocumentSnapshot> _teamMembers = []; // Store fetched team members
   ScrollController _scrollController = ScrollController();
-  bool _isScrollingForward = true; // Track scrolling direction
 
   @override
   void initState() {
@@ -28,28 +27,13 @@ class _TeamDisplayState extends State<TeamDisplay> {
 
   void _scrollToNextMember() {
     if (_scrollController.hasClients) {
-      double targetOffset;
+      double targetOffset = _scrollController.offset - 300; // Scroll to the left
 
-      if (_isScrollingForward) {
-        // Scroll forward
-        targetOffset = _scrollController.offset + 300; // Adjust this value based on your item width
-
-        if (targetOffset >= _scrollController.position.maxScrollExtent) {
-          // If we reach the end, switch direction
-          targetOffset = _scrollController.position.maxScrollExtent;
-          _isScrollingForward = false;
-        }
-      } else {
-        // Scroll backward
-        targetOffset = _scrollController.offset - 300; // Adjust this value based on your item width
-
-        if (targetOffset <= 0) {
-          // If we reach the start, switch direction
-          targetOffset = 0;
-          _isScrollingForward = true;
-        }
+      if (targetOffset <= 0) {
+        // If we reach the start, reset to the end
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+        targetOffset = _scrollController.position.maxScrollExtent - 300; // Move to the last item
       }
-      //animated
 
       // Animate to the target offset
       _scrollController.animateTo(
@@ -64,7 +48,7 @@ class _TeamDisplayState extends State<TeamDisplay> {
   Widget build(BuildContext context) {
     return Container(
       width: 400,
-      height: 400,
+      height: 300, // Set the height to 300
       child: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('teamData').snapshots(),
         builder: (context, snapshot) {
@@ -79,35 +63,38 @@ class _TeamDisplayState extends State<TeamDisplay> {
           // Store the fetched team members
           _teamMembers = snapshot.data!.docs;
 
-          return ListView.builder(
+          return SingleChildScrollView(
             controller: _scrollController,
             scrollDirection: Axis.horizontal,
-            itemCount: _teamMembers.length,
-            itemBuilder: (context, index) {
-              var currentMember = _teamMembers[index];
-              var name = currentMember['MemberName'];
-              var specialty = currentMember['MemberSpecialty'];
-              var experience = currentMember['MemberExperience'];
+            child: Row(
+              children: _teamMembers.map((currentMember) {
+                var name = currentMember['MemberName'];
+                var specialty = currentMember['MemberSpecialty'];
+                var experience = currentMember['MemberExperience'];
 
-              return Container(
-                width: 300, // Set the width of each item
-                margin: EdgeInsets.all(8),
-                child: Card(
-                  elevation: 4,
-                  child: Container(
-                    padding: EdgeInsets.all(8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(name, style: TextStyle(fontWeight: FontWeight.bold)),
-                        Text(specialty),
-                        Text(experience),
-                      ],
+                return Container(
+                  width: 300,
+                  height: 200,// Set the width of each item
+                  margin: EdgeInsets.all(8),
+                  child: Card(
+                    elevation: 4,
+                    child: Container(
+                      height: 300, // Keep the height of the card as 300
+                      padding: EdgeInsets.all(8),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(name, style: TextStyle(fontWeight: FontWeight.bold)),
+                          Text(specialty),
+                          Text(experience),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              );
-            },
+                );
+              }).toList(),
+            ),
           );
         },
       ),
