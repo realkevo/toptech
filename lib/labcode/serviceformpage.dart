@@ -344,6 +344,14 @@ class _ServiceFormPageState extends State<ServiceFormPage> {
   TextEditingController reviewCustomerNameController = TextEditingController();
   TextEditingController reviewCustomerRemarkController = TextEditingController();
 
+
+  //Member controllers
+  TextEditingController MemberNameController = TextEditingController();
+  TextEditingController MemberSpecialtyController = TextEditingController();
+  TextEditingController MemberExperienceController = TextEditingController();
+
+
+
   // Function to select and encode the banner image to Base64
   Future<void> selectBannerImage() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
@@ -542,6 +550,24 @@ class _ServiceFormPageState extends State<ServiceFormPage> {
 
             SizedBox(height: 20),
 
+
+            //MemberTexFormFields
+
+            TextField(
+              controller: MemberNameController,
+              decoration: InputDecoration(labelText: 'Member Name'),
+            ),
+            TextField(
+              controller: MemberSpecialtyController,
+              decoration: InputDecoration(labelText: 'Member Specialty'),
+            ),
+            TextField(
+              controller: MemberExperienceController,
+              decoration: InputDecoration(labelText: 'Member Experience'),
+            ),
+
+
+
             ElevatedButton(
               onPressed: () {
                 // Gather all form data
@@ -557,7 +583,13 @@ class _ServiceFormPageState extends State<ServiceFormPage> {
                   HeadGmailIconUrl: base64GmailIcon,
                   HeadBannerImage: base64BannerImage,
                   ReviewCustomerName: reviewCustomerNameController.text,
+
                   ReviewCustomerRemark: reviewCustomerRemarkController.text,
+
+                  //Member
+                  MemberName: MemberNameController.text,
+                  MemberSpecialty: MemberSpecialtyController.text,
+                  Memberexperience: MemberExperienceController.text,
                 );
 
                 uploadService(newService); // Upload service data to Firestore
@@ -584,6 +616,14 @@ class Databaseservice {
   String? HeadBannerImage;
   String? HeadGmailIconUrl;
 
+
+  //Member Names
+  String? MemberName;
+  String? MemberSpecialty;
+  String? Memberexperience;
+
+
+
   // Review Fields
   String? ReviewCustomerName;
   String? ReviewCustomerRemark;
@@ -601,6 +641,9 @@ class Databaseservice {
     this.HeadBannerImage,
     this.ReviewCustomerName,
     this.ReviewCustomerRemark,
+    this.MemberName,
+    this.MemberSpecialty,
+    this.Memberexperience,
   });
 
   Map<String, dynamic> toMap() {
@@ -617,6 +660,11 @@ class Databaseservice {
       'HeadBannerImage': HeadBannerImage,
       'ReviewCustomerName' : ReviewCustomerName,
       'ReviewCustomerRemark' : ReviewCustomerRemark,
+
+
+      'MemberName' : MemberName,
+      'MemberSpecialty' : MemberSpecialty,
+      'Memberexperience' : Memberexperience,
     };
   }
 
@@ -634,6 +682,12 @@ class Databaseservice {
       HeadBannerImage: doc['HeadBannerImage'],
       ReviewCustomerRemark: doc['ReviewCustomerRemark'],
       ReviewCustomerName: doc['ReviewCustomerName'],
+
+      //Member documents
+      MemberName: doc['MemberName'],
+      MemberSpecialty: doc['MemberSpecialty'],
+      Memberexperience: doc['Memberexperience'],
+
     );
   }
 }

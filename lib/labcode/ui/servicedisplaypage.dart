@@ -1,11 +1,13 @@
 import 'dart:convert';
-import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:toptech/labcode/serviceformpage.dart';
-import 'package:toptech/stateTv/servicestate.dart';
 
-import '../../stateTv/headerstate.dart';
+import '../../screens/mainuploadclass.dart';
+import '../../stateTv/footerdisplayTv.dart';
+import '../../stateTv/remarkDisplay.dart';
+import '../../stateTv/teamDisplay.dart';
+
 /*
 class ServiceDisplayPage extends StatelessWidget {
   @override
@@ -85,19 +87,19 @@ class ServiceDisplayPage extends StatelessWidget {
                                   return Center(
                                       child: CircularProgressIndicator());
                                 }
-                            
+
                                 if (snapshot.hasError) {
                                   return Center(
                                       child: Text('Error: ${snapshot.error}'));
                                 }
-                            
+
                                 if (!snapshot.hasData || snapshot.data!.isEmpty) {
                                   return Center(
                                       child: Text('No services available.'));
                                 }
-                            
+
                                 List<Databaseservice> services = snapshot.data!;
-                            
+
                                 return GridView.builder(
                                   gridDelegate:
                                       SliverGridDelegateWithFixedCrossAxisCount(
@@ -456,6 +458,9 @@ class ServiceDisplayPage extends StatelessWidget {
           }
 
 
+
+
+
           final services = snapshot.data!.docs;
           final serviceData = Databaseservice.fromDocument(services[0]);
 
@@ -477,6 +482,20 @@ class ServiceDisplayPage extends StatelessWidget {
                   style: TextStyle(fontSize: 18, color: Colors.blue),
                 ),
               ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>               Mainuploadclass
+                      ()),
+                  );
+                },
+                child: Text(
+                  'Go to main upload Page',
+                  style: TextStyle(fontSize: 18, color: Colors.blue),
+                ),
+              ),
+
 
               // Main content - List of Services
               Expanded(
@@ -484,7 +503,7 @@ class ServiceDisplayPage extends StatelessWidget {
                   height: MediaQuery.of(context).size.height * 0.9,
                   child: SingleChildScrollView(
                     child: Column(
-                      spacing: 30,
+                      spacing: 10,
                       children: [
                         /*   Column(
                           spacing: 20,
@@ -540,7 +559,8 @@ class ServiceDisplayPage extends StatelessWidget {
                                     ),
                                     itemCount: services.length,
                                     itemBuilder: (context, index) {
-                                      return _buildServiceItem(services[index]);
+                                      return
+                                        _buildServiceItem(services[index]);
                                     },
                                   );
                                 },
@@ -549,9 +569,16 @@ class ServiceDisplayPage extends StatelessWidget {
                           ),
                         ),
 
-                        _buildContact(context),
-                        ReviewsClass(),
-                        _buildFooter(context),
+                        //
+                        // _buildContact(context),
+                        RemarkDisplayClass(),
+                        TeamDisplay(),
+                        Align(
+                          alignment: Alignment.bottomCenter,
+
+                            child: FooterDisplayTv(),
+                        )
+
                       ],
                     ),
                   ),
@@ -563,153 +590,12 @@ class ServiceDisplayPage extends StatelessWidget {
       ),
     );
   }
-  Widget _buildContact(BuildContext context){
-    return
-      Container(
-      padding: EdgeInsets.all(16.0), // Padding inside the container
-      margin: EdgeInsets.all(16.0),
-      width: MediaQuery.sizeOf(context).width * 0.6,// Margin outside the container
-      decoration: BoxDecoration(
-        color: Colors.lightBlueAccent, // Background color of the container
-        borderRadius: BorderRadius.circular(10.0), // Rounded corners
-      ),
-      child:
-      Row(
-mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(onPressed: (){},
-              icon: Icon(
-                  Icons.
-                  navigate_before_outlined)),
 
-          Column(
-            mainAxisSize: MainAxisSize.min, // Size of the column
-            crossAxisAlignment: CrossAxisAlignment.center, // Align children to the start
-            children: [
-              Text( "Angela Francis",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 10), // Space between items
-              Text(
-                'Graphics Designer ',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 10), // Space between items
-              Text(
-                ' 5 years Experience',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
 
-          IconButton(onPressed: (){},
-              icon: Icon(Icons.navigate_next)),
 
-        ],
-      ),
-    );
-  }
-Widget _buildFooter(BuildContext context) {
-    return
-      Container(
-        width: MediaQuery.sizeOf(context).width * 1,
-        color: Colors.pink,
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text("whatsapp"),
-                Text("reddit"),
-                Text("x"),
-                Text("youtube"),
-                Text("Discord"),
 
-              ],
-            ),
-            //todo Add Sponsors container details in her
-            Row(
-              spacing: 10,
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  width: MediaQuery.sizeOf(context).width * 0.4,
-                  padding: EdgeInsets.all(16.0),
-                  decoration: BoxDecoration(
-                    color: Colors.orange,
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Copyright",
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 10), // Add some space between title and image
-                   /*   Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Image.asset(
-                            'assets/partner1.png', // Replace with your image asset path
-                            width: 100,
-                            height: 100,
-                          ),
-                          SizedBox(width: 10), // Add space between images
-                          Image.asset(
-                            'assets/partner2.png', // Replace with your image asset path
-                            width: 100,
-                            height: 100,
-                          ),
-                        ],
-                      ),*/
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.all(16.0),
-                    decoration: BoxDecoration(
-                      color: Colors.orange,
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Partners and Sponsors",
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(height: 10), // Add some space between title and image
-                        /*   Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Image.asset(
-                              'assets/partner1.png', // Replace with your image asset path
-                              width: 100,
-                              height: 100,
-                            ),
-                            SizedBox(width: 10), // Add space between images
-                            Image.asset(
-                              'assets/partner2.png', // Replace with your image asset path
-                              width: 100,
-                              height: 100,
-                            ),
-                          ],
-                        ),*/
-                      ],
-                    ),
-                  ),
-                ),
 
-              ],
-            ),
-          ],
-        ),
-      );
-  }
+
   // Header Section
   Widget _buildHeader(
       Databaseservice serviceData, List<DocumentSnapshot> services) {
@@ -865,32 +751,9 @@ Widget _buildFooter(BuildContext context) {
     );
   }
 
-  /*Widget _builderRemarkItem(Databaseservice serviceData) {
-    return Container(
-      color: Colors.orange,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            serviceData.ReviewCustomerName ?? 'No customer name',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Text(
-            serviceData.ReviewCustomerRemark ?? 'No customer remark',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }*/
+
+  // ... other methods ...
+
 
 }
 
@@ -907,9 +770,12 @@ class Databaseservice {
   String? HeadBannerImage;
   String? HeadGmailIconUrl;
 
+
+  //Member Names
+
+
+
   // Review Fields
-  String? ReviewCustomerName;
-  String? ReviewCustomerRemark;
 
   Databaseservice({
     this.service_title,
@@ -922,9 +788,7 @@ class Databaseservice {
     this.HeadLocationIconUrl,
     this.HeadGmailIconUrl,
     this.HeadBannerImage,
-    this.ReviewCustomerName,
-    this.ReviewCustomerRemark,
-  });
+     });
 
   Map<String, dynamic> toMap() {
     return {
@@ -938,8 +802,8 @@ class Databaseservice {
       'HeadLocationIconUrl': HeadLocationIconUrl,
       'HeadGmailIconUrl': HeadGmailIconUrl,
       'HeadBannerImage': HeadBannerImage,
-      'ReviewCustomerName': ReviewCustomerName,
-      'ReviewCustomerRemark': ReviewCustomerRemark,
+
+
     };
   }
 
@@ -955,11 +819,17 @@ class Databaseservice {
       HeadLocationIconUrl: doc['HeadLocationIconUrl'],
       HeadGmailIconUrl: doc['HeadGmailIconUrl'],
       HeadBannerImage: doc['HeadBannerImage'],
-      ReviewCustomerRemark: doc['ReviewCustomerRemark'],
-      ReviewCustomerName: doc['ReviewCustomerName'],
+
+      //Member documents
+
     );
   }
 }
+
+
+
+
+
 
 
 

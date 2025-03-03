@@ -1,7 +1,7 @@
 /*import 'package:flutter/material.dart';
 import 'package:toptech/stateTv/cataloguestate.dart';
-import 'package:toptech/stateTv/footerstate.dart';
-import 'package:toptech/stateTv/headerstate.dart';
+import 'package:toptech/stateTv/footerdisplay.dart';
+import 'package:toptech/stateTv/teamDisplay.dart';
 import 'package:toptech/stateTv/servicestate.dart';
 import '../stateTv/contactstate.dart';
 
