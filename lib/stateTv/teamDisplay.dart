@@ -49,6 +49,7 @@ class _TeamDisplayState extends State<TeamDisplay> {
           _isScrollingForward = true;
         }
       }
+      //animated
 
       // Animate to the target offset
       _scrollController.animateTo(
