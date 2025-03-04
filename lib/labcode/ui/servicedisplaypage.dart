@@ -548,7 +548,8 @@ class ServiceDisplayPage extends StatelessWidget {
 
                                   List<Databaseservice> services = snapshot.data!;
 
-                                  return GridView.builder(
+                                  return
+                                    GridView.builder(
                                     gridDelegate:
                                     SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: MediaQuery.of(context).size.width > 600 ? 3 : 2, // Adjust grid columns based on screen width
@@ -659,9 +660,9 @@ class ServiceDisplayPage extends StatelessWidget {
   // Service Item Container
   Widget _buildServiceItem(Databaseservice serviceData) {
     return Container(
-      height: 300,
       color: Colors.pink,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -669,6 +670,8 @@ class ServiceDisplayPage extends StatelessWidget {
             serviceData.service_title ?? 'No Title',
             style: const TextStyle(
               color: Colors.white,
+              overflow: TextOverflow.visible, // Show all text
+
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
@@ -679,18 +682,25 @@ class ServiceDisplayPage extends StatelessWidget {
               padding: const EdgeInsets.all(1.0),
               child: Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(3),
+                  borderRadius: BorderRadius.circular(5),
                   color: Colors.white,
                   boxShadow: [],
+
                 ),
+                width: 200,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   child: Padding(
                     padding: const EdgeInsets.all(12.0),
-                    child: Text(
+                    child:
+
+
+                    Text(
                       //  overflow: TextOverflow.ellipsis,
                       serviceData.service_description ?? 'No Description',
                       style: const TextStyle(
+                        overflow: TextOverflow.visible, // Show all text
+
                         color: Colors.black,
                         fontSize: 14,
                       ),

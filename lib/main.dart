@@ -5,7 +5,9 @@ import 'package:toptech/screens/mainuploadclass.dart';
 import 'package:toptech/screens/remarkupload.dart';
 import 'package:toptech/screens/teamupload.dart';
 import 'package:toptech/stateTv/footerdisplayTv.dart';
+import 'package:toptech/stateTv/homepageDisplay.dart';
 import 'package:toptech/stateTv/remarkDisplay.dart';
+import 'package:toptech/stateTv/serviceDisplay.dart';
 import 'package:toptech/stateTv/teamDisplay.dart';
 import 'firebase_options.dart';
 import 'labcode/ui/servicedisplaypage.dart';
@@ -56,7 +58,9 @@ debugShowCheckedModeBanner: false,
         useMaterial3: true,
       ),
       home:
-        ServiceDisplayPage(),
+      Homepagedisplay(),
+      //ServiceDisplayClass(),
+       // ServiceDisplayPage(),
       //UploadHeaderService(),
      // DisplayHeaderService(),
      // ReviewsClass(),
@@ -64,6 +68,7 @@ debugShowCheckedModeBanner: false,
      // ReviewsPagination(),
       //ServiceFormPage(),
      // ContactScreen(),
+
     //  Mainuploadclass(),      //TeamClass(),
       //FooterDisplayTv(),
 

@@ -47,7 +47,7 @@ class _TeamDisplayState extends State<TeamDisplay> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 400,
+      width: MediaQuery.sizeOf(context).width * 0.7,
       height: 300, // Set the height to 300
       child: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('teamData').snapshots(),

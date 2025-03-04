@@ -47,9 +47,10 @@ class _RemarkDisplayClassState extends State<RemarkDisplayClass> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 300,
-      height: 400,
-      child: StreamBuilder<QuerySnapshot>(
+      width: MediaQuery.sizeOf(context).width * 0.7,
+      height: 190,
+      child:
+      StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('remarkData').snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -70,6 +71,7 @@ class _RemarkDisplayClassState extends State<RemarkDisplayClass> {
             controller: _scrollController,
             scrollDirection: Axis.horizontal,
             child: Row(
+              spacing: 13,
               children: duplicatedRemarks.map((currentRemark) {
                 var name = currentRemark['remarkName'];
                 var description = currentRemark['remarkDescription'];
@@ -77,14 +79,15 @@ class _RemarkDisplayClassState extends State<RemarkDisplayClass> {
 
                 return Container(
                   width: 250,
-                  height: 200,// Set the width of each item
-                  margin: EdgeInsets.all(8),
+                  height: 150,
+                  // Set the width of each item
                   child: Card(
                     elevation: 4,
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child:
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                             name,
