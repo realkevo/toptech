@@ -59,19 +59,6 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context)
-                            => Mainuploadclass()),
-                          );
-                        },
-                        child: Text(
-                          'Go to Di Form Page',
-                          style: TextStyle(fontSize: 18, color: Colors.blue, decoration: TextDecoration.none), // No underline
-                        ),
-                      ),
                       Text(
                         serviceData['serviceTitle'] ?? 'No Title',
                         style: const TextStyle(

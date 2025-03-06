@@ -3,6 +3,7 @@ import 'package:toptech/stateTv/remarkDisplay.dart';
 import 'package:toptech/stateTv/serviceDisplay.dart';
 import 'package:toptech/stateTv/teamDisplay.dart';
 
+import '../screens/mainuploadclass.dart';
 import 'footerdisplayTv.dart';
 import 'headerdisplayclass.dart';
 
@@ -16,8 +17,21 @@ class Homepagedisplay extends StatelessWidget {
         width: MediaQuery.sizeOf(context).width * 1,
         height:  MediaQuery.sizeOf(context).height * 1,
         child: Column(children: [
-          Headerdisplayclass(),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context)
+                => Mainuploadclass()),
+              );
+            },
+            child: Text(
+              'Go to Di Form Page',
+              style: TextStyle(fontSize: 18, color: Colors.blue, decoration: TextDecoration.none), // No underline
+            ),
+          ),
 
+          HeaderDisplayClass(),
           Expanded(
             child: SingleChildScrollView(
               child:

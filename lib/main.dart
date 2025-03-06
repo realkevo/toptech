@@ -1,16 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:toptech/screens/footerdataupload.dart';
-import 'package:toptech/screens/mainuploadclass.dart';
-import 'package:toptech/screens/remarkupload.dart';
-import 'package:toptech/screens/teamupload.dart';
-import 'package:toptech/stateTv/footerdisplayTv.dart';
+import 'package:toptech/stateTv/headerdisplayclass.dart';
 import 'package:toptech/stateTv/homepageDisplay.dart';
-import 'package:toptech/stateTv/remarkDisplay.dart';
-import 'package:toptech/stateTv/serviceDisplay.dart';
-import 'package:toptech/stateTv/teamDisplay.dart';
 import 'firebase_options.dart';
-import 'labcode/ui/servicedisplaypage.dart';
 
 
 void main() async {
@@ -58,7 +50,8 @@ debugShowCheckedModeBanner: false,
         useMaterial3: true,
       ),
       home:
-      Homepagedisplay(),
+     // HeaderDisplayClass(),
+     Homepagedisplay(),
       //ServiceDisplayClass(),
        // ServiceDisplayPage(),
       //UploadHeaderService(),

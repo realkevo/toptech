@@ -14,7 +14,8 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
   Future<Map<String, String>> fetchFooterData() async {
     try {
       // Get the first document from the 'footerData' collection
-      var querySnapshot = await FirebaseFirestore.instance.collection('footerData').get();
+      var querySnapshot =
+      await FirebaseFirestore.instance.collection('footerData').get();
 
       if (querySnapshot.docs.isNotEmpty) {
         // Assuming the first document contains the data
@@ -77,76 +78,127 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
             return Container(
               color: Colors.orange,
               child:
-                Column(
-                  children: [
-                  //Social Link Row
-                  Container(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Container(
-                          height: 30,
-                          child: footerData['githubIcon'] != null
-                              ? _decodeBase64ToImage(footerData['githubIcon']!)
-                              : Text("No image"),
-                        ),
-                        Container(
-                          height: 30,
-                          child: footerData['xIcon'] != null
-                              ? _decodeBase64ToImage(footerData['xIcon']!)
-                              : Text("No image"),
-                        ),
-                        Container(
-                          height: 30,
-                          child: footerData['redditIcon'] != null
-                              ? _decodeBase64ToImage(footerData['redditIcon']!)
-                              : Text("No image"),
-                        ),
-                        Container(
-                          height: 30,
-                          child: footerData['facebookIcon'] != null
-                              ? _decodeBase64ToImage(footerData['facebookIcon']!)
-                              : Text("No image"),
-                        ),
-                    
-                        Container(
-                          height: 30,
-                          child: footerData['copyRightIcon'] != null
-                              ? _decodeBase64ToImage(footerData['copyRightIcon']!)
-                              : Text("No image"),
-                        ),
-                      ],
-                    ),
-                  ),
-                  //Partners Container
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    mainAxisSize: MainAxisSize.min,
-
+              SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                     children: [
-                      Container(
-                        height: 30,
-                        child: footerData['partnerOneIcon'] != null
-                            ? _decodeBase64ToImage(footerData['partnerOneIcon']!)
-                            : Text("No image"),
+                    //Social Link Row
+                    Container(
+                      color: Colors.black,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                            height: 30,
+                            child: footerData['githubIcon'] != null
+                                ? _decodeBase64ToImage(footerData['githubIcon']!)
+                                : Text("No image"),
+                          ),
+                          Container(
+                            height: 30,
+                            child: footerData['xIcon'] != null
+                                ? _decodeBase64ToImage(footerData['xIcon']!)
+                                : Text("No image"),
+                          ),
+                          Container(
+                            height: 30,
+                            child: footerData['redditIcon'] != null
+                                ? _decodeBase64ToImage(footerData['redditIcon']!)
+                                : Text("No image"),
+                          ),
+                          Container(
+                            height: 30,
+                            child: footerData['facebookIcon'] != null
+                                ? _decodeBase64ToImage(footerData['facebookIcon']!)
+                                : Text("No image"),
+                          ),
+
+                        ],
                       ),
-                      Container(
-                        height: 30,
-                        child: footerData['partnerTwoIcon'] != null
-                            ? _decodeBase64ToImage(footerData['partnerTwoIcon']!)
-                            : Text("No image"),
-                      ),
-                      Container(
-                        height: 30,
-                        child: footerData['partnerThreeIcon'] != null
-                            ? _decodeBase64ToImage(footerData['partnerThreeIcon']!)
-                            : Text("No image"),
+                    ),
+                    Container(
+                width: MediaQuery.sizeOf(context).width *1,
+                      height: 1,
+                      color: Colors.white,
+                    ),
+                    //Partners Container
+
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                            height: 30,
+                            child: footerData['copyRightIcon'] != null
+                                ? _decodeBase64ToImage(footerData['copyRightIcon']!)
+                                : Text("No image"),
+                          ),
+
+                          Container(
+                            width: 200,
+                            color: Colors.orange,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text("FAQ"),
+                                Text("Terms of Service"),
+
+
+                              ],
+                            ),
+                          ),
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text("our sponsors and partners"),
+                              Container(
+                                height: 30,
+                                color: Colors.orange,
+                                child: Row(
+                                  spacing: 10,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Container(
+                                      height: 30,
+                                      child: footerData['partnerOneIcon'] != null
+                                          ? _decodeBase64ToImage(footerData['partnerOneIcon']!)
+                                          : Text("No image"),
+                                    ),
+                                    SizedBox(width: 5,),
+
+                                    Container(
+                                      height: 30,
+                                      child: footerData['partnerTwoIcon']
+                                          != null
+                                          ? _decodeBase64ToImage(footerData[
+                                            'partnerTwoIcon']!)
+                                          : Text("No image"),
+                                    ),
+                                    SizedBox(width: 5,),
+                                    Container(
+                                      height: 30,
+                                      child: footerData['partnerThreeIcon']
+                                          != null
+                                          ? _decodeBase64ToImage(footerData[
+                                      'partnerThreeIcon']!)
+                                          : Text("No image"),
+                                    ),
+
+
+                                  ],
+                                ),
+                              ),
+
+                            ],
+                          ),
+
+                        ],
                       ),
 
-                    ],),
-
-                ],),
+                  ],),
+              ),
             );
           },
         ),

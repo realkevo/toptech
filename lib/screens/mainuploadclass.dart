@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:toptech/labcode/ui/servicedisplaypage.dart';
+import 'package:toptech/screens/headerdataupload.dart';
 import 'package:toptech/screens/remarkupload.dart';
 import 'package:toptech/screens/serviceupload.dart';
 import 'package:toptech/screens/teamupload.dart';
@@ -49,6 +50,7 @@ Scaffold(
             RemarkUploadClass(),
             UploadFooterData(),
             TeamUploadClass(),
+            HeaderDataUpload(),
 
           ]
         ),
