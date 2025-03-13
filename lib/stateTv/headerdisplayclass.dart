@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -56,13 +55,12 @@ class FirestoreService {
   }
 }
 
-class HeaderDisplayClass extends StatelessWidget {
+class HeaderDisplay extends StatelessWidget {
   final FirestoreService _firestoreService = FirestoreService();
 
   @override
   Widget build(BuildContext context) {
-    return
-      StreamBuilder<List<HeaderData>>(
+    return StreamBuilder<List<HeaderData>>(
       stream: _firestoreService.fetchHeaderData(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
@@ -80,14 +78,13 @@ class HeaderDisplayClass extends StatelessWidget {
         final headerDataList = snapshot.data!;
 
         return Container(
-
-          height: 85,
-            decoration: BoxDecoration(
-            color: Colors.blueAccent, // Set the background color
+          decoration: BoxDecoration(
+            color: Colors.blueAccent,
             borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20.0), // Adjust the radius as needed
-        bottomRight: Radius.circular(20.0), // Adjust the radius as needed
-            ),),
+              bottomLeft: Radius.circular(7.0),
+              bottomRight: Radius.circular(7.0),
+            ),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: headerDataList.map((headerData) {
@@ -97,64 +94,116 @@ class HeaderDisplayClass extends StatelessWidget {
                   if (headerData.bannerIcon.isNotEmpty)
                     Image.network(headerData.bannerIcon),
                   if (headerData.siteTitle.isNotEmpty)
-                    Text(headerData.siteTitle,
-                        style: TextStyle(fontSize: 15,
-                            fontWeight: FontWeight.bold)),
+                    Text(
+                      headerData.siteTitle,
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.width * 0.04,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   if (headerData.slogan.isNotEmpty)
-                    Text(headerData.slogan,
-                        style: TextStyle(fontSize: 16)),
-                  Row(
-                    children: [
-
-                      IconButton(onPressed: (){},
-                          icon: Icon(Icons.menu_sharp)),
-
-
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Container(
-                            color: Colors.blueAccent,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(children: [
-
-                                ],),
-                                IconButton(onPressed: (){},
-                                    icon: Icon(Icons.location_on)),
-
-                                if (headerData.locationText.isNotEmpty)
-                                  Text(headerData.locationText
-                                    ,
-                                    style: TextStyle(fontSize: 10),
-                                  ),
-
-                                IconButton(onPressed: (){},
-                                    icon: Icon(Icons.phone)),
-
-                                if (headerData.phoneText.isNotEmpty)
-                                  Text('Phone: ${headerData.phoneText}',
-                                  style: TextStyle(fontSize: 10),
-                                  ),
-                                IconButton(onPressed: (){},
-                                    icon: Icon(Icons.email)),
-
-                                if (headerData.email.isNotEmpty)
-                                  Text('Email: ${headerData.email}',
-                                    style: TextStyle(fontSize: 10),
-                                  ),
-
-
-
-                              ],
+                    Text(
+                      headerData.slogan,
+                      style: TextStyle(
+                        fontSize: MediaQuery.of(context).size.width * 0.04,
+                      ),
+                    ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 1,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Left Container (Location)
+                          Expanded(
+                            child: Container(
+                              color: Colors.blueAccent,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                                child: Row(
+                                  children: [
+                                    IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(Icons.menu_sharp),
+                                      iconSize: MediaQuery.of(context).size.width * 0.07, // Responsive Icon Size
+                                    ),
+                                    IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(Icons.location_on),
+                                      iconSize: MediaQuery
+                                          .of(context).size.width * 0.03, // Responsive Icon Size
+                                      color: Colors.black,
+                                    ),
+                                    if (headerData.locationText.isNotEmpty)
+                                      Flexible(
+                                        child: Text(
+                                          headerData.locationText,
+                                          style: TextStyle(
+                                            fontSize:
+                                            MediaQuery.of(context).
+                                            size.width * 0.02,
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+
+                          // Right Container (Contact Information)
+                          Expanded(
+                            child: Container(
+                              color: Colors.blueAccent,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(Icons.phone),
+                                    color: Colors.black,
+                                    iconSize: MediaQuery
+                                        .of(context).size.width * 0.03, // Responsive Icon Size
+                                  ),
+                                  if (headerData.phoneText.isNotEmpty)
+                                    Flexible(
+                                      child: Text(
+                                        headerData.phoneText,
+                                        style: TextStyle(
+                                          fontSize: MediaQuery.
+                                          of(context).size.width * 0.02,
+                                        ),
+                                      ),
+                                    ),
+                                  IconButton(
+                                    onPressed: () {},
+                                    icon: Icon(Icons.email),
+                                    iconSize: MediaQuery
+                                        .of(context).size.width * 0.03, // Responsive Icon Size
+                                    color: Colors.black,
+                                  ),
+                                  if (headerData.email.isNotEmpty)
+                                    Flexible(
+                                      child: Text(
+                                        headerData.email,
+                                        style: TextStyle(
+                                          fontSize:
+                                          MediaQuery.of(context).size
+                                              .width * 0.02,
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                    ],
+                ],
               );
             }).toList(),
           ),

@@ -51,7 +51,8 @@ class _RemarkDisplayClassState extends State<RemarkDisplayClass> {
       height: 190,
       child:
       StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('remarkData').snapshots(),
+        stream: FirebaseFirestore.instance.collection('remarkData').
+        snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());

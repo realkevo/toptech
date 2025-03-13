@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:toptech/labcode/serviceformpage.dart';
 
 import '../../screens/mainuploadclass.dart';
-import '../../stateTv/footerdisplayTv.dart';
+import '../../stateTv/footerdisplaytv.dart';
 import '../../stateTv/remarkDisplay.dart';
-import '../../stateTv/teamDisplay.dart';
+import '../../stateTv/teamdisplay.dart';
 
 /*
 class ServiceDisplayPage extends StatelessWidget {

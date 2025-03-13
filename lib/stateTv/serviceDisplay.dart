@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-import '../screens/mainuploadclass.dart';
-
 class ServiceDisplayClass extends StatefulWidget {
   @override
   _ServiceDisplayClassState createState() => _ServiceDisplayClassState();
@@ -23,9 +21,19 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
 
   @override
   Widget build(BuildContext context) {
-    return      Container(
-      width: MediaQuery.sizeOf(context).width *0.7,
-      height: 300,
+    // Get the screen width and height
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
+    // Calculate responsive font size based on screen width
+    double titleFontSize = screenWidth * 0.04; // Title font size is 5% of screen width
+    double descriptionFontSize = screenWidth * 0.035; // Description font size is 3.5% of screen width
+    double priceFontSize = screenWidth * 0.04; // Price font size is 4% of screen width
+    double inquireFontSize = screenWidth * 0.035; // Inquire button font size is 3.5% of screen width
+
+    return Container(
+      width: screenWidth * 0.98,
+      height: screenHeight * 0.46, // Height is 40% of the screen height
       child: StreamBuilder<List<Map<String, dynamic>>>(
         stream: fetchServices(),
         builder: (context, snapshot) {
@@ -42,12 +50,12 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
           var services = snapshot.data!;
 
           return Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(screenWidth * 0.02), // Padding is 2% of screen width
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 5.0,
-                mainAxisSpacing: 8.0,
+                crossAxisCount: screenWidth > 600 ? 3 : 2, // Use 2 columns for large screens, 1 for small
+                crossAxisSpacing: screenWidth * 0.02, // Space between columns
+                mainAxisSpacing: screenWidth * 0.02, // Space between rows
               ),
               itemCount: services.length,
               itemBuilder: (context, index) {
@@ -59,20 +67,23 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Text(
-                        serviceData['serviceTitle'] ?? 'No Title',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.none, // No underline
+                      FittedBox(
+                        fit: BoxFit.scaleDown, // Ensure text scales down to fit
+                        child: Text(
+                          serviceData['serviceTitle'] ?? 'No Title',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: titleFontSize, // Font size adjusts relative to screen size
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.none, // No underline
+                          ),
                         ),
                       ),
                       Expanded(
                         child: Padding(
-                          padding: const EdgeInsets.all(1.0),
+                          padding: EdgeInsets.all(screenWidth * 0.01), // Padding based on screen width
                           child: Container(
-                            width: 200,
+                            width: screenWidth * 0.8, // Width is 80% of screen width
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(4),
                               color: Colors.white,
@@ -80,12 +91,12 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
                             child: SingleChildScrollView(
                               scrollDirection: Axis.vertical,
                               child: Padding(
-                                padding: const EdgeInsets.all(12.0),
+                                padding: EdgeInsets.all(screenWidth * 0.03), // Padding based on screen width
                                 child: Text(
                                   serviceData['serviceDescription'] ?? 'No Description',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 14,
+                                    fontSize: descriptionFontSize,
                                     decoration: TextDecoration.none, // No underline
                                   ),
                                 ),
@@ -102,25 +113,25 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
                           children: [
                             Text(
                               "Price",
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 14,
+                                fontSize: priceFontSize,
                                 decoration: TextDecoration.none, // No underline
                               ),
                             ),
                             Text(
                               'Ksh: ${serviceData['servicePriceKsh'] ?? 'N/A'}',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 14,
+                                fontSize: priceFontSize,
                                 decoration: TextDecoration.none, // No underline
                               ),
                             ),
                             Text(
                               'USD: ${serviceData['servicePriceUsd'] ?? 'N/A'}',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 14,
+                                fontSize: priceFontSize,
                                 decoration: TextDecoration.none, // No underline
                               ),
                             ),
@@ -128,18 +139,18 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(right: 0.3),
+                        padding: EdgeInsets.only(right: screenWidth * 0.03), // Padding for the "Inquire" button
                         child: Align(
                           alignment: Alignment.bottomRight,
                           child: Container(
                             color: Colors.orange,
                             child: Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: EdgeInsets.all(screenWidth * 0.02), // Padding based on screen width
                               child: Text(
                                 "INQUIRE",
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 10,
+                                  fontSize: inquireFontSize,
                                   decoration: TextDecoration.none, // No underline
                                 ),
                               ),
@@ -156,6 +167,5 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
         },
       ),
     );
-
   }
 }

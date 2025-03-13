@@ -7,7 +7,7 @@ class TeamDisplay extends StatefulWidget {
 }
 
 class _TeamDisplayState extends State<TeamDisplay> {
-  List<DocumentSnapshot> _teamMembers = []; // Store fetched team members
+  List<DocumentSnapshot> _teams = []; // Store fetched remarks
   ScrollController _scrollController = ScrollController();
 
   @override
@@ -18,21 +18,21 @@ class _TeamDisplayState extends State<TeamDisplay> {
 
   void _startAutoplay() {
     Future.delayed(Duration(seconds: 5), () {
-      if (_teamMembers.isNotEmpty) {
-        _scrollToNextMember();
+      if (_teams.isNotEmpty) {
+        _scrollToNextRemark();
         _startAutoplay(); // Restart autoplay
       }
     });
   }
 
-  void _scrollToNextMember() {
+  void _scrollToNextRemark() {
     if (_scrollController.hasClients) {
-      double targetOffset = _scrollController.offset - 300; // Scroll to the left
+      double targetOffset = _scrollController.offset + 250; // Adjust this value based on your item width
 
-      if (targetOffset <= 0) {
-        // If we reach the start, reset to the end
-        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-        targetOffset = _scrollController.position.maxScrollExtent - 300; // Move to the last item
+      if (targetOffset >= _scrollController.position.maxScrollExtent) {
+        // If we reach the end, reset to the start
+        _scrollController.jumpTo(0);
+        targetOffset = 250; // Move to the first item in the second list
       }
 
       // Animate to the target offset
@@ -48,46 +48,56 @@ class _TeamDisplayState extends State<TeamDisplay> {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.sizeOf(context).width * 0.7,
-      height: 300, // Set the height to 300
-      child: StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('teamData').snapshots(),
+      height: 190,
+      child:
+      StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('teamData').
+        snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           }
 
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text('No team members found.'));
+            return Center(child: Text('No team  found.'));
           }
 
-          // Store the fetched team members
-          _teamMembers = snapshot.data!.docs;
+          // Store the fetched remarks
+          _teams = snapshot.data!.docs;
+
+          // Create a duplicated list for seamless scrolling
+          List<DocumentSnapshot> duplicatedRemarks = [..._teams, ..._teams];
 
           return SingleChildScrollView(
             controller: _scrollController,
             scrollDirection: Axis.horizontal,
             child: Row(
-              children: _teamMembers.map((currentMember) {
+              spacing: 13,
+              children: duplicatedRemarks.map((currentMember) {
                 var name = currentMember['MemberName'];
                 var specialty = currentMember['MemberSpecialty'];
                 var experience = currentMember['MemberExperience'];
 
                 return Container(
-                  width: 300,
-                  height: 200,// Set the width of each item
-                  margin: EdgeInsets.all(8),
+                  width: 250,
+                  height: 150,
+                  // Set the width of each item
                   child: Card(
                     elevation: 4,
-                    child: Container(
-                      height: 300, // Keep the height of the card as 300
-                      padding: EdgeInsets.all(8),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child:
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(name, style: TextStyle(fontWeight: FontWeight.bold)),
-                          Text(specialty),
-                          Text(experience),
+                          Text(
+                            name,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 4),
+                          Text('specialty: $specialty'),
+                          SizedBox(height: 4),
+                          Text('experience: $experience'),
                         ],
                       ),
                     ),

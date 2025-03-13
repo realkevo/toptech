@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:toptech/stateTv/remarkDisplay.dart';
 import 'package:toptech/stateTv/serviceDisplay.dart';
-import 'package:toptech/stateTv/teamDisplay.dart';
+import 'package:toptech/stateTv/teamdisplay.dart';
 
-import '../screens/mainuploadclass.dart';
-import 'footerdisplayTv.dart';
+import 'footerdisplaytv.dart';
 import 'headerdisplayclass.dart';
 
 class Homepagedisplay extends StatelessWidget {
@@ -17,7 +16,7 @@ class Homepagedisplay extends StatelessWidget {
         width: MediaQuery.sizeOf(context).width * 1,
         height:  MediaQuery.sizeOf(context).height * 1,
         child: Column(children: [
-          GestureDetector(
+        /*  GestureDetector(
             onTap: () {
               Navigator.push(
                 context,
@@ -30,8 +29,10 @@ class Homepagedisplay extends StatelessWidget {
               style: TextStyle(fontSize: 18, color: Colors.blue, decoration: TextDecoration.none), // No underline
             ),
           ),
+*/
 
-          HeaderDisplayClass(),
+          HeaderDisplay(),
+SizedBox(height: 15,),
           Expanded(
             child: SingleChildScrollView(
               child:
