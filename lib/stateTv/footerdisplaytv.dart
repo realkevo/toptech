@@ -58,8 +58,14 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
 
     return Container(
       width: widthFactor,
-      padding: EdgeInsets.symmetric(horizontal: widthFactor * 0.05, vertical: heightFactor * 0.02),
-      color: Colors.orange,
+      padding: EdgeInsets.symmetric(horizontal: widthFactor * 0.05, vertical: heightFactor * 0.012), // Further reduced vertical padding
+      decoration: BoxDecoration(
+        color: Colors.blueAccent,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(7.0),
+          topRight: Radius.circular(7.0),
+        ),
+      ),
       child: FutureBuilder<Map<String, String>>(
         future: fetchFooterData(),
         builder: (context, snapshot) {
@@ -78,7 +84,6 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
           var footerData = snapshot.data!;
 
           return Column(
-
             children: [
               // Row for main content
               Row(
@@ -90,40 +95,92 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Follow us",
-                          style: TextStyle(
-                            fontSize: heightFactor * 0.04, // Responsive font size
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                        FittedBox(
+                          fit: BoxFit.scaleDown, // Ensure text scales down to fit
+                          child: Text(
+                            "Follow us",
+                            style: TextStyle(
+                              fontSize: heightFactor * 0.014, // Further reduced responsive font size
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              decoration: TextDecoration.none,
+                            ),
                           ),
                         ),
                         footerData['githubIcon'] != null
-                            ? Container(
-                          margin: EdgeInsets.symmetric(vertical: 5),
-                          height: 30,
-                          child: _decodeBase64ToImage(footerData['githubIcon']!),
+                            ? Row(
+                          spacing: 12,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.symmetric(vertical: 5),
+                              height: 14, // Further reduced height
+                              child: _decodeBase64ToImage(footerData['githubIcon']!),
+                            ),
+                            Text(
+                              "github",
+                              style: TextStyle(
+                                fontSize: heightFactor * 0.014, // Responsive font size
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         )
                             : SizedBox.shrink(),
                         footerData['xIcon'] != null
-                            ? Container(
-                          margin: EdgeInsets.symmetric(vertical: 5),
-                          height: 30,
-                          child: _decodeBase64ToImage(footerData['xIcon']!),
+                            ? Row(
+                          spacing: 12,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.symmetric(vertical: 5),
+                              height: 14, // Further reduced height
+                              child: _decodeBase64ToImage(footerData['xIcon']!),
+                            ),
+                            Text(
+                              "X",
+                              style: TextStyle(
+                                fontSize: heightFactor * 0.014, // Responsive font size
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         )
                             : SizedBox.shrink(),
                         footerData['redditIcon'] != null
-                            ? Container(
-                          margin: EdgeInsets.symmetric(vertical: 5),
-                          height: 30,
-                          child: _decodeBase64ToImage(footerData['redditIcon']!),
+                            ? Row(
+                          spacing: 12,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.symmetric(vertical: 5),
+                              height: 14, // Further reduced height
+                              child: _decodeBase64ToImage(footerData['redditIcon']!),
+                            ),
+                            Text(
+                              "reddit",
+                              style: TextStyle(
+                                fontSize: heightFactor * 0.014, // Responsive font size
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         )
                             : SizedBox.shrink(),
                         footerData['facebookIcon'] != null
-                            ? Container(
-                          margin: EdgeInsets.symmetric(vertical: 5),
-                          height: 30,
-                          child: _decodeBase64ToImage(footerData['facebookIcon']!),
+                            ? Row(
+                          spacing: 12,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.symmetric(vertical: 5),
+                              height: 14, // Further reduced height
+                              child: _decodeBase64ToImage(footerData['facebookIcon']!),
+                            ),
+                            Text(
+                              "linkedin",
+                              style: TextStyle(
+                                fontSize: heightFactor * 0.014, // Responsive font size
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         )
                             : SizedBox.shrink(),
                       ],
@@ -139,14 +196,14 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
                         Text(
                           "P.O Box 600-63 Nairobi, Kenya",
                           style: TextStyle(
-                            fontSize: heightFactor * 0.022, // Responsive font size
+                            fontSize: heightFactor * 0.014, // Further reduced responsive font size
                             color: Colors.white,
                           ),
                         ),
                         Text(
                           "Mombasa Road, Platnum Plaza flr 2",
                           style: TextStyle(
-                            fontSize: heightFactor * 0.022, // Responsive font size
+                            fontSize: heightFactor * 0.014, // Further reduced responsive font size
                             color: Colors.white,
                           ),
                         ),
@@ -160,12 +217,16 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Text(
-                          "Partners and sponsors",
-                          style: TextStyle(
-                            fontSize: heightFactor * 0.04, // Responsive font size
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                        FittedBox(
+                          fit: BoxFit.scaleDown, // Ensure text scales down to fit
+                          child: Text(
+                            "Partners and sponsors",
+                            style: TextStyle(
+                              fontSize: heightFactor * 0.024, // Further reduced responsive font size
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              decoration: TextDecoration.none,
+                            ),
                           ),
                         ),
                         Row(
@@ -174,14 +235,14 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
                             footerData['partnerOneIcon'] != null
                                 ? Container(
                               margin: EdgeInsets.symmetric(horizontal: 5),
-                              height: 30,
+                              height: 20, // Further reduced height
                               child: _decodeBase64ToImage(footerData['partnerOneIcon']!),
                             )
                                 : SizedBox.shrink(),
                             footerData['partnerTwoIcon'] != null
                                 ? Container(
                               margin: EdgeInsets.symmetric(horizontal: 5),
-                              height: 30,
+                              height: 20, // Further reduced height
                               child: _decodeBase64ToImage(footerData['partnerTwoIcon']!),
                             )
                                 : SizedBox.shrink(),
@@ -192,7 +253,7 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
                           children: [
                             footerData['partnerThreeIcon'] != null
                                 ? Container(
-                              height: 30,
+                              height: 20, // Further reduced height
                               child: _decodeBase64ToImage(footerData['partnerThreeIcon']!),
                             )
                                 : SizedBox.shrink(),
@@ -206,9 +267,8 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
 
               // Bottom row for copyright
               Container(
-                color: Colors.red,
+                color: Colors.blueAccent,
                 width: widthFactor,
-                height: heightFactor * 0.03,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
@@ -217,14 +277,14 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
                     footerData['copyRightIcon'] != null
                         ? Container(
                       margin: EdgeInsets.symmetric(horizontal: 5),
-                      height: 30,
+                      height: 20, // Further reduced height
                       child: _decodeBase64ToImage(footerData['copyRightIcon']!),
                     )
                         : SizedBox.shrink(),
                     Text(
                       "Copyright",
                       style: TextStyle(
-                        fontSize: heightFactor * 0.04, // Responsive font size
+                        fontSize: heightFactor * 0.024, // Further reduced responsive font size
                         color: Colors.white,
                       ),
                     ),

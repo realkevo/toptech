@@ -80,10 +80,6 @@ class HeaderDisplay extends StatelessWidget {
         return Container(
           decoration: BoxDecoration(
             color: Colors.blueAccent,
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(7.0),
-              bottomRight: Radius.circular(7.0),
-            ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -169,12 +165,19 @@ class HeaderDisplay extends StatelessWidget {
                                   ),
                                   if (headerData.phoneText.isNotEmpty)
                                     Flexible(
-                                      child: Text(
-                                        headerData.phoneText,
-                                        style: TextStyle(
-                                          fontSize: MediaQuery.
-                                          of(context).size.width * 0.02,
+                                      child: FittedBox(
+                                        fit: BoxFit.scaleDown, // Ensure text scales down to fit
+                                        child:
+                                        Text(
+                                          headerData.phoneText,
+                                          style: TextStyle(
+                                            fontSize: MediaQuery.
+                                            of(context).size.width * 0.02,
+                                            decoration: TextDecoration.none, // No underline
+                                      
+                                          ),
                                         ),
+                                      
                                       ),
                                     ),
                                   IconButton(
@@ -186,14 +189,25 @@ class HeaderDisplay extends StatelessWidget {
                                   ),
                                   if (headerData.email.isNotEmpty)
                                     Flexible(
-                                      child: Text(
-                                        headerData.email,
-                                        style: TextStyle(
-                                          fontSize:
-                                          MediaQuery.of(context).size
-                                              .width * 0.02,
+                                      child:
+                                      FittedBox(
+                                        fit: BoxFit.scaleDown, // Ensure text scales down to fit
+                                        child:                                       Text(
+                                          headerData.email,
+                                          style: TextStyle(
+                                            fontSize:
+                                            MediaQuery.of(context).size
+                                                .width * 0.06,
+                                            decoration: TextDecoration.none, // No underline
+
+                                          ),
                                         ),
+
+
                                       ),
+
+
+
                                     ),
                                 ],
                               ),
