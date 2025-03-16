@@ -32,8 +32,8 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
     double inquireFontSize = screenWidth * 0.035; // Inquire button font size is 3.5% of screen width
 
     return Container(
-      width: screenWidth * 0.98,
-      height: screenHeight * 0.46, // Height is 40% of the screen height
+      width: screenWidth * 0.99,
+      height: screenHeight * 0.60, // Height is 40% of the screen height
       child: StreamBuilder<List<Map<String, dynamic>>>(
         stream: fetchServices(),
         builder: (context, snapshot) {
@@ -49,119 +49,154 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
 
           var services = snapshot.data!;
 
-          return Padding(
-            padding: EdgeInsets.all(screenWidth * 0.02), // Padding is 2% of screen width
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: screenWidth > 600 ? 3 : 2, // Use 2 columns for large screens, 1 for small
-                crossAxisSpacing: screenWidth * 0.02, // Space between columns
-                mainAxisSpacing: screenWidth * 0.02, // Space between rows
-              ),
-              itemCount: services.length,
-              itemBuilder: (context, index) {
-                var serviceData = services[index];
-                return Container(
-                  color: Colors.pink,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      FittedBox(
-                        fit: BoxFit.scaleDown, // Ensure text scales down to fit
-                        child: Text(
-                          serviceData['serviceTitle'] ?? 'No Title',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: titleFontSize, // Font size adjusts relative to screen size
-                            fontWeight: FontWeight.bold,
-                            decoration: TextDecoration.none, // No underline
+          return Container(
+            decoration: BoxDecoration(
+              color: Colors.brown,
+
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(screenWidth * 0.02), // Padding is 2% of screen width
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: screenWidth > 600 ? 3 : 2, // Use 2 columns for large screens, 1 for small
+                  crossAxisSpacing: screenWidth * 0.02, // Space between columns
+                  mainAxisSpacing: screenWidth * 0.02, // Space between rows
+                ),
+                itemCount: services.length,
+                itemBuilder: (context, index) {
+                  var serviceData = services[index];
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        FittedBox(
+                          fit: BoxFit.scaleDown, // Ensure text scales down to fit
+                          child:
+                          Text(
+                            serviceData['serviceTitle'] ?? 'No Title',
+                            style:
+                            TextStyle(
+                              color: Colors.white,
+                              fontSize: titleFontSize, // Font size adjusts relative to screen size
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.none, // No underline
+                            ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.all(screenWidth * 0.01), // Padding based on screen width
-                          child: Container(
-                            width: screenWidth * 0.8, // Width is 80% of screen width
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: Colors.white,
-                            ),
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.vertical,
-                              child: Padding(
-                                padding: EdgeInsets.all(screenWidth * 0.03), // Padding based on screen width
-                                child: Text(
-                                  serviceData['serviceDescription'] ?? 'No Description',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: descriptionFontSize,
-                                    decoration: TextDecoration.none, // No underline
+                        Expanded(
+                          child: Padding(
+                            padding: EdgeInsets.all(screenWidth * 0.01), // Padding based on screen width
+                            child: Container(
+
+                              width: screenWidth * 0.8, // Width is 80% of screen width
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                                color: Colors.white,
+                              ),
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.vertical,
+                                child: Padding(
+                                  padding: EdgeInsets.all(screenWidth * 0.03), // Padding based on screen width
+                                  child: Text(
+                                    serviceData['serviceDescription'] ?? 'No Description',
+                                    style:
+                                    TextStyle(
+                                      color: Colors.black,
+                                      fontSize: titleFontSize, // Font size adjusts relative to screen size
+                                      fontWeight: FontWeight.normal,
+                                      decoration: TextDecoration.none, // No underline
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                      // Prices row for services
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Text(
-                              "Price",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: priceFontSize,
-                                decoration: TextDecoration.none, // No underline
-                              ),
-                            ),
-                            Text(
-                              'Ksh: ${serviceData['servicePriceKsh'] ?? 'N/A'}',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: priceFontSize,
-                                decoration: TextDecoration.none, // No underline
-                              ),
-                            ),
-                            Text(
-                              'USD: ${serviceData['servicePriceUsd'] ?? 'N/A'}',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: priceFontSize,
-                                decoration: TextDecoration.none, // No underline
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(right: screenWidth * 0.03), // Padding for the "Inquire" button
-                        child: Align(
-                          alignment: Alignment.bottomRight,
-                          child: Container(
-                            color: Colors.orange,
-                            child: Padding(
-                              padding: EdgeInsets.all(screenWidth * 0.02), // Padding based on screen width
-                              child: Text(
-                                "INQUIRE",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: inquireFontSize,
-                                  decoration: TextDecoration.none, // No underline
+                        // Prices row for services
+                        Padding(
+                          padding: const EdgeInsets.only(left: 4.0, right: 4.0),
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child:
+                            Container(
+                              color: Colors.black,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 4.0, right: 4.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Price",
+                                      style:
+                                      TextStyle(
+                                        color: Colors.white,
+                                        fontSize: titleFontSize, // Font size adjusts relative to screen size
+                                        fontWeight: FontWeight.normal,
+                                        decoration: TextDecoration.none, // No underline
+                                      ),
+                                    ),
+                                    Text(
+                                      'Ksh: ${serviceData['servicePriceKsh'] ?? 'N/A'}',
+                                      style:
+                                      TextStyle(
+                                        color: Colors.white,
+                                        fontSize: titleFontSize, // Font size adjusts relative to screen size
+                                        fontWeight: FontWeight.bold,
+                                        decoration: TextDecoration.none, // No underline
+                                      ),
+                                    ),
+                                    Text(
+                                      'USD: ${serviceData['servicePriceUsd'] ?? 'N/A'}',
+                                      style:
+                                      TextStyle(
+                                        color: Colors.white,
+                                        fontSize: titleFontSize, // Font size adjusts relative to screen size
+                                        fontWeight: FontWeight.bold,
+                                        decoration: TextDecoration.none, // No underline
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                );
-              },
+                       /* Padding(
+                          padding: EdgeInsets.only(right: screenWidth * 0.03), // Padding for the "Inquire" button
+                          child: Align(
+                            alignment: Alignment.bottomRight,
+                            child: Container(
+                              color: Colors.black,
+                              child: Padding(
+                                padding: EdgeInsets.all(screenWidth * 0.02), // Padding based on screen width
+                                child: Text(
+                                  "INQUIRE",
+                                  style:
+                                  TextStyle(
+                                    color: Colors.white,
+                                    fontSize: titleFontSize, // Font size adjusts relative to screen size
+                                    fontWeight: FontWeight.bold,
+                                    decoration: TextDecoration.none, // No underline
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),*/
+                      ],
+                    ),
+                  );
+                },
+              ),
             ),
           );
         },

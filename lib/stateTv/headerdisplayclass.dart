@@ -194,7 +194,8 @@ class HeaderDisplay extends StatelessWidget {
                                         fit: BoxFit.scaleDown, // Ensure text scales down to fit
                                         child:                                       Text(
                                           headerData.email,
-                                          style: TextStyle(
+                                          style:
+                                          TextStyle(
                                             fontSize:
                                             MediaQuery.of(context).size
                                                 .width * 0.06,

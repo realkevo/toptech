@@ -37,14 +37,33 @@ SizedBox(height: 15,),
             child: SingleChildScrollView(
               child:
               Column(children: [
-                Text("SERVICES"),
+                Text("SERVICES",
+                style:
+                TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+
+                ),),
                 ServiceDisplayClass(),
 SizedBox(height: 30,),
-                Text("REMARKS AND REVIEWS"),
+                Text("REMARKS AND REVIEWS",
+                style:
+                TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+
+                ),),
+
 
                 RemarkDisplayClass(),
 
-                Text("OUR TEAM"),
+                Text("OUR TEAM",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+
+                ),),
+
 
                 TeamDisplay(),
                 Align(
