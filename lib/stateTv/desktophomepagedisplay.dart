@@ -13,6 +13,21 @@ class Homepagedisplay extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(7.0),
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF0A0E21), // Dark blue
+              Color(0xFF12233F), // Slightly lighter blue
+              Color(0xFF1E3C72), // Mid blue
+            ],
+          ),
+
+
+        ),
+
         width: MediaQuery.sizeOf(context).width * 1,
         height:  MediaQuery.sizeOf(context).height * 1,
         child: Column(children: [
@@ -40,6 +55,7 @@ SizedBox(height: 15,),
                 Text("SERVICES",
                 style:
                 TextStyle(
+                  color: Colors.white,
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
 
@@ -49,6 +65,7 @@ SizedBox(height: 30,),
                 Text("REMARKS AND REVIEWS",
                 style:
                 TextStyle(
+                  color: Colors.white,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
 
@@ -59,6 +76,7 @@ SizedBox(height: 30,),
 
                 Text("OUR TEAM",
                 style: TextStyle(
+                  color: Colors.white,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
 

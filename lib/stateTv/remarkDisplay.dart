@@ -47,6 +47,21 @@ class _RemarkDisplayClassState extends State<RemarkDisplayClass> {
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(7.0),
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xFF0A0E21), // Dark blue
+            Color(0xFF12233F), // Slightly lighter blue
+            Color(0xFF1E3C72), // Mid blue
+          ],
+        ),
+
+
+      ),
+
       width: MediaQuery.sizeOf(context).width * 0.7,
       height: 190,
       child:
@@ -79,29 +94,51 @@ class _RemarkDisplayClassState extends State<RemarkDisplayClass> {
                 var date = currentRemark['remarkDate'];
 
                 return Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(7.0),
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Color(0xFF0A0E21), // Dark blue
+                        Color(0xFF12233F), // Slightly lighter blue
+                        Color(0xFF1E3C72), // Mid blue
+                      ],
+                    ),
+
+
+                  ),
+
                   width: 250,
                   height: 150,
                   // Set the width of each item
-                  child: Card(
-                    elevation: 4,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child:
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            name,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          SizedBox(height: 4),
-                          Text('Description: $description'),
-                          SizedBox(height: 4),
-                          Text('Date: $date'),
-                        ],
-                      ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child:
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          name,
+                          style: TextStyle(
+color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 4),
+                        Text(description,
+                        style:
+                          TextStyle(
+                            color: Colors.white,
+                          ),),
+                        SizedBox(height: 4),
+                        Text('  $date',
+                        style: TextStyle(
+                          color: Colors.white
+                        ),),
+                      ],
                     ),
                   ),
+
                 );
               }).toList(),
             ),

@@ -59,8 +59,19 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
     return Container(
       width: widthFactor,
       padding: EdgeInsets.symmetric(horizontal: widthFactor * 0.05, vertical: heightFactor * 0.012), // Further reduced vertical padding
+
       decoration: BoxDecoration(
-        color: Colors.blueAccent,
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xFF0A0E21), // Dark blue
+            Color(0xFF12233F), // Slightly lighter blue
+            Color(0xFF1E3C72), // Mid blue
+          ],
+        ),
+
+
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(7.0),
           topRight: Radius.circular(7.0),
@@ -302,7 +313,19 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
                 
                   // Bottom row for copyright
                   Container(
-                    color: Colors.blueAccent,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Color(0xFF0A0E21), // Dark blue
+                          Color(0xFF12233F), // Slightly lighter blue
+                          Color(0xFF1E3C72), // Mid blue
+                        ],
+                      ),
+
+
+                    ),
                     width: widthFactor,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -335,3 +358,6 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
     );
   }
 }
+
+
+

@@ -79,7 +79,18 @@ class HeaderDisplay extends StatelessWidget {
 
         return Container(
           decoration: BoxDecoration(
-            color: Colors.blueAccent,
+
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xFF0A0E21), // Dark blue
+                Color(0xFF12233F), // Slightly lighter blue
+                Color(0xFF1E3C72), // Mid blue
+              ],
+            ),
+
+
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
@@ -93,6 +104,7 @@ class HeaderDisplay extends StatelessWidget {
                     Text(
                       headerData.siteTitle,
                       style: TextStyle(
+                        color: Colors.white,
                         fontSize: MediaQuery.of(context).size.width * 0.04,
                         fontWeight: FontWeight.bold,
                       ),
@@ -105,6 +117,21 @@ class HeaderDisplay extends StatelessWidget {
                       ),
                     ),
                   Container(
+                    decoration: BoxDecoration(
+
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Color(0xFF0A0E21), // Dark blue
+                          Color(0xFF12233F), // Slightly lighter blue
+                          Color(0xFF1E3C72), // Mid blue
+                        ],
+                      ),
+
+
+                    ),
+
                     width: MediaQuery.of(context).size.width * 1,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 3.0),
@@ -115,13 +142,27 @@ class HeaderDisplay extends StatelessWidget {
                           // Left Container (Location)
                           Expanded(
                             child: Container(
-                              color: Colors.blueAccent,
+                              decoration: BoxDecoration(
+
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    Color(0xFF0A0E21), // Dark blue
+                                    Color(0xFF12233F), // Slightly lighter blue
+                                    Color(0xFF1E3C72), // Mid blue
+                                  ],
+                                ),
+
+
+                              ),
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 3.0),
                                 child: Row(
                                   children: [
                                     IconButton(
                                       onPressed: () {},
+                                      color: Colors.white,
                                       icon: Icon(Icons.menu_sharp),
                                       iconSize: MediaQuery.of(context).size.width * 0.07, // Responsive Icon Size
                                     ),
@@ -130,13 +171,15 @@ class HeaderDisplay extends StatelessWidget {
                                       icon: Icon(Icons.location_on),
                                       iconSize: MediaQuery
                                           .of(context).size.width * 0.03, // Responsive Icon Size
-                                      color: Colors.black,
+                                      color: Colors.white,
                                     ),
                                     if (headerData.locationText.isNotEmpty)
                                       Flexible(
                                         child: Text(
+
                                           headerData.locationText,
                                           style: TextStyle(
+                                            color: Colors.white,
                                             fontSize:
                                             MediaQuery.of(context).
                                             size.width * 0.02,
@@ -152,14 +195,27 @@ class HeaderDisplay extends StatelessWidget {
                           // Right Container (Contact Information)
                           Expanded(
                             child: Container(
-                              color: Colors.blueAccent,
+                              decoration: BoxDecoration(
+
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    Color(0xFF0A0E21), // Dark blue
+                                    Color(0xFF12233F), // Slightly lighter blue
+                                    Color(0xFF1E3C72), // Mid blue
+                                  ],
+                                ),
+
+
+                              ),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   IconButton(
                                     onPressed: () {},
                                     icon: Icon(Icons.phone),
-                                    color: Colors.black,
+                                    color: Colors.white,
                                     iconSize: MediaQuery
                                         .of(context).size.width * 0.03, // Responsive Icon Size
                                   ),
@@ -171,6 +227,7 @@ class HeaderDisplay extends StatelessWidget {
                                         Text(
                                           headerData.phoneText,
                                           style: TextStyle(
+                                            color: Colors.white,
                                             fontSize: MediaQuery.
                                             of(context).size.width * 0.02,
                                             decoration: TextDecoration.none, // No underline
@@ -185,7 +242,7 @@ class HeaderDisplay extends StatelessWidget {
                                     icon: Icon(Icons.email),
                                     iconSize: MediaQuery
                                         .of(context).size.width * 0.03, // Responsive Icon Size
-                                    color: Colors.black,
+                                    color: Colors.white,
                                   ),
                                   if (headerData.email.isNotEmpty)
                                     Flexible(
@@ -196,6 +253,7 @@ class HeaderDisplay extends StatelessWidget {
                                           headerData.email,
                                           style:
                                           TextStyle(
+                                            color: Colors.white,
                                             fontSize:
                                             MediaQuery.of(context).size
                                                 .width * 0.06,

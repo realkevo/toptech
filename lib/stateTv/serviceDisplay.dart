@@ -51,10 +51,22 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
 
           return Container(
             decoration: BoxDecoration(
-              color: Colors.brown,
-
               borderRadius: BorderRadius.circular(5),
+
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  Color(0xFF0A0E21), // Dark blue
+                  Color(0xFF12233F), // Slightly lighter blue
+                  Color(0xFF1E3C72), // Mid blue
+                ],
+              ),
+
+
             ),
+
+
             child: Padding(
               padding: EdgeInsets.all(screenWidth * 0.02), // Padding is 2% of screen width
               child: GridView.builder(
@@ -68,9 +80,18 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
                   var serviceData = services[index];
                   return Container(
                     decoration: BoxDecoration(
-                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(7.0),
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Color(0xFF0A0E21), // Dark blue
+                          Color(0xFF12233F), // Slightly lighter blue
+                          Color(0xFF1E3C72), // Mid blue
+                        ],
+                      ),
 
-                      borderRadius: BorderRadius.circular(5),
+
                     ),
 
                     child: Column(
@@ -86,7 +107,7 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
                             style:
                             TextStyle(
                               color: Colors.white,
-                              fontSize: titleFontSize, // Font size adjusts relative to screen size
+                              fontSize: 16, // Font size adjusts relative to screen size
                               fontWeight: FontWeight.bold,
                               decoration: TextDecoration.none, // No underline
                             ),
@@ -99,8 +120,18 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
 
                               width: screenWidth * 0.8, // Width is 80% of screen width
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(6),
-                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(7.0),
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    Color(0xFF0A0E21), // Dark blue
+                                    Color(0xFF12233F), // Slightly lighter blue
+                                    Color(0xFF1E3C72), // Mid blue
+                                  ],
+                                ),
+
+
                               ),
                               child: SingleChildScrollView(
                                 scrollDirection: Axis.vertical,
@@ -110,8 +141,8 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
                                     serviceData['serviceDescription'] ?? 'No Description',
                                     style:
                                     TextStyle(
-                                      color: Colors.black,
-                                      fontSize: titleFontSize, // Font size adjusts relative to screen size
+                                      color: Colors.white,
+                                      fontSize: 12, // Font size adjusts relative to screen size
                                       fontWeight: FontWeight.normal,
                                       decoration: TextDecoration.none, // No underline
                                     ),
@@ -132,6 +163,7 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 4.0, right: 4.0),
                                 child: Row(
+                                  spacing: 10,
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
@@ -139,7 +171,7 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
                                       style:
                                       TextStyle(
                                         color: Colors.white,
-                                        fontSize: titleFontSize, // Font size adjusts relative to screen size
+                                        fontSize: 12, // Font size adjusts relative to screen size
                                         fontWeight: FontWeight.normal,
                                         decoration: TextDecoration.none, // No underline
                                       ),
@@ -149,7 +181,7 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
                                       style:
                                       TextStyle(
                                         color: Colors.white,
-                                        fontSize: titleFontSize, // Font size adjusts relative to screen size
+                                        fontSize: 12, // Font size adjusts relative to screen size
                                         fontWeight: FontWeight.bold,
                                         decoration: TextDecoration.none, // No underline
                                       ),
@@ -159,7 +191,7 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
                                       style:
                                       TextStyle(
                                         color: Colors.white,
-                                        fontSize: titleFontSize, // Font size adjusts relative to screen size
+                                        fontSize: 12, // Font size adjusts relative to screen size
                                         fontWeight: FontWeight.bold,
                                         decoration: TextDecoration.none, // No underline
                                       ),
