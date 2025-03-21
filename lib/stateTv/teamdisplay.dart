@@ -46,25 +46,7 @@ class _TeamDisplayState extends State<TeamDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(7.0),
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Color(0xFF0A0E21), // Dark blue
-            Color(0xFF12233F), // Slightly lighter blue
-            Color(0xFF1E3C72), // Mid blue
-          ],
-        ),
-
-
-      ),
-
-      width: MediaQuery.sizeOf(context).width * 0.7,
-      height: 190,
-      child:
+    return
       StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('teamData').
         snapshots(),
@@ -95,7 +77,7 @@ class _TeamDisplayState extends State<TeamDisplay> {
 
                 return Container(
                   decoration: BoxDecoration(
-borderRadius: BorderRadius.circular(7.0),
+                    borderRadius: BorderRadius.circular(7.0),
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
@@ -117,7 +99,9 @@ borderRadius: BorderRadius.circular(7.0),
                     padding: const EdgeInsets.all(8.0),
                     child:
                     Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
+
                       children: [
                         Text(
                           name,
@@ -127,14 +111,14 @@ borderRadius: BorderRadius.circular(7.0),
                         ),
                         SizedBox(height: 4),
                         Text( specialty,
-                        style: TextStyle(
-                          color: Colors.white
-                        ),),
+                          style: TextStyle(
+                              color: Colors.white
+                          ),),
                         SizedBox(height: 4),
                         Text('experience: $experience',
-                        style: TextStyle(
-                          color: Colors.white
-                        ),),
+                          style: TextStyle(
+                              color: Colors.white
+                          ),),
                       ],
                     ),
                   ),
@@ -143,7 +127,6 @@ borderRadius: BorderRadius.circular(7.0),
             ),
           );
         },
-      ),
-    );
+      );
   }
 }
