@@ -34,7 +34,8 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
     return Container(
       width: screenWidth * 0.99,
       height: screenHeight * 0.60, // Height is 40% of the screen height
-      child: StreamBuilder<List<Map<String, dynamic>>>(
+      child:
+      StreamBuilder<List<Map<String, dynamic>>>(
         stream: fetchServices(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

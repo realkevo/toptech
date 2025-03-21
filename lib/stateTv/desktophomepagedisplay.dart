@@ -55,32 +55,17 @@ SizedBox(height: 15,),
                 Text("SERVICES",
                 style:
                 TextStyle(
-                  color: Colors.white,
-                  fontSize: 28,
+                  color: Colors.lightGreen,
+                  fontSize: 15,
                   fontWeight: FontWeight.bold,
 
                 ),),
                 ServiceDisplayClass(),
 SizedBox(height: 30,),
-                Text("REMARKS AND REVIEWS",
-                style:
-                TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-
-                ),),
 
 
                 RemarkDisplayClass(),
 
-                Text("OUR TEAM",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-
-                ),),
 
 
                 TeamDisplay(),
