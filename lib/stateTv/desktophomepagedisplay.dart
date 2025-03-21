@@ -3,6 +3,7 @@ import 'package:toptech/stateTv/remarkDisplay.dart';
 import 'package:toptech/stateTv/serviceDisplay.dart';
 import 'package:toptech/stateTv/teamdisplay.dart';
 
+import '../widgets/advert_container.dart';
 import 'footerdisplaytv.dart';
 import 'headerdisplayclass.dart';
 
@@ -69,6 +70,8 @@ SizedBox(height: 30,),
 
 
                 TeamDisplay(),
+                AdvertContainer(),
+
                 Align(
                   alignment: Alignment.bottomCenter,
 
