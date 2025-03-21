@@ -159,11 +159,10 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
                             scrollDirection: Axis.horizontal,
                             child:
                             Container(
-                              color: Colors.black,
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 4.0, right: 4.0),
                                 child: Row(
-                                  spacing: 10,
+                                  spacing: 12,
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
@@ -176,11 +175,12 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
                                         decoration: TextDecoration.none, // No underline
                                       ),
                                     ),
+                                    SizedBox(width: 10,),
                                     Text(
                                       'Ksh: ${serviceData['servicePriceKsh'] ?? 'N/A'}',
                                       style:
                                       TextStyle(
-                                        color: Colors.white,
+                                        color: Colors.orange[200],
                                         fontSize: 12, // Font size adjusts relative to screen size
                                         fontWeight: FontWeight.bold,
                                         decoration: TextDecoration.none, // No underline
@@ -190,7 +190,7 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
                                       'USD: ${serviceData['servicePriceUsd'] ?? 'N/A'}',
                                       style:
                                       TextStyle(
-                                        color: Colors.white,
+                                        color: Colors.orange[200],
                                         fontSize: 12, // Font size adjusts relative to screen size
                                         fontWeight: FontWeight.bold,
                                         decoration: TextDecoration.none, // No underline
