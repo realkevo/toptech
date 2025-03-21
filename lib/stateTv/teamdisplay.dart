@@ -47,86 +47,89 @@ class _TeamDisplayState extends State<TeamDisplay> {
   @override
   Widget build(BuildContext context) {
     return
-      StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('teamData').
-        snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
-
-          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-            return Center(child: Text('No team  found.'));
-          }
-
-          // Store the fetched remarks
-          _teams = snapshot.data!.docs;
-
-          // Create a duplicated list for seamless scrolling
-          List<DocumentSnapshot> duplicatedRemarks = [..._teams, ..._teams];
-
-          return SingleChildScrollView(
-            controller: _scrollController,
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              spacing: 13,
-              children: duplicatedRemarks.map((currentMember) {
-                var name = currentMember['MemberName'];
-                var specialty = currentMember['MemberSpecialty'];
-                var experience = currentMember['MemberExperience'];
-
-                return Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(7.0),
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Color(0xFF0A0E21), // Dark blue
-                        Color(0xFF12233F), // Slightly lighter blue
-                        Color(0xFF1E3C72), // Mid blue
-                      ],
+      Padding(
+        padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+        child: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance.collection('teamData').
+          snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
+        
+            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+              return Center(child: Text('No team  found.'));
+            }
+        
+            // Store the fetched remarks
+            _teams = snapshot.data!.docs;
+        
+            // Create a duplicated list for seamless scrolling
+            List<DocumentSnapshot> duplicatedRemarks = [..._teams, ..._teams];
+        
+            return SingleChildScrollView(
+              controller: _scrollController,
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                spacing: 13,
+                children: duplicatedRemarks.map((currentMember) {
+                  var name = currentMember['MemberName'];
+                  var specialty = currentMember['MemberSpecialty'];
+                  var experience = currentMember['MemberExperience'];
+        
+                  return Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(7.0),
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Color(0xFF0A0E21), // Dark blue
+                          Color(0xFF12233F), // Slightly lighter blue
+                          Color(0xFF1E3C72), // Mid blue
+                        ],
+                      ),
+        
+        
                     ),
-
-
-                  ),
-
-                  width: 250,
-                  height: 150,
-                  // Set the width of each item
-                  child:
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
+        
+                    width: 250,
+                    height: 150,
+                    // Set the width of each item
                     child:
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-
-                      children: [
-                        Text(
-                          name,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(height: 4),
-                        Text( specialty,
-                          style: TextStyle(
-                              color: Colors.white
-                          ),),
-                        SizedBox(height: 4),
-                        Text('experience: $experience',
-                          style: TextStyle(
-                              color: Colors.white
-                          ),),
-                      ],
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child:
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+        
+                        children: [
+                          Text(
+                            name,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(height: 4),
+                          Text( specialty,
+                            style: TextStyle(
+                                color: Colors.white
+                            ),),
+                          SizedBox(height: 4),
+                          Text('experience: $experience',
+                            style: TextStyle(
+                                color: Colors.white
+                            ),),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              }).toList(),
-            ),
-          );
-        },
+                  );
+                }).toList(),
+              ),
+            );
+          },
+        ),
       );
   }
 }
