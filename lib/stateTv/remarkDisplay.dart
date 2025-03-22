@@ -66,9 +66,9 @@ class _RemarkDisplayClassState extends State<RemarkDisplayClass> {
               stream: FirebaseFirestore.instance.collection('remarkData').
               snapshots(),
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
+               /* if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
-                }
+                }*/
             
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                   return Center(child: Text('No remarks found.'));

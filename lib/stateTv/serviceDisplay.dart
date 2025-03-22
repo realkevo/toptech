@@ -19,6 +19,9 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
         .toList());
   }
 
+  int? _tappedIndex;  // Track the tapped index
+  bool _isShaking = false; // Track if the card is shaking
+
   @override
   Widget build(BuildContext context) {
     // Get the screen width and height
@@ -34,13 +37,9 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
     return Container(
       width: screenWidth * 0.99,
       height: screenHeight * 0.60, // Height is 40% of the screen height
-      child:
-      StreamBuilder<List<Map<String, dynamic>>>(
+      child: StreamBuilder<List<Map<String, dynamic>>>(
         stream: fetchServices(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
           if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           }
@@ -53,7 +52,6 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
           return Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5),
-
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
@@ -63,11 +61,7 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
                   Color(0xFF1E3C72), // Mid blue
                 ],
               ),
-
-
             ),
-
-
             child: Padding(
               padding: EdgeInsets.all(screenWidth * 0.02), // Padding is 2% of screen width
               child: GridView.builder(
@@ -79,153 +73,129 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
                 itemCount: services.length,
                 itemBuilder: (context, index) {
                   var serviceData = services[index];
-                  return Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(7.0),
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Color(0xFF0A0E21), // Dark blue
-                          Color(0xFF12233F), // Slightly lighter blue
-                          Color(0xFF1E3C72), // Mid blue
+                  bool isTapped = _tappedIndex == index; // Check if this card is tapped
+
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (_tappedIndex == index) {
+                          _isShaking = !_isShaking; // Toggle the shaking effect
+                        } else {
+                          _tappedIndex = index; // Set new tapped index
+                          _isShaking = true; // Start shaking
+                        }
+                      });
+                    },
+                    child: AnimatedContainer(
+                      duration: Duration(milliseconds: 300), // Duration for the animation
+                      curve: Curves.easeInOut,
+                      transform: Matrix4.translationValues(
+                          isTapped && _isShaking ? 10.0 * (index % 2 == 0 ? 1 : -1) : 0.0, 0.0, 0.0), // Apply shake effect
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(7.0),
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: isTapped
+                              ? [
+                            Colors.black, // Black gradient when tapped
+                            Colors.black54,
+                          ]
+                              : [
+                            Color(0xFF0A0E21), // Dark blue
+                            Color(0xFF12233F), // Slightly lighter blue
+                            Color(0xFF1E3C72), // Mid blue
+                          ],
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: Offset(0, 3),
+                          ),
                         ],
                       ),
-
-
-                    ),
-
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        FittedBox(
-                          fit: BoxFit.scaleDown, // Ensure text scales down to fit
-                          child:
-                          Text(
-                            serviceData['serviceTitle'] ?? 'No Title',
-                            style:
-                            TextStyle(
-                              color: Colors.white,
-                              fontSize: 16, // Font size adjusts relative to screen size
-                              fontWeight: FontWeight.bold,
-                              decoration: TextDecoration.none, // No underline
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.all(screenWidth * 0.01), // Padding based on screen width
-                            child: Container(
-
-                              width: screenWidth * 0.8, // Width is 80% of screen width
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(7.0),
-                                gradient: LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: [
-                                    Color(0xFF0A0E21), // Dark blue
-                                    Color(0xFF12233F), // Slightly lighter blue
-                                    Color(0xFF1E3C72), // Mid blue
-                                  ],
-                                ),
-
-
-                              ),
-                              child: SingleChildScrollView(
-                                scrollDirection: Axis.vertical,
-                                child: Padding(
-                                  padding: EdgeInsets.all(screenWidth * 0.03), // Padding based on screen width
-                                  child: Text(
-                                    serviceData['serviceDescription'] ?? 'No Description',
-                                    style:
-                                    TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12, // Font size adjusts relative to screen size
-                                      fontWeight: FontWeight.normal,
-                                      decoration: TextDecoration.none, // No underline
-                                    ),
-                                  ),
+                      width: screenWidth * 0.35, // Set card size
+                      height: screenHeight * 0.2, // Set card height
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(7.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            FittedBox(
+                              fit: BoxFit.scaleDown, // Ensure text scales down to fit
+                              child: Text(
+                                serviceData['serviceTitle'] ?? 'No Title',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16, // Font size adjusts relative to screen size
+                                  fontWeight: FontWeight.bold,
+                                  decoration: TextDecoration.none, // No underline
                                 ),
                               ),
                             ),
-                          ),
-                        ),
-                        // Prices row for services
-                        Padding(
-                          padding: const EdgeInsets.only(left: 4.0, right: 4.0),
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child:
-                            Container(
+                            Expanded(
                               child: Padding(
-                                padding: const EdgeInsets.only(left: 4.0, right: 4.0),
-                                child: Row(
-                                  spacing: 12,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "Price",
-                                      style:
-                                      TextStyle(
+                                padding: EdgeInsets.all(screenWidth * 0.01), // Padding based on screen width
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.vertical,
+                                  child: Padding(
+                                    padding: EdgeInsets.all(screenWidth * 0.03),
+                                    child: Text(
+                                      serviceData['serviceDescription'] ?? 'No Description',
+                                      style: TextStyle(
                                         color: Colors.white,
                                         fontSize: 12, // Font size adjusts relative to screen size
                                         fontWeight: FontWeight.normal,
                                         decoration: TextDecoration.none, // No underline
                                       ),
                                     ),
-                                    SizedBox(width: 10,),
-                                    Text(
-                                      'Ksh: ${serviceData['servicePriceKsh'] ?? 'N/A'}',
-                                      style:
-                                      TextStyle(
-                                        color: Colors.orange[200],
-                                        fontSize: 12, // Font size adjusts relative to screen size
-                                        fontWeight: FontWeight.bold,
-                                        decoration: TextDecoration.none, // No underline
-                                      ),
-                                    ),
-                                    Text(
-                                      'USD: ${serviceData['servicePriceUsd'] ?? 'N/A'}',
-                                      style:
-                                      TextStyle(
-                                        color: Colors.orange[200],
-                                        fontSize: 12, // Font size adjusts relative to screen size
-                                        fontWeight: FontWeight.bold,
-                                        decoration: TextDecoration.none, // No underline
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                       /* Padding(
-                          padding: EdgeInsets.only(right: screenWidth * 0.03), // Padding for the "Inquire" button
-                          child: Align(
-                            alignment: Alignment.bottomRight,
-                            child: Container(
-                              color: Colors.black,
-                              child: Padding(
-                                padding: EdgeInsets.all(screenWidth * 0.02), // Padding based on screen width
-                                child: Text(
-                                  "INQUIRE",
-                                  style:
-                                  TextStyle(
-                                    color: Colors.white,
-                                    fontSize: titleFontSize, // Font size adjusts relative to screen size
-                                    fontWeight: FontWeight.bold,
-                                    decoration: TextDecoration.none, // No underline
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ),*/
-                      ],
+                            Padding(
+                              padding: const EdgeInsets.only(left: 7.0, right: 7.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    "Price",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12, // Font size adjusts relative to screen size
+                                      fontWeight: FontWeight.normal,
+                                      decoration: TextDecoration.none, // No underline
+                                    ),
+                                  ),
+                                  SizedBox(width: 7),
+                                  Text(
+                                    'Ksh:   ${serviceData['servicePriceKsh'] ?? 'N/A'}',
+                                    style: TextStyle(
+                                      color: Colors.orange[200],
+                                      fontSize: 12, // Font size adjusts relative to screen size
+                                      fontWeight: FontWeight.bold,
+                                      decoration: TextDecoration.none, // No underline
+                                    ),
+                                  ),
+                                  Text(
+                                    'USD:   ${serviceData['servicePriceUsd'] ?? 'N/A'}',
+                                    style: TextStyle(
+                                      color: Colors.orange[200],
+                                      fontSize: 12, // Font size adjusts relative to screen size
+                                      fontWeight: FontWeight.bold,
+                                      decoration: TextDecoration.none, // No underline
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   );
                 },

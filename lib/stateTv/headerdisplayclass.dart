@@ -63,9 +63,9 @@ class HeaderDisplay extends StatelessWidget {
     return StreamBuilder<List<HeaderData>>(
       stream: _firestoreService.fetchHeaderData(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
+       /* if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
-        }
+        }*/
 
         if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));

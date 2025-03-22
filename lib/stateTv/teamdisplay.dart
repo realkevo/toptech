@@ -66,9 +66,9 @@ class _TeamDisplayState extends State<TeamDisplay> {
               stream: FirebaseFirestore.instance.collection('teamData').
               snapshots(),
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
+               /* if (snapshot.connectionState == ConnectionState.waiting) {
                   return Center(child: CircularProgressIndicator());
-                }
+                }*/
 
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                   return Center(child: Text('No team  found.'));

@@ -10,28 +10,44 @@ class AdvertContainer extends StatefulWidget {
 class _AdvertContainerState extends State<AdvertContainer> {
   bool _isTapped = false; // Variable to track tap state
 
+
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 38.0, bottom: 20),
-      child: GestureDetector(
-        onTap: () {
-          setState(() {
-            _isTapped = !_isTapped; // Toggle the tapped state
-          });
-        },
-        child: AnimatedContainer(
-          height: _isTapped ? 450 : 400, // Change height on tap
-          width: _isTapped ? 375 : 350, // Change width on tap
-          duration: const Duration(milliseconds: 300), // Animation duration
-          curve: Curves.easeInOut, // Smooth curve for animation
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.black, Colors.green.shade900],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+      padding: const EdgeInsets.only(left: 15.0),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Padding(
+          padding: const EdgeInsets.only(top: 38.0, bottom: 20),
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                _isTapped = !_isTapped; // Toggle the tapped state
+              });
+            },
+            child: AnimatedContainer(
+              height:
+              _isTapped ? 400 : 350, // Change height on tap
+              width:
+              _isTapped ? 330 : 300, // Change width on tap
+              duration: const Duration(milliseconds: 500), // Animation duration
+              curve: Curves.easeInOut, // Smooth curve for animation
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Colors.black, Colors.blue.shade900],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(10),
+              ),
+
+              child: Column(
+                children: [
+                  
+                ],
+              ),
+
             ),
-            borderRadius: BorderRadius.circular(10),
           ),
         ),
       ),
