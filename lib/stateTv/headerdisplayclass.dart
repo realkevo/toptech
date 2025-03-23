@@ -77,7 +77,8 @@ class HeaderDisplay extends StatelessWidget {
 
         final headerDataList = snapshot.data!;
 
-        return Container(
+        return
+          Container(
           decoration: BoxDecoration(
 
             gradient: LinearGradient(
@@ -116,165 +117,120 @@ class HeaderDisplay extends StatelessWidget {
                         fontSize: MediaQuery.of(context).size.width * 0.04,
                       ),
                     ),
-                  Container(
-                    decoration: BoxDecoration(
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      // Left Container (Location)
+                      Expanded(
+                        child:
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                          child:
+                          Row(
+                            children: [
 
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Color(0xFF0A0E21), // Dark blue
-                          Color(0xFF12233F), // Slightly lighter blue
-                          Color(0xFF1E3C72), // Mid blue
-                        ],
+                              //open drAWER when this os clicked from left
+                              IconButton(
+                                onPressed: () {},
+                                color: Colors.white,
+                                icon: Icon(Icons.menu_sharp),
+                                iconSize: MediaQuery.of(context).size.width * 0.07, // Responsive Icon Size
+                              ),
+                              IconButton(
+                                onPressed: () {},
+                                icon: Icon(Icons.location_on),
+                                iconSize: MediaQuery
+                                    .of(context).size.width * 0.03, // Responsive Icon Size
+                                color: Colors.white,
+                              ),
+                              if (headerData.locationText.isNotEmpty)
+                                Flexible(
+                                  child: Text(
+
+                                    headerData.locationText,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize:
+                                      MediaQuery.of(context).
+                                      size.width * 0.02,
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ),
                       ),
 
-
-                    ),
-
-                    width: MediaQuery.of(context).size.width * 1,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 3.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          // Left Container (Location)
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-
-                                gradient: LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: [
-                                    Color(0xFF0A0E21), // Dark blue
-                                    Color(0xFF12233F), // Slightly lighter blue
-                                    Color(0xFF1E3C72), // Mid blue
-                                  ],
-                                ),
-
-
+                      // Right Container (Contact Information)
+                      Expanded(
+                        child:
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                onPressed: () {},
+                                icon: Icon(Icons.phone),
+                                color: Colors.white,
+                                iconSize: MediaQuery
+                                    .of(context).size.width * 0.03, // Responsive Icon Size
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 3.0),
-                                child: Row(
-                                  children: [
-                                    IconButton(
-                                      onPressed: () {},
-                                      color: Colors.white,
-                                      icon: Icon(Icons.menu_sharp),
-                                      iconSize: MediaQuery.of(context).size.width * 0.07, // Responsive Icon Size
-                                    ),
-                                    IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(Icons.location_on),
-                                      iconSize: MediaQuery
-                                          .of(context).size.width * 0.03, // Responsive Icon Size
-                                      color: Colors.white,
-                                    ),
-                                    if (headerData.locationText.isNotEmpty)
-                                      Flexible(
-                                        child: Text(
+                              if (headerData.phoneText.isNotEmpty)
+                                Flexible(
+                                  child: FittedBox(
+                                    fit: BoxFit.scaleDown, // Ensure text scales down to fit
+                                    child:
+                                    Text(
+                                      headerData.phoneText,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: MediaQuery.
+                                        of(context).size.width * 0.02,
+                                        decoration: TextDecoration.none, // No underline
 
-                                          headerData.locationText,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize:
-                                            MediaQuery.of(context).
-                                            size.width * 0.02,
-                                          ),
-                                        ),
                                       ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
+                                    ),
 
-                          // Right Container (Contact Information)
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-
-                                gradient: LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.bottomCenter,
-                                  colors: [
-                                    Color(0xFF0A0E21), // Dark blue
-                                    Color(0xFF12233F), // Slightly lighter blue
-                                    Color(0xFF1E3C72), // Mid blue
-                                  ],
-                                ),
-
-
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(Icons.phone),
-                                    color: Colors.white,
-                                    iconSize: MediaQuery
-                                        .of(context).size.width * 0.03, // Responsive Icon Size
                                   ),
-                                  if (headerData.phoneText.isNotEmpty)
-                                    Flexible(
-                                      child: FittedBox(
-                                        fit: BoxFit.scaleDown, // Ensure text scales down to fit
-                                        child:
-                                        Text(
-                                          headerData.phoneText,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: MediaQuery.
-                                            of(context).size.width * 0.02,
-                                            decoration: TextDecoration.none, // No underline
-                                      
-                                          ),
-                                        ),
-                                      
-                                      ),
-                                    ),
-                                  IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(Icons.email),
-                                    iconSize: MediaQuery
-                                        .of(context).size.width * 0.03, // Responsive Icon Size
-                                    color: Colors.white,
-                                  ),
-                                  if (headerData.email.isNotEmpty)
-                                    Flexible(
-                                      child:
-                                      FittedBox(
-                                        fit: BoxFit.scaleDown, // Ensure text scales down to fit
-                                        child:                                       Text(
-                                          headerData.email,
-                                          style:
-                                          TextStyle(
-                                            color: Colors.white,
-                                            fontSize:
-                                            MediaQuery.of(context).size
-                                                .width * 0.06,
-                                            decoration: TextDecoration.none, // No underline
-
-                                          ),
-                                        ),
-
-
-                                      ),
-
-
-
-                                    ),
-                                ],
+                                ),
+                              IconButton(
+                                onPressed: () {},
+                                icon: Icon(Icons.email),
+                                iconSize: MediaQuery
+                                    .of(context).size.width * 0.03, // Responsive Icon Size
+                                color: Colors.white,
                               ),
-                            ),
+                              if (headerData.email.isNotEmpty)
+                                Flexible(
+                                  child:
+                                  FittedBox(
+                                    fit: BoxFit.scaleDown, // Ensure text scales down to fit
+                                    child:                                       Text(
+                                      headerData.email,
+                                      style:
+                                      TextStyle(
+                                        color: Colors.white,
+                                        fontSize:
+                                        MediaQuery.of(context).size
+                                            .width * 0.06,
+                                        decoration: TextDecoration.none, // No underline
+
+                                      ),
+                                    ),
+
+
+                                  ),
+
+
+
+                                ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+                    ],
                   ),
                 ],
               );

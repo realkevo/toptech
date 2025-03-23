@@ -131,7 +131,7 @@ class _TeamDisplayState extends State<TeamDisplay> {
                                       color: Colors.white
                                   ),),
                                 SizedBox(height: 4),
-                                Text('experience: $experience',
+                                Text(experience,
                                   style: TextStyle(
                                       color: Colors.white
                                   ),),

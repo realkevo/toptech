@@ -80,10 +80,10 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
       child: FutureBuilder<Map<String, String>>(
         future: fetchFooterData(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
+         /* if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           }
-
+*/
           if (snapshot.hasError) {
             return Center(child: Text("Error loading data"));
           }
@@ -246,7 +246,8 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
 
                           ),
 
-                          child: Column(
+                          child:
+                          Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               FittedBox(
@@ -312,42 +313,26 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
                   ),
                 
                   // Bottom row for copyright
-                  Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Color(0xFF0A0E21), // Dark blue
-                          Color(0xFF12233F), // Slightly lighter blue
-                          Color(0xFF1E3C72), // Mid blue
-                        ],
-                      ),
-
-
-                    ),
-                    width: widthFactor,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        footerData['copyRightIcon'] != null
-                            ? Container(
-                          margin: EdgeInsets.symmetric(horizontal: 5),
-                          height: 20, // Further reduced height
-                          child: _decodeBase64ToImage(footerData['copyRightIcon']!),
-                        )
-                            : SizedBox.shrink(),
-                        Text(
-                          "Copyright",
-                          style: TextStyle(
-                            fontSize: heightFactor * 0.024, // Further reduced responsive font size
-                            color: Colors.white,
-                          ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      footerData['copyRightIcon'] != null
+                          ? Container(
+                        margin: EdgeInsets.symmetric(horizontal: 5),
+                        height: 15, // Further reduced height
+                        child: _decodeBase64ToImage(footerData['copyRightIcon']!),
+                      )
+                          : SizedBox.shrink(),
+                      Text(
+                        "Copyright",
+                        style: TextStyle(
+                          fontSize: heightFactor * 0.024, // Further reduced responsive font size
+                          color: Colors.white,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ],
                           ),

@@ -17,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _startProgress() {
-    Timer.periodic(Duration(milliseconds: 250), (timer) {
+    Timer.periodic(Duration(milliseconds: 300), (timer) {
       setState(() {
         if (_progress < 1.0) {
           _progress += 0.1; // Increase progress
@@ -48,15 +48,6 @@ class _SplashScreenState extends State<SplashScreen> {
               Icons.flutter_dash, // Example Flutter icon
               size: 100,
               color: Colors.greenAccent, // Hacker-like color
-            ),
-            SizedBox(height: 20),
-            Text(
-              "Loading...",
-              style: TextStyle(
-                fontSize: 24,
-                color: Colors.greenAccent,
-                fontWeight: FontWeight.bold,
-              ),
             ),
             SizedBox(height: 20),
             _buildHackerProgressBar(),
