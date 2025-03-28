@@ -93,147 +93,162 @@ class HeaderDisplay extends StatelessWidget {
 
 
           ),
-          child: Column(
+          child:
+          Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: headerDataList.map((headerData) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  if (headerData.bannerIcon.isNotEmpty)
-                    Image.network(headerData.bannerIcon),
-                  if (headerData.siteTitle.isNotEmpty)
-                    Text(
-                      headerData.siteTitle,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: MediaQuery.of(context).size.width * 0.04,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  if (headerData.slogan.isNotEmpty)
-                    Text(
-                      headerData.slogan,
-                      style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.width * 0.04,
-                      ),
-                    ),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
+              return
+                Padding(
+                  padding: const EdgeInsets.only(left:
+                  10.0, right: 10.0),
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Left Container (Location)
-                      Expanded(
-                        child:
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 3.0),
-                          child:
-                          Row(
-                            children: [
-
-                              //open drAWER when this os clicked from left
-                              IconButton(
-                                onPressed: () {},
-                                color: Colors.white,
-                                icon: Icon(Icons.menu_sharp),
-                                iconSize: MediaQuery.of(context).size.width * 0.07, // Responsive Icon Size
-                              ),
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(Icons.location_on),
-                                iconSize: MediaQuery
-                                    .of(context).size.width * 0.03, // Responsive Icon Size
-                                color: Colors.white,
-                              ),
-                              if (headerData.locationText.isNotEmpty)
-                                Flexible(
-                                  child: Text(
-
-                                    headerData.locationText,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize:
-                                      MediaQuery.of(context).
-                                      size.width * 0.02,
-                                    ),
-                                  ),
-                                ),
-                            ],
+                                 children: [
+                    if (headerData.bannerIcon.isNotEmpty)
+                      Image.network(headerData.bannerIcon),
+                    if (headerData.siteTitle.isNotEmpty)
+                      Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          headerData.siteTitle,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: MediaQuery.of(context).size.width * 0.04,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
+                    if (headerData.slogan.isNotEmpty)
+                      Text(
+                        headerData.slogan,
+                        style: TextStyle(
+                          fontSize: MediaQuery.of(context).size.width * 0.04,
+                        ),
+                      ),
+                   IconButton(
+                     onPressed: () {},
+                     color: Colors.white,
+                     icon: Icon(Icons.menu_sharp),
+                     iconSize: MediaQuery.of(context).size.width * 0.07, // Responsive Icon Size
+                   ),
+                  /*  Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        // Left Container (Location)
+                        Expanded(
+                          child:
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                            child:
+                            Row(
+                              children: [
 
-                      // Right Container (Contact Information)
-                      Expanded(
-                        child:
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(Icons.phone),
-                                color: Colors.white,
-                                iconSize: MediaQuery
-                                    .of(context).size.width * 0.03, // Responsive Icon Size
-                              ),
-                              if (headerData.phoneText.isNotEmpty)
-                                Flexible(
-                                  child: FittedBox(
-                                    fit: BoxFit.scaleDown, // Ensure text scales down to fit
-                                    child:
-                                    Text(
-                                      headerData.phoneText,
+                                //open drAWER when this os clicked from left
+                                IconButton(
+                                  onPressed: () {},
+                                  color: Colors.white,
+                                  icon: Icon(Icons.menu_sharp),
+                                  iconSize: MediaQuery.of(context).size.width * 0.07, // Responsive Icon Size
+                                ),
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.location_on),
+                                  iconSize: MediaQuery
+                                      .of(context).size.width * 0.03, // Responsive Icon Size
+                                  color: Colors.white,
+                                ),
+                                if (headerData.locationText.isNotEmpty)
+                                  Flexible(
+                                    child: Text(
+
+                                      headerData.locationText,
                                       style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: MediaQuery.
-                                        of(context).size.width * 0.02,
-                                        decoration: TextDecoration.none, // No underline
-
-                                      ),
-                                    ),
-
-                                  ),
-                                ),
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(Icons.email),
-                                iconSize: MediaQuery
-                                    .of(context).size.width * 0.03, // Responsive Icon Size
-                                color: Colors.white,
-                              ),
-                              if (headerData.email.isNotEmpty)
-                                Flexible(
-                                  child:
-                                  FittedBox(
-                                    fit: BoxFit.scaleDown, // Ensure text scales down to fit
-                                    child:                                       Text(
-                                      headerData.email,
-                                      style:
-                                      TextStyle(
-                                        color: Colors.white,
                                         fontSize:
-                                        MediaQuery.of(context).size
-                                            .width * 0.06,
-                                        decoration: TextDecoration.none, // No underline
-
+                                        MediaQuery.of(context).
+                                        size.width * 0.02,
                                       ),
                                     ),
-
-
                                   ),
-
-
-
-                                ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              );
+
+                        // Right Container (Contact Information)
+                      /*  Expanded(
+                          child:
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.phone),
+                                  color: Colors.white,
+                                  iconSize: MediaQuery
+                                      .of(context).size.width * 0.03, // Responsive Icon Size
+                                ),
+                                if (headerData.phoneText.isNotEmpty)
+                                  Flexible(
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown, // Ensure text scales down to fit
+                                      child:
+                                      Text(
+                                        headerData.phoneText,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: MediaQuery.
+                                          of(context).size.width * 0.02,
+                                          decoration: TextDecoration.none, // No underline
+
+                                        ),
+                                      ),
+
+                                    ),
+                                  ),
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.email),
+                                  iconSize: MediaQuery
+                                      .of(context).size.width * 0.03, // Responsive Icon Size
+                                  color: Colors.white,
+                                ),
+                                if (headerData.email.isNotEmpty)
+                                  Flexible(
+                                    child:
+                                    FittedBox(
+                                      fit: BoxFit.scaleDown, // Ensure text scales down to fit
+                                      child:                                       Text(
+                                        headerData.email,
+                                        style:
+                                        TextStyle(
+                                          color: Colors.white,
+                                          fontSize:
+                                          MediaQuery.of(context).size
+                                              .width * 0.06,
+                                          decoration: TextDecoration.none, // No underline
+
+                                        ),
+                                      ),
+
+
+                                    ),
+
+
+
+                                  ),
+                              ],
+                            ),
+                          ),
+                        ),*/
+                      ],
+                    ),*/
+                  ],
+                                ),
+                );
             }).toList(),
           ),
         );

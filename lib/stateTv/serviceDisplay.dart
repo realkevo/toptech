@@ -11,15 +11,13 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
 
   // Fetch the services from Firestore
   Stream<List<Map<String, dynamic>>> fetchServices() {
-    return _firestore
-        .collection('servicesData')
-        .snapshots()
-        .map((snapshot) => snapshot.docs
-        .map((doc) => doc.data() as Map<String, dynamic>)
-        .toList());
+    return _firestore.collection('servicesData').snapshots().map((snapshot) =>
+        snapshot.docs
+            .map((doc) => doc.data() as Map<String, dynamic>)
+            .toList());
   }
 
-  int? _tappedIndex;  // Track the tapped index
+  int? _tappedIndex; // Track the tapped index
   bool _isShaking = false; // Track if the card is shaking
 
   @override
@@ -29,10 +27,14 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     // Calculate responsive font size based on screen width
-    double titleFontSize = screenWidth * 0.04; // Title font size is 5% of screen width
-    double descriptionFontSize = screenWidth * 0.035; // Description font size is 3.5% of screen width
-    double priceFontSize = screenWidth * 0.04; // Price font size is 4% of screen width
-    double inquireFontSize = screenWidth * 0.035; // Inquire button font size is 3.5% of screen width
+    double titleFontSize =
+        screenWidth * 0.04; // Title font size is 5% of screen width
+    double descriptionFontSize =
+        screenWidth * 0.035; // Description font size is 3.5% of screen width
+    double priceFontSize =
+        screenWidth * 0.04; // Price font size is 4% of screen width
+    double inquireFontSize =
+        screenWidth * 0.035; // Inquire button font size is 3.5% of screen width
 
     return Container(
       width: screenWidth * 0.99,
@@ -62,18 +64,24 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
                 ],
               ),
             ),
-            child: Padding(
-              padding: EdgeInsets.all(screenWidth * 0.02), // Padding is 2% of screen width
+            child:
+            Padding(
+              padding: EdgeInsets.all(
+                  screenWidth * 0.02,
+              ), // Padding is 2% of screen width
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: screenWidth > 600 ? 3 : 2, // Use 2 columns for large screens, 1 for small
+                  crossAxisCount: screenWidth > 600
+                      ? 3
+                      : 2, // Use 2 columns for large screens, 1 for small
                   crossAxisSpacing: screenWidth * 0.02, // Space between columns
                   mainAxisSpacing: screenWidth * 0.02, // Space between rows
                 ),
                 itemCount: services.length,
                 itemBuilder: (context, index) {
                   var serviceData = services[index];
-                  bool isTapped = _tappedIndex == index; // Check if this card is tapped
+                  bool isTapped =
+                      _tappedIndex == index; // Check if this card is tapped
 
                   return GestureDetector(
                     onTap: () {
@@ -87,10 +95,16 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
                       });
                     },
                     child: AnimatedContainer(
-                      duration: Duration(milliseconds: 300), // Duration for the animation
+                      duration: Duration(
+                          milliseconds: 300
+                      ), // Duration for the animation
                       curve: Curves.easeInOut,
                       transform: Matrix4.translationValues(
-                          isTapped && _isShaking ? 10.0 * (index % 2 == 0 ? 1 : -1) : 0.0, 0.0, 0.0), // Apply shake effect
+                          isTapped && _isShaking
+                              ? 10.0 * (index % 2 == 0 ? 1 : -1)
+                              : 0.0,
+                          0.0,
+                          0.0), // Apply shake effect
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(7.0),
                         gradient: LinearGradient(
@@ -98,14 +112,14 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
                           end: Alignment.bottomCenter,
                           colors: isTapped
                               ? [
-                            Colors.black, // Black gradient when tapped
-                            Colors.black54,
-                          ]
+                                  Colors.black, // Black gradient when tapped
+                                  Colors.black54,
+                                ]
                               : [
-                            Color(0xFF0A0E21), // Dark blue
-                            Color(0xFF12233F), // Slightly lighter blue
-                            Color(0xFF1E3C72), // Mid blue
-                          ],
+                                  Color(0xFF0A0E21), // Dark blue
+                                  Color(0xFF12233F), // Slightly lighter blue
+                                  Color(0xFF1E3C72), // Mid blue
+                                ],
                         ),
                         boxShadow: [
                           BoxShadow(
@@ -118,39 +132,48 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
                       ),
                       width: screenWidth * 0.35, // Set card size
                       height: screenHeight * 0.2, // Set card height
-                      child: ClipRRect(
+                      child:
+                      ClipRRect(
                         borderRadius: BorderRadius.circular(7.0),
-                        child: Column(
+                        child:
+                        Column(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             FittedBox(
-                              fit: BoxFit.scaleDown, // Ensure text scales down to fit
+                              fit: BoxFit
+                                  .scaleDown, // Ensure text scales down to fit
                               child: Text(
                                 serviceData['serviceTitle'] ?? 'No Title',
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 16, // Font size adjusts relative to screen size
+                                  fontSize:
+                                      16, // Font size adjusts relative to screen size
                                   fontWeight: FontWeight.bold,
-                                  decoration: TextDecoration.none, // No underline
+                                  decoration:
+                                      TextDecoration.none, // No underline
                                 ),
                               ),
                             ),
                             Expanded(
                               child: Padding(
-                                padding: EdgeInsets.all(screenWidth * 0.01), // Padding based on screen width
+                                padding: EdgeInsets.all(screenWidth *
+                                    0.01), // Padding based on screen width
                                 child: SingleChildScrollView(
                                   scrollDirection: Axis.vertical,
                                   child: Padding(
                                     padding: EdgeInsets.all(screenWidth * 0.03),
                                     child: Text(
-                                      serviceData['serviceDescription'] ?? 'No Description',
+                                      serviceData['serviceDescription'] ??
+                                          'No Description',
                                       style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 12, // Font size adjusts relative to screen size
+                                        fontSize:
+                                            12, // Font size adjusts relative to screen size
                                         fontWeight: FontWeight.normal,
-                                        decoration: TextDecoration.none, // No underline
+                                        decoration:
+                                            TextDecoration.none, // No underline
                                       ),
                                     ),
                                   ),
@@ -158,17 +181,21 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(left: 7.0, right: 7.0),
+                              padding:
+                                  const EdgeInsets.only(left: 7.0, right: 7.0),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     "Price",
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 12, // Font size adjusts relative to screen size
+                                      fontSize:
+                                          12, // Font size adjusts relative to screen size
                                       fontWeight: FontWeight.normal,
-                                      decoration: TextDecoration.none, // No underline
+                                      decoration:
+                                          TextDecoration.none, // No underline
                                     ),
                                   ),
                                   SizedBox(width: 7),
@@ -176,18 +203,22 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
                                     'Ksh:   ${serviceData['servicePriceKsh'] ?? 'N/A'}',
                                     style: TextStyle(
                                       color: Colors.orange[200],
-                                      fontSize: 12, // Font size adjusts relative to screen size
+                                      fontSize:
+                                          12, // Font size adjusts relative to screen size
                                       fontWeight: FontWeight.bold,
-                                      decoration: TextDecoration.none, // No underline
+                                      decoration:
+                                          TextDecoration.none, // No underline
                                     ),
                                   ),
                                   Text(
                                     'USD:   ${serviceData['servicePriceUsd'] ?? 'N/A'}',
                                     style: TextStyle(
                                       color: Colors.orange[200],
-                                      fontSize: 12, // Font size adjusts relative to screen size
+                                      fontSize:
+                                          12, // Font size adjusts relative to screen size
                                       fontWeight: FontWeight.bold,
-                                      decoration: TextDecoration.none, // No underline
+                                      decoration:
+                                          TextDecoration.none, // No underline
                                     ),
                                   ),
                                 ],

@@ -119,7 +119,8 @@ class _ProfileSettingsState extends State<ProfileSettings> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "KELVIN THURANIRA",
+                                    "KELVIN T"
+                                        "HURANIRA",
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontStyle: FontStyle.normal,

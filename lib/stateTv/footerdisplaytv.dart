@@ -56,7 +56,8 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
     double heightFactor = MediaQuery.of(context).size.height;
     double widthFactor = MediaQuery.of(context).size.width;
 
-    return Container(
+    return
+      Container(
       width: widthFactor,
       padding: EdgeInsets.symmetric(horizontal: widthFactor * 0.05, vertical: heightFactor * 0.012), // Further reduced vertical padding
 
@@ -77,7 +78,8 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
           topRight: Radius.circular(7.0),
         ),
       ),
-      child: FutureBuilder<Map<String, String>>(
+      child:
+      FutureBuilder<Map<String, String>>(
         future: fetchFooterData(),
         builder: (context, snapshot) {
          /* if (snapshot.connectionState == ConnectionState.waiting) {
@@ -95,11 +97,9 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
           var footerData = snapshot.data!;
 
           return
-            Container(
-              child:
-              Padding(
-                padding: const EdgeInsets.all(7.0),
-                child: Column(
+            Padding(
+              padding: const EdgeInsets.all(7.0),
+              child: Column(
                 children: [
                   // Row for main content
                   Row(
@@ -205,7 +205,7 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
                           ),
                         ),
                       ),
-                
+
                       // Center Column - PO Box and Address
                       Flexible(
                         flex: 3,
@@ -232,7 +232,7 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
                           ),
                         ),
                       ),
-                
+
                       // Right Column - Partners
                       Flexible(
                         flex: 2,
@@ -311,7 +311,7 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
                       ),
                     ],
                   ),
-                
+
                   // Bottom row for copyright
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -326,16 +326,15 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
                       )
                           : SizedBox.shrink(),
                       Text(
-                        "Copyright",
+                        "2025 Copyright",
                         style: TextStyle(
-                          fontSize: heightFactor * 0.024, // Further reduced responsive font size
+                          fontSize: heightFactor * 0.015, // Further reduced responsive font size
                           color: Colors.white,
                         ),
                       ),
                     ],
                   ),
                 ],
-                          ),
               ),
             );
         },

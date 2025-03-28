@@ -4,8 +4,10 @@ import 'package:toptech/screens/headerdataupload.dart';
 import 'package:toptech/screens/remarkupload.dart';
 import 'package:toptech/screens/serviceupload.dart';
 import 'package:toptech/screens/teamupload.dart';
+import 'package:toptech/widgets/splash_screen.dart';
 
 import '../stateTv/serviceDisplay.dart';
+import 'adcontainerupload.dart';
 import 'footerdataupload.dart';
 
 class Mainuploadclass extends StatelessWidget {
@@ -37,11 +39,11 @@ Scaffold(
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ServiceDisplayClass()),
+                  MaterialPageRoute(builder: (context) => SplashScreen()),
                 );
               },
               child: Text(
-                'Go to Display Form Page',
+                'Go to splash Page',
                 style: TextStyle(fontSize: 18, color: Colors.blue),
               ),
             ),
@@ -51,6 +53,7 @@ Scaffold(
             UploadFooterData(),
             TeamUploadClass(),
             HeaderDataUpload(),
+            AddContainerUpload(),
 
           ]
         ),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:toptech/screens/mainuploadclass.dart';
 import 'package:toptech/stateTv/desktophomepagedisplay.dart';
+import 'package:toptech/stk/stkpush.dart';
+import 'package:toptech/widgets/advert_containerdisplay.dart';
 import 'package:toptech/widgets/splash_screen.dart';
 import 'firebase_options.dart';
 import 'labcode/testwidget/testwidget.dart';
@@ -51,7 +53,11 @@ debugShowCheckedModeBanner: false,
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: SplashScreen(),
+      home:
+     // Mainuploadclass(),      //TeamClass(),
+
+      //SafaricomSTKForm(),
+      SplashScreen(),
      // HeaderDisplayClass(),
    //  Homepagedisplay(),
       //ServiceDisplayClass(),
@@ -64,7 +70,6 @@ debugShowCheckedModeBanner: false,
       //ServiceFormPage(),
      // ContactScreen(),
 
-    // Mainuploadclass(),      //TeamClass(),
       //FooterDisplayTv(),
 
      // ServicePage(),
