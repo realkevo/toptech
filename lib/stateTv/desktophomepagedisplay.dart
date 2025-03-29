@@ -4,6 +4,7 @@ import 'package:toptech/stateTv/serviceDisplay.dart';
 import 'package:toptech/stateTv/teamdisplay.dart';
 
 import '../widgets/advert_containerdisplay.dart';
+import '../widgets/email_upload_widget.dart';
 import 'footerdisplaytv.dart';
 import 'headerdisplayclass.dart';
 
@@ -70,7 +71,8 @@ SizedBox(height: 30,),
 
 
                 TeamDisplay(),
-                DisplayAdData(),
+                SloganDisplayWidget(),
+                MailUploadPage(),
 
                 Align(
                   alignment: Alignment.bottomCenter,

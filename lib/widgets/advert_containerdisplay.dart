@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class DisplayAdData extends StatelessWidget {
+class SloganDisplayWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Align(
@@ -31,7 +31,7 @@ class DisplayAdData extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
-                .collection('toptechData')
+                .collection('adContainer')
                 .snapshots(),
             builder: (context, snapshot) {
               // Handling different states of connection
@@ -48,11 +48,11 @@ class DisplayAdData extends StatelessWidget {
               }
 
               final dataList = snapshot.data!.docs.map((doc) {
-                return UploadData.fromMap(doc.data() as Map<String, dynamic>);
+                return SloganDataPojo.fromMap(doc.data() as Map<String, dynamic>);
               }).toList();
 
               return Column(
-                children: dataList.map((uploadData) {
+                children: dataList.map(( SloganDataPojo uploadData) {
                   // Decode the base64 image
                   Uint8List decodedIcon = base64Decode(uploadData.toptechIcon);
                   return Padding(
@@ -97,11 +97,11 @@ class DisplayAdData extends StatelessWidget {
   }
 }
 
-class UploadData {
+class SloganDataPojo {
   String toptechIcon;
   String toptechSlogan;
 
-  UploadData({
+  SloganDataPojo({
     required this.toptechIcon,
     required this.toptechSlogan,
   });
@@ -115,8 +115,8 @@ class UploadData {
   }
 
   // Convert a Map to UploadData (for fetching from Firestore)
-  factory UploadData.fromMap(Map<String, dynamic> map) {
-    return UploadData(
+  factory SloganDataPojo.fromMap(Map<String, dynamic> map) {
+    return SloganDataPojo(
       toptechIcon: map['toptechIcon'] ?? '',
       toptechSlogan: map['toptechSlogan'] ?? '',
     );

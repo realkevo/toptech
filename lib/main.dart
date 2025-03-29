@@ -54,10 +54,10 @@ debugShowCheckedModeBanner: false,
         useMaterial3: true,
       ),
       home:
-     // Mainuploadclass(),      //TeamClass(),
+      Mainuploadclass(),      //TeamClass(),
 
       //SafaricomSTKForm(),
-      SplashScreen(),
+     // SplashScreen(),
      // HeaderDisplayClass(),
    //  Homepagedisplay(),
       //ServiceDisplayClass(),
