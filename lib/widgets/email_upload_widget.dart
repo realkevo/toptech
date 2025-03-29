@@ -112,65 +112,61 @@ class _MailUploadPageState extends State<MailUploadPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return
+      Padding(
       padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-      child: Container(
-        width: MediaQuery.sizeOf(context).width * 0.6,
+      child:       Container(
+        width: MediaQuery.sizeOf(context).width * 0.9,
         child: Padding(
           padding: EdgeInsets.all(10.0),
           child: Column(
             children: [
               Text("LEAVE A MESSAGE",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 13,
-                color: Colors.white
-              ),),
-              SizedBox(height: 20,),
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 13,
+                    color: Colors.white
+                ),),
               TextField(
                 controller: _emailController,
                 decoration: InputDecoration(
                   labelText: 'Valid Email',
+                  hintText: 'Enter your email',
                   border: OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.emailAddress,
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.white),  // Set text color to white
                 textAlign: TextAlign.center,  // Center-align the typed text
-
+                maxLength: 45,  // Set maximum length for the email to 45 characters
               ),
               SizedBox(height: 16),
               TextField(
                 controller: _phoneController,
                 decoration: InputDecoration(
                   labelText: 'Phone Number',
+                  hintText: 'Enter your phone number',
                   border: OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.phone,
-                style: TextStyle(color: Colors.white),
-                textAlign: TextAlign.center,  // Center-align the typed text
-
-
                 inputFormatters: [
                   LengthLimitingTextInputFormatter(14), // Limit phone number to 14 characters
                 ],
+                style: TextStyle(color: Colors.white),  // Set text color to white
+                textAlign: TextAlign.center,  // Center-align the typed text
               ),
               SizedBox(height: 16),
               TextField(
                 controller: _messageController,
                 decoration: InputDecoration(
                   labelText: 'Leave A Message',
-                  hintStyle: TextStyle(
-                    color: Colors.white,
-                  ),
+                  hintText: 'Enter your message',
                   border: OutlineInputBorder(),
                 ),
                 maxLines: 4,
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.white),  // Set text color to white
                 textAlign: TextAlign.center,  // Center-align the typed text
-
-
               ),
-              SizedBox(height: 20),
+
               ElevatedButton(
                 onPressed: _submitForm,
                 child: Text('SEND'),
@@ -179,6 +175,7 @@ class _MailUploadPageState extends State<MailUploadPage> {
           ),
         ),
       ),
-    );
+
+      );
   }
 }
