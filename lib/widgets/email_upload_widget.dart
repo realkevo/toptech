@@ -127,6 +127,9 @@ class _MailUploadPageState extends State<MailUploadPage> {
                     fontSize: 13,
                     color: Colors.white
                 ),),
+              SizedBox(
+                height: 40,
+              ),
               TextField(
                 controller: _emailController,
                 decoration: InputDecoration(
