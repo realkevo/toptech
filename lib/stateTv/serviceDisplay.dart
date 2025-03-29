@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -144,17 +145,37 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
                             FittedBox(
                               fit: BoxFit
                                   .scaleDown, // Ensure text scales down to fit
-                              child: Text(
-                                serviceData['serviceTitle'] ?? 'No Title',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize:
-                                      16, // Font size adjusts relative to screen size
-                                  fontWeight: FontWeight.bold,
-                                  decoration:
-                                      TextDecoration.none, // No underline
-                                ),
-                              ),
+                              child:
+                                  Text(
+                                    serviceData['serviceTitle'] ?? 'No Title',
+                                    style:       TextStyle(
+                                      color: Colors.lightGreen,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+
+                                    ),
+
+
+                                  ),
+                             /* AnimatedTextKit(animatedTexts:[
+                                WavyAnimatedText(  serviceData['serviceTitle'] ?? 'No Title',
+
+                                  textStyle:
+                                  TextStyle(
+                                    color: Colors.lightGreen,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+
+                                  ),
+                                )
+                              ],
+                                isRepeatingAnimation: false,
+
+
+
+                              ),*/
+
+
                             ),
                             Expanded(
                               child: Padding(
@@ -164,18 +185,43 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
                                   scrollDirection: Axis.vertical,
                                   child: Padding(
                                     padding: EdgeInsets.all(screenWidth * 0.03),
-                                    child: Text(
-                                      serviceData['serviceDescription'] ??
-                                          'No Description',
-                                      style: TextStyle(
+                                    child:
+                                    AnimatedTextKit(
+                                      animatedTexts: [
+                                      /*  ScaleAnimatedText(serviceData['serviceDescription'] ??
+                                      'No Description',
+                                      textStyle: TextStyle(
                                         color: Colors.white,
-                                        fontSize:
-                                            12, // Font size adjusts relative to screen size
-                                        fontWeight: FontWeight.normal,
-                                        decoration:
-                                            TextDecoration.none, // No underline
-                                      ),
+                                      )
+                                        ),*/
+
+                                       /* FadeAnimatedText(serviceData['serviceDescription'] ??
+                                      'No Description',
+                                          textStyle: TextStyle(
+                                            color: Colors.white,
+
+
+                                          ),
+                                        ),*/
+
+                                        TyperAnimatedText(serviceData['serviceDescription'] ??
+                                            'No Description',
+                                        textStyle: TextStyle(
+                                          color: Colors.white,
+
+
+                                        ),
+                                           speed: Duration(milliseconds: 50,),
+
+
+                                        ),
+
+
+                                      ],
+                                      isRepeatingAnimation: false,
+
                                     ),
+
                                   ),
                                 ),
                               ),

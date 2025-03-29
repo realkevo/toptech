@@ -1,3 +1,4 @@
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -53,14 +54,30 @@ class _RemarkDisplayClassState extends State<RemarkDisplayClass> {
         child: 
         Column(
           children: [
-            Text("REVIEWS",
-              style:
-              TextStyle(
-                color: Colors.lightGreen,
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
 
-              ),),
+
+
+
+
+
+            AnimatedTextKit(animatedTexts:[
+
+
+
+
+             TypewriterAnimatedText("REVIEWS",
+textStyle:                 TextStyle(
+                  color: Colors.lightGreen,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+
+                ),
+              speed: Duration(milliseconds: 100),
+              )
+
+
+            ]
+            ),
 
             StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance.collection('remarkData').
