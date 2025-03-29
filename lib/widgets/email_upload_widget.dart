@@ -44,6 +44,8 @@ class _MailUploadPageState extends State<MailUploadPage> {
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _messageController = TextEditingController();
+  bool _isPressed = true;
+
 
   // Regular expression for validating email format
   final RegExp _emailRegExp = RegExp(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
@@ -169,11 +171,44 @@ class _MailUploadPageState extends State<MailUploadPage> {
                 style: TextStyle(color: Colors.white),  // Set text color to white
                 textAlign: TextAlign.center,  // Center-align the typed text
               ),
+              SizedBox(height:  20,),
+              AnimatedContainer(
+                duration: Duration(milliseconds: 200),  // Duration of the animation
+                curve: Curves.easeInOut,  // Animation curve
+                height: _isPressed ? 55 : 50,  // Increase height when pressed
+                width: _isPressed ? 210 : 200,  // Increase width when pressed
+                decoration: BoxDecoration(
+                  color: Colors.orange,  // Set background color to orange
+                  borderRadius: BorderRadius.circular(12),  // Rounded corners
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.5),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3),  // Shadow effect
+                    ),
+                  ],
+                ),
+                child: MaterialButton(
+                  onPressed: () {
+                    setState(() {
+                      _isPressed = !_isPressed;  // Toggle the button press state
+                    });
+                    _submitForm();  // Call your submit form method
+                  },
+                  child: Text(
+                    'S E N D',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              )
 
-              ElevatedButton(
-                onPressed: _submitForm,
-                child: Text('SEND'),
-              ),
+
+
             ],
           ),
         ),
