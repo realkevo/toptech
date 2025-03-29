@@ -120,24 +120,36 @@ class _MailUploadPageState extends State<MailUploadPage> {
           padding: EdgeInsets.all(10.0),
           child: Column(
             children: [
+              Text("LEAVE A MESSAGE",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 13,
+                color: Colors.white
+              ),),
+              SizedBox(height: 20,),
               TextField(
                 controller: _emailController,
                 decoration: InputDecoration(
                   labelText: 'Valid Email',
-                  hintText: 'Enter your email',
                   border: OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.emailAddress,
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,  // Center-align the typed text
+
               ),
               SizedBox(height: 16),
               TextField(
                 controller: _phoneController,
                 decoration: InputDecoration(
                   labelText: 'Phone Number',
-                  hintText: 'Enter your phone number',
                   border: OutlineInputBorder(),
                 ),
                 keyboardType: TextInputType.phone,
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,  // Center-align the typed text
+
+
                 inputFormatters: [
                   LengthLimitingTextInputFormatter(14), // Limit phone number to 14 characters
                 ],
@@ -147,10 +159,16 @@ class _MailUploadPageState extends State<MailUploadPage> {
                 controller: _messageController,
                 decoration: InputDecoration(
                   labelText: 'Leave A Message',
-                  hintText: 'Enter your message',
+                  hintStyle: TextStyle(
+                    color: Colors.white,
+                  ),
                   border: OutlineInputBorder(),
                 ),
                 maxLines: 4,
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,  // Center-align the typed text
+
+
               ),
               SizedBox(height: 20),
               ElevatedButton(
