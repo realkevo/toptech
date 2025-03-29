@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import '../stateTv/desktophomepagedisplay.dart';
+import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -38,10 +39,56 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return
+      Scaffold(
       backgroundColor: Colors.black, // Dark background for hacker theme
       body: Center(
-        child: Column(
+        child: FlutterSplashScreen(
+          duration: const Duration(milliseconds: 2000),
+          nextScreen: const Homepagedisplay(),
+          backgroundColor: Colors.white,
+          splashScreenBody: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  height: 100,
+                ),
+                const Text(
+                  "Custom Splash",
+                  style: TextStyle(color: Colors.black, fontSize: 24),
+                ),
+                const Spacer(),
+                SizedBox(
+                  width: 200,
+                  child: Image.asset('assets/flutter.png'),
+                ),
+                const Spacer(),
+                const Text(
+                  "Flutter is Love",
+                  style: TextStyle(color: Colors.pink, fontSize: 20),
+                ),
+                const SizedBox(
+                  height: 100,
+                ),
+              ],
+            ),
+          ),
+        ),
+       /* FlutterSplashScreen.gif(
+          gifPath: 'assets/splashgif/splash.gif',
+          gifWidth: 269,
+          gifHeight: 474,
+          nextScreen: const Homepagedisplay(),
+          duration: const Duration(milliseconds: 3515),
+          onInit: () async {
+            debugPrint("onInit");
+          },
+          onEnd: () async {
+            debugPrint("onEnd 1");
+          },
+        ),*/
+      /*  Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
@@ -52,12 +99,12 @@ class _SplashScreenState extends State<SplashScreen> {
             SizedBox(height: 20),
             _buildHackerProgressBar(),
           ],
-        ),
+        ),*/
       ),
     );
   }
 
-  Widget _buildHackerProgressBar() {
+ /* Widget _buildHackerProgressBar() {
     return Container(
       width: 300,
       height: 20,
@@ -86,5 +133,5 @@ class _SplashScreenState extends State<SplashScreen> {
         ],
       ),
     );
-  }
+  }*/
 }

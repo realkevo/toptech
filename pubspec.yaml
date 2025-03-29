@@ -46,6 +46,7 @@ dependencies:
   file_picker: ^9.2.1
   animated_text_kit: ^4.2.2
   lottie: ^3.3.1
+  another_flutter_splash_screen: ^1.2.1
 
 
 dev_dependencies:
