@@ -112,51 +112,53 @@ class _MailUploadPageState extends State<MailUploadPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 800,
-      width: 500,
-      child: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _emailController,
-              decoration: InputDecoration(
-                labelText: 'Valid Email',
-                hintText: 'Enter your email',
-                border: OutlineInputBorder(),
+    return Padding(
+      padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+      child: Container(
+        width: MediaQuery.sizeOf(context).width * 0.6,
+        child: Padding(
+          padding: EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              TextField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                  labelText: 'Valid Email',
+                  hintText: 'Enter your email',
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.emailAddress,
               ),
-              keyboardType: TextInputType.emailAddress,
-            ),
-            SizedBox(height: 16),
-            TextField(
-              controller: _phoneController,
-              decoration: InputDecoration(
-                labelText: 'Phone Number',
-                hintText: 'Enter your phone number',
-                border: OutlineInputBorder(),
+              SizedBox(height: 16),
+              TextField(
+                controller: _phoneController,
+                decoration: InputDecoration(
+                  labelText: 'Phone Number',
+                  hintText: 'Enter your phone number',
+                  border: OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.phone,
+                inputFormatters: [
+                  LengthLimitingTextInputFormatter(14), // Limit phone number to 14 characters
+                ],
               ),
-              keyboardType: TextInputType.phone,
-              inputFormatters: [
-                LengthLimitingTextInputFormatter(14), // Limit phone number to 14 characters
-              ],
-            ),
-            SizedBox(height: 16),
-            TextField(
-              controller: _messageController,
-              decoration: InputDecoration(
-                labelText: 'Leave A Message',
-                hintText: 'Enter your message',
-                border: OutlineInputBorder(),
+              SizedBox(height: 16),
+              TextField(
+                controller: _messageController,
+                decoration: InputDecoration(
+                  labelText: 'Leave A Message',
+                  hintText: 'Enter your message',
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 4,
               ),
-              maxLines: 4,
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _submitForm,
-              child: Text('SEND'),
-            ),
-          ],
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _submitForm,
+                child: Text('SEND'),
+              ),
+            ],
+          ),
         ),
       ),
     );
