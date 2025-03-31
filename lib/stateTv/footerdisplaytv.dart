@@ -44,10 +44,10 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
   Image _decodeBase64ToImage(String base64String) {
     try {
       Uint8List bytes = base64Decode(base64String);
-      return Image.memory(bytes);
+      return Image.memory(bytes, fit: BoxFit.contain); // Use BoxFit.contain to ensure the image fits well
     } catch (e) {
       print("Error decoding base64: $e");
-      return Image.asset('assets/placeholder.png'); // Use a placeholder in case of error
+      return Image.asset('assets/placeholder.png', fit: BoxFit.contain); // Use a placeholder in case of error
     }
   }
 
@@ -56,11 +56,9 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
     double heightFactor = MediaQuery.of(context).size.height;
     double widthFactor = MediaQuery.of(context).size.width;
 
-    return
-      Container(
+    return Container(
       width: widthFactor,
       padding: EdgeInsets.symmetric(horizontal: widthFactor * 0.05, vertical: heightFactor * 0.012), // Further reduced vertical padding
-
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -71,21 +69,14 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
             Color(0xFF1E3C72), // Mid blue
           ],
         ),
-
-
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(7.0),
           topRight: Radius.circular(7.0),
         ),
       ),
-      child:
-      FutureBuilder<Map<String, String>>(
+      child: FutureBuilder<Map<String, String>>(
         future: fetchFooterData(),
         builder: (context, snapshot) {
-         /* if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          }
-*/
           if (snapshot.hasError) {
             return Center(child: Text("Error loading data"));
           }
@@ -96,252 +87,237 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
 
           var footerData = snapshot.data!;
 
-          return
-            Padding(
-              padding: const EdgeInsets.all(7.0),
-              child: Column(
-                children: [
-                  // Row for main content
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      // Left Column - Socials
-                      Flexible(
-                        flex: 2,
-                        child:
-                        Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+          return Padding(
+            padding: const EdgeInsets.all(7.0),
+            child: Column(
+              children: [
+                // Row for main content
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Left Column - Socials
+                    Flexible(
+                      flex: 2,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              "Follow us",
+                              style: TextStyle(
+                                fontSize: heightFactor * 0.014,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          footerData['githubIcon'] != null
+                              ? Row(
                             children: [
-                              FittedBox(
-                                fit: BoxFit.scaleDown, // Ensure text scales down to fit
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical: 5),
+                                height: 20, // Adjusted height
+                                width: 20, // Adjusted width
+                                child: _decodeBase64ToImage(footerData['githubIcon']!),
+                              ),
+                              Text(
+                                "github",
+                                style: TextStyle(
+                                  fontSize: heightFactor * 0.014,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          )
+                              : SizedBox.shrink(),
+                          footerData['xIcon'] != null
+                              ? Row(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical: 5),
+                                height: 20,
+                                width: 20,
+                                child: _decodeBase64ToImage(footerData['xIcon']!),
+                              ),
+                              Text(
+                                "X",
+                                style: TextStyle(
+                                  fontSize: heightFactor * 0.014,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          )
+                              : SizedBox.shrink(),
+                          footerData['redditIcon'] != null
+                              ? Row(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical: 5),
+                                height: 20,
+                                width: 20,
+                                child: _decodeBase64ToImage(footerData['redditIcon']!),
+                              ),
+                              Text(
+                                "reddit",
+                                style: TextStyle(
+                                  fontSize: heightFactor * 0.014,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          )
+                              : SizedBox.shrink(),
+                          footerData['facebookIcon'] != null
+                              ? Row(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical: 5),
+                                height: 20,
+                                width: 20,
+                                child: _decodeBase64ToImage(footerData['facebookIcon']!),
+                              ),
+                              Text(
+                                "linkedin",
+                                style: TextStyle(
+                                  fontSize: heightFactor * 0.014,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          )
+                              : SizedBox.shrink(),
+                        ],
+                      ),
+                    ),
+
+                    // Center Column - PO Box and Address
+                    Flexible(
+                      flex: 3,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "P.O Box 600-63 Nairobi, Kenya",
+                            style: TextStyle(
+                              fontSize: heightFactor * 0.014,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            "Mombasa Road, Platnum Plaza flr 2",
+                            style: TextStyle(
+                              fontSize: heightFactor * 0.014,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // Right Column - Partners
+                    Flexible(
+                      flex: 2,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(7.0),
+                            topRight: Radius.circular(7.0),
+                          ),
+                          color: Colors.deepOrange,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 2.0, right: 2.0),
                                 child: Text(
-                                  "Follow us",
+                                  "Partners and sponsors",
                                   style: TextStyle(
-                                    fontSize: heightFactor * 0.014, // Further reduced responsive font size
+                                    fontSize: heightFactor * 0.024,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white,
-                                    decoration: TextDecoration.none,
                                   ),
                                 ),
                               ),
-                              footerData['githubIcon'] != null
-                                  ? Row(
-                                spacing: 12,
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.symmetric(vertical: 5),
-                                    height: 14, // Further reduced height
-                                    child: _decodeBase64ToImage(footerData['githubIcon']!),
-                                  ),
-                                  Text(
-                                    "github",
-                                    style: TextStyle(
-                                      fontSize: heightFactor * 0.014, // Responsive font size
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              )
-                                  : SizedBox.shrink(),
-                              footerData['xIcon'] != null
-                                  ? Row(
-                                spacing: 12,
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.symmetric(vertical: 5),
-                                    height: 14, // Further reduced height
-                                    child: _decodeBase64ToImage(footerData['xIcon']!),
-                                  ),
-                                  Text(
-                                    "X",
-                                    style: TextStyle(
-                                      fontSize: heightFactor * 0.014, // Responsive font size
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              )
-                                  : SizedBox.shrink(),
-                              footerData['redditIcon'] != null
-                                  ? Row(
-                                spacing: 12,
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.symmetric(vertical: 5),
-                                    height: 14, // Further reduced height
-                                    child: _decodeBase64ToImage(footerData['redditIcon']!),
-                                  ),
-                                  Text(
-                                    "reddit",
-                                    style: TextStyle(
-                                      fontSize: heightFactor * 0.014, // Responsive font size
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              )
-                                  : SizedBox.shrink(),
-                              footerData['facebookIcon'] != null
-                                  ? Row(
-                                spacing: 12,
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.symmetric(vertical: 5),
-                                    height: 14, // Further reduced height
-                                    child: _decodeBase64ToImage(footerData['facebookIcon']!),
-                                  ),
-                                  Text(
-                                    "linkedin",
-                                    style: TextStyle(
-                                      fontSize: heightFactor * 0.014, // Responsive font size
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              )
-                                  : SizedBox.shrink(),
-                            ],
-                          ),
-                        ),
-                      ),
-
-                      // Center Column - PO Box and Address
-                      Flexible(
-                        flex: 3,
-                        child:
-                        Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                "P.O Box 600-63 Nairobi, Kenya",
-                                style: TextStyle(
-                                  fontSize: heightFactor * 0.014, // Further reduced responsive font size
-                                  color: Colors.white,
-                                ),
-                              ),
-                              Text(
-                                "Mombasa Road, Platnum Plaza flr 2",
-                                style: TextStyle(
-                                  fontSize: heightFactor * 0.014, // Further reduced responsive font size
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-
-                      // Right Column - Partners
-                      Flexible(
-                        flex: 2,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(7.0),
-                              topRight: Radius.circular(7.0),
                             ),
-                            color: Colors.deepOrange,
-
-                          ),
-
-                          child:
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              FittedBox(
-                                fit: BoxFit.scaleDown, // Ensure text scales down to fit
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 2.0, right: 2.0),
-                                  child: Text(
-                                    "Partners and sponsors",
-                                    style: TextStyle(
-                                      fontSize: heightFactor * 0.024, // Further reduced responsive font size
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      decoration: TextDecoration.none,
-                                    ),
+                            Container(
+                              color: Colors.white,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      footerData['partnerOneIcon'] != null
+                                          ? Container(
+                                        margin: EdgeInsets.symmetric(horizontal: 5),
+                                        height: 20,
+                                        width: 20,
+                                        child: _decodeBase64ToImage(footerData['partnerOneIcon']!),
+                                      )
+                                          : SizedBox.shrink(),
+                                      footerData['partnerTwoIcon'] != null
+                                          ? Container(
+                                        margin: EdgeInsets.symmetric(horizontal: 5),
+                                        height: 20,
+                                        width: 20,
+                                        child: _decodeBase64ToImage(footerData['partnerTwoIcon']!),
+                                      )
+                                          : SizedBox.shrink(),
+                                    ],
                                   ),
-                                ),
+                                  Row(
+                                    children: [
+                                      footerData['partnerThreeIcon'] != null
+                                          ? Container(
+                                        height: 20,
+                                        width: 20,
+                                        child: _decodeBase64ToImage(footerData['partnerThreeIcon']!),
+                                      )
+                                          : SizedBox.shrink(),
+                                    ],
+                                  ),
+                                ],
                               ),
-                              Container(
-                                color: Colors.white,
-                                child:
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        footerData['partnerOneIcon'] != null
-                                            ? Container(
-                                          margin: EdgeInsets.symmetric(horizontal: 5),
-                                          height: 20, // Further reduced height
-                                          child: _decodeBase64ToImage(footerData['partnerOneIcon']!),
-                                        )
-                                            : SizedBox.shrink(),
-                                        footerData['partnerTwoIcon'] != null
-                                            ? Container(
-                                          margin: EdgeInsets.symmetric(horizontal: 5),
-                                          height: 20, // Further reduced height
-                                          child: _decodeBase64ToImage(footerData['partnerTwoIcon']!),
-                                        )
-                                            : SizedBox.shrink(),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        footerData['partnerThreeIcon'] != null
-                                            ? Container(
-                                          height: 20, // Further reduced height
-                                          child: _decodeBase64ToImage(footerData['partnerThreeIcon']!),
-                                        )
-                                            : SizedBox.shrink(),
-                                      ],
-                                    ),
-
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
+                ),
 
-                  // Bottom row for copyright
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      footerData['copyRightIcon'] != null
-                          ? Container(
-                        margin: EdgeInsets.symmetric(horizontal: 5),
-                        height: 15, // Further reduced height
-                        child: _decodeBase64ToImage(footerData['copyRightIcon']!),
-                      )
-                          : SizedBox.shrink(),
-                      Text(
-                        "2025 Copyright",
-                        style: TextStyle(
-                          fontSize: heightFactor * 0.015, // Further reduced responsive font size
-                          color: Colors.white,
-                        ),
+                // Bottom row for copyright
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    footerData['copyRightIcon'] != null
+                        ? Container(
+                      margin: EdgeInsets.symmetric(horizontal: 5),
+                      height: 15,
+                      width: 15,
+                      child: _decodeBase64ToImage(footerData['copyRightIcon']!),
+                    )
+                        : SizedBox.shrink(),
+                    Text(
+                      "2025 Copyright",
+                      style: TextStyle(
+                        fontSize: heightFactor * 0.015,
+                        color: Colors.white,
                       ),
-                    ],
-                  ),
-                ],
-              ),
-            );
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
         },
       ),
     );
   }
 }
-
-
-

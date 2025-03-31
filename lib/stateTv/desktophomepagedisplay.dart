@@ -3,6 +3,7 @@ import 'package:toptech/stateTv/remarkDisplay.dart';
 import 'package:toptech/stateTv/serviceDisplay.dart';
 import 'package:toptech/stateTv/teamdisplay.dart';
 
+import '../screens/mainuploadclass.dart';
 import '../widgets/advert_containerdisplay.dart';
 import '../widgets/email_upload_widget.dart';
 import 'footerdisplaytv.dart';
@@ -73,6 +74,19 @@ SizedBox(height: 30,),
                 TeamDisplay(),
                 SloganDisplayWidget(),
                 MailUploadPage(),
+              /*  GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder:
+                          (context) => Mainuploadclass()),
+                    );
+                  },
+                  child: Text(
+                    'Go to upload',
+                    style: TextStyle(fontSize: 18, color: Colors.blue),
+                  ),
+                ),*/
 
                 Align(
                   alignment: Alignment.bottomCenter,

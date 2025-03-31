@@ -4,9 +4,7 @@ import 'package:toptech/screens/headerdataupload.dart';
 import 'package:toptech/screens/remarkupload.dart';
 import 'package:toptech/screens/serviceupload.dart';
 import 'package:toptech/screens/teamupload.dart';
-import 'package:toptech/widgets/splash_screen.dart';
 
-import '../stateTv/serviceDisplay.dart';
 import 'adcontainerupload.dart';
 import 'footerdataupload.dart';
 
@@ -32,18 +30,6 @@ Scaffold(
               },
               child: Text(
                 'Go to Display Form Page',
-                style: TextStyle(fontSize: 18, color: Colors.blue),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SplashScreen()),
-                );
-              },
-              child: Text(
-                'Go to splash Page',
                 style: TextStyle(fontSize: 18, color: Colors.blue),
               ),
             ),

@@ -24,9 +24,12 @@ class _AddContainerUploadState extends State<AddContainerUpload> {
         toptechSlogan: _toptechSloganController.text,
       );
 
-      // Upload to Firestore
-      await FirebaseFirestore.instance.collection('adContainer')
-          .add(uploadData.toMap());
+      // Upload to Firestore and overwrite the current entry (single document)
+      await FirebaseFirestore.instance
+          .collection('adContainer')
+          .doc('single_entry')  // Use a predefined document ID
+          .set(uploadData.toMap());  // Use .set() to overwrite the document
+
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Data uploaded successfully!')));
 
       // Clear form after successful upload
