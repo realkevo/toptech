@@ -30,44 +30,56 @@ class SloganDisplayWidget extends StatelessWidget {
             return SloganDataPojo.fromMap(doc.data() as Map<String, dynamic>);
           }).toList();
 
-          return Column(
-            children: dataList.map((SloganDataPojo uploadData) {
-              Uint8List decodedIcon = base64Decode(uploadData.toptechIcon);
-              return
-                Container(
-                  width: MediaQuery.sizeOf(context).width * 0.6,
-                  decoration: BoxDecoration(
-                    color: Colors.blueAccent,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child:
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      // Display image
-                      Image.memory(
-                        decodedIcon,
-                        height: 300, // Set height as needed
-                        width: double.infinity, // Set width to match the container
-                        fit: BoxFit.cover,
+          return Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Column(
+              children: dataList.map((SloganDataPojo uploadData) {
+                Uint8List decodedIcon = base64Decode(uploadData.toptechIcon);
+                return
+                  Container(
+                    width: MediaQuery.sizeOf(context).width * 0.6,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Color(0xFF0A0E21), // Dark blue
+                          Color(0xFF12233F), // Slightly lighter blue
+                          Color(0xFF1E3C72), // Mid blue
+                        ],
                       ),
-                      SizedBox(height: 10),
-                      // Display slogan
-                      Text(
-                        uploadData.toptechSlogan,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.normal,
-                          fontStyle: FontStyle.italic,
 
+                    ),
+
+                    child:
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        // Display image
+                        Image.memory(
+                          decodedIcon,
+                          height: 300, // Set height as needed
+                          width: double.infinity, // Set width to match the container
+                          fit: BoxFit.cover,
                         ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-                );
-            }).toList(),
+                        SizedBox(height: 10),
+                        // Display slogan
+                        Text(
+                          uploadData.toptechSlogan,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.normal,
+
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  );
+              }).toList(),
+            ),
           );
         },
       ),

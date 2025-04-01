@@ -14,10 +14,9 @@ class Homepagedisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
+    return
+      Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(7.0),
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
@@ -34,7 +33,7 @@ class Homepagedisplay extends StatelessWidget {
         width: MediaQuery.sizeOf(context).width * 1,
         height:  MediaQuery.sizeOf(context).height * 1,
         child: Column(children: [
-        /*  GestureDetector(
+          /*  GestureDetector(
             onTap: () {
               Navigator.push(
                 context,
@@ -49,22 +48,22 @@ class Homepagedisplay extends StatelessWidget {
           ),
 */
 
-          HeaderDisplay(),
-SizedBox(height: 15,),
+        /*  HeaderDisplay(),*/
+          SizedBox(height: 15,),
           Expanded(
             child: SingleChildScrollView(
               child:
               Column(children: [
                 Text("SERVICES",
-                style:
-                TextStyle(
-                  color: Colors.lightGreen,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
+                  style:
+                  TextStyle(
+                    color: Colors.lightGreen,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
 
-                ),),
+                  ),),
                 ServiceDisplayClass(),
-SizedBox(height: 30,),
+                SizedBox(height: 30,),
 
 
                 RemarkDisplayClass(),
@@ -74,7 +73,7 @@ SizedBox(height: 30,),
                 TeamDisplay(),
                 SloganDisplayWidget(),
                 MailUploadPage(),
-              /*  GestureDetector(
+                /*  GestureDetector(
                   onTap: () {
                     Navigator.push(
                       context,
@@ -97,7 +96,6 @@ SizedBox(height: 30,),
             ),
           ),
         ],),
-      ),
-    );
+      );
   }
 }

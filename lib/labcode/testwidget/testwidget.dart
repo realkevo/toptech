@@ -1,452 +1,265 @@
+import 'dart:async';
+
+import 'package:anydrawer/anydrawer.dart';
 import 'package:flutter/material.dart';
 
-import '../../widgets/drawer.dart';
 
-class ProfileSettings extends StatefulWidget {
-  const ProfileSettings({Key? key}) : super(key: key);
 
-  @override
-  State<ProfileSettings> createState() => _ProfileSettingsState();
-}
+class AnyDrawerRouterDelegate extends RouterDelegate<Uri>
+    with ChangeNotifier, PopNavigatorRouterDelegateMixin<Uri> {
+  AnyDrawerRouterDelegate({required this.builder});
 
-class _ProfileSettingsState extends State<ProfileSettings> {
-  final GlobalKey<ScaffoldState> _scaffoldkey = GlobalKey<ScaffoldState>();
+  final WidgetBuilder builder;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldkey,
-      appBar: AppBar(
-        elevation: 6,
-        shadowColor: Colors.cyan,
-        bottomOpacity: 40.0,
-        backgroundColor: Colors.white,
-        toolbarHeight: 40,
-        title: const Center(
-            child: Text(
-              "Profile",
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 25,
-                fontWeight: FontWeight.normal,
-              ),
-            )),
-      ),
-      drawer: Padding(
-        padding: const EdgeInsets.only(top: 38.0, bottom: 10),
-        child: Drawer(
-          backgroundColor: Colors.pink,
-          child: Drawercontainer(),
+    return Navigator(
+      key: navigatorKey,
+      pages: [
+        MaterialPage(
+          child: builder(context),
         ),
-      ),
-      body: Center(
-        child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.rectangle,
-          ),
+      ],
+      onPopPage: (route, result) {
+        if (!route.didPop(result)) {
+          return false;
+        }
 
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 12,
-                    right: 3,
-                    left: 3,
-                  ),
-                  child: Container(
-                    width: double.infinity,
+        notifyListeners();
 
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(12)),
-                      /* BorderRadius.only(bottomLeft: Radius.circular(5.0),
-                              bottomRight: Radius.circular(5.0),),*/
+        return true;
+      },
+    );
+  }
 
-                      color: Colors.pink,
-                      shape: BoxShape.rectangle,
-                    ),
+  @override
+  GlobalKey<NavigatorState> get navigatorKey => GlobalKey<NavigatorState>();
 
-                    //decoration box here
-                    child: const Center(
-                      child: Text(
-                        "EDIT PROFILE",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontStyle: FontStyle.normal,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
+  @override
+  Uri? get currentConfiguration => null;
+
+  @override
+  Future<void> setNewRoutePath(Uri configuration) async {}
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  DrawerConfig config = const DrawerConfig();
+
+  final AnyDrawerController controller = AnyDrawerController();
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  void _showDrawer() {
+    showDrawer(
+      context,
+      builder: (context) => const SurveryForm(),
+      config: config,
+      onClose: () {
+        debugPrint('Drawer closed');
+      },
+      onOpen: () {
+        debugPrint('Drawer opened');
+      },
+      controller: controller,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final width = MediaQuery.sizeOf(context).width;
+
+    return Scaffold(
+      body: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        width: width > 600 ? width / 2 : width,
+        child: Column(
+          children: [
+            const SizedBox(height: 50),
+            Text('Any Drawer Example App',
+                style: Theme.of(context).textTheme.titleLarge),
+            const SizedBox(height: 50),
+            DropdownButton<DrawerSide>(
+              isExpanded: true,
+              value: config.side,
+              onChanged: (value) {
+                setState(() {
+                  config = config.copyWith(side: value);
+                });
+              },
+              items: const [
+                DropdownMenuItem(
+                  value: DrawerSide.left,
+                  child: Text('Left'),
                 ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      top: 4,
-                      right: 3,
-                      left: 3,
-                    ),
-                    child: Container(
-                      height: 190,
-                      width: double.infinity,
-
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                        /* BorderRadius.only(bottomLeft: Radius.circular(5.0),
-                          bottomRight: Radius.circular(5.0),),*/
-
-                        color: Colors.pink,
-                        shape: BoxShape.rectangle,
-                      ),
-
-                      //decoration box here
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          //todo show logged in user here in this text widget
-                          Center(
-                            child: Padding(
-                              padding: EdgeInsets.only(
-                                top: 15.0,
-                                left: 45,
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    "KELVIN T"
-                                        "HURANIRA",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontStyle: FontStyle.normal,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-
-                                  //todo change this to
-                                  IconButton(
-                                    onPressed: () {
-                                      _scaffoldkey.currentState?.openDrawer();
-
-                                      /*   _opensettings(context);*/
-                                    },
-                                    icon: Icon(
-                                      Icons.settings,
-                                      size: 38,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0, top: 2),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                //profile picture here
-                                ClipOval(
-                                  child: Image.asset(
-                                    'assets/images/pic.jpg',
-                                    width: 50,
-                                    height: 50,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-
-                                const Padding(
-                                  padding: EdgeInsets.only(
-                                    left: 13.0,
-                                  ),
-                                  child: Text(
-                                    "Wallet Balance: Ksh 768,430.78",
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontStyle: FontStyle.normal,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 13,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 2.0),
-                            child: Center(
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceEvenly,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Column(
-                                    children: [
-                                      SizedBox(
-                                        child: IconButton(
-                                          onPressed: _wishlist,
-                                          icon: Image.asset(
-                                            'assets/icons/wishlist.jpg',
-                                          ),
-                                          color: Colors.green,
-                                        ),
-                                        height: 35,
-                                      ),
-                                      const Text(
-                                        "Wishlist",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontStyle: FontStyle.normal,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 10,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      SizedBox(
-                                        child: IconButton(
-                                          onPressed: _wishlist,
-                                          icon: Icon(Icons.history_sharp),
-                                          color: Colors.white,
-                                        ),
-                                        height: 35,
-                                      ),
-                                      Text(
-                                        "Order history",
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontStyle: FontStyle.normal,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 10,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                DropdownMenuItem(
+                  value: DrawerSide.right,
+                  child: Text('Right'),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 4,
-                    right: 3,
-                    left: 3,
-                  ),
-                  child: Container(
-                    width: double.infinity,
-
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(12)),
-                      /* BorderRadius.only(bottomLeft: Radius.circular(5.0),
-                            bottomRight: Radius.circular(5.0),),*/
-
-                      color: Colors.pink,
-                      shape: BoxShape.rectangle,
-                    ),
-
-                    //decoration box here
-                    child: const Center(
-                      child: Text(
-                        "MANAGE ORDERS",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontStyle: FontStyle.normal,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 4,
-                    right: 3,
-                    left: 3,
-                  ),
-                  child: Container(
-                    width: double.infinity,
-                    height: 190,
-
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(12)),
-                      /* BorderRadius.only(bottomLeft: Radius.circular(5.0),
-                              bottomRight: Radius.circular(5.0),),*/
-
-                      color: Colors.pink,
-                      shape: BoxShape.rectangle,
-                    ),
-
-                    //decoration box here
-                    child: const Center(
-                      child: Text(
-                        "SHOW ORDER STATUS HERE",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                    top: 4,
-                    right: 3,
-                    left: 3,
-                  ),
-                  child: Container(
-                    height: 190,
-                    width: double.infinity,
-
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(12)),
-                      /* BorderRadius.only(bottomLeft: Radius.circular(5.0),
-                            bottomRight: Radius.circular(5.0),),*/
-
-                      color: Colors.white,
-                      shape: BoxShape.rectangle,
-                    ),
-
-                    //decoration box here
-                    child: Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: <Widget>[
-                            //todo show logged in user here in this text widget
-
-                            const Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                "Terms and conditions",
-                                style: TextStyle(
-                                  fontStyle: FontStyle.italic,
-                                  fontSize: 12,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            const Align(
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                "About Us",
-                                style: TextStyle(
-                                  fontStyle: FontStyle.italic,
-                                  fontSize: 12,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 38.0),
-                              child: FilledButton(
-                                  onPressed: () {
-                                    //todo send user login details here
-                                  },
-                                  style: TextButton.styleFrom(
-                                    foregroundColor: Colors.white,
-                                    backgroundColor: Colors.pink,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 10),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                  ),
-                                  child: const Text(
-                                    "LOGOUT",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                        fontSize: 18.0),
-                                  )),
-                            ),
-                            const SizedBox(
-                              height: 5,
-                            ),
-
-                            const Align(
-                              alignment: Alignment.bottomRight,
-                              child: Text(
-                                "Contact Developer: 0758536280",
-                                style: TextStyle(
-                                  fontStyle: FontStyle.italic,
-                                  fontSize: 12,
-                                  color: Colors.black,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-
-                /* Column(
-                 mainAxisSize: MainAxisSize.max,
-                 mainAxisAlignment:
-                 MainAxisAlignment.start,
-                 crossAxisAlignment:
-                 CrossAxisAlignment.center,
-                 children: <Widget>[
-                   SizedBox(height: 30,),
-                   Text(" Phone number "),
-                   SizedBox(height: 30,),
-
-                   Text(" Email "),
-                   SizedBox(height: 30,),
-
-                   Text(" Register Seller?"),
-                   SizedBox(height: 30,),
-
-                   Text(" Update profile"),
-                   SizedBox(height: 30,),
-
-                   TextButton(onPressed: (){}, child:
-                   Text("Logout"))
-
-
-
-
-                 ],
-               ),*/
               ],
             ),
-          ),
-
-          //Mother container
-
-          //todo implement the user details here
+            const SizedBox(height: 20),
+            DropdownButtonFormField<double>(
+              isExpanded: true,
+              value: config.widthPercentage ?? 0.3,
+              onChanged: (value) {
+                setState(() {
+                  config = config.copyWith(widthPercentage: value);
+                });
+              },
+              items: const [
+                DropdownMenuItem(
+                  value: 0.3,
+                  child: Text('Width: 30%'),
+                ),
+                DropdownMenuItem(
+                  value: 0.5,
+                  child: Text('Width: 50%'),
+                ),
+                DropdownMenuItem(
+                  value: 0.7,
+                  child: Text('Width: 70%'),
+                ),
+                DropdownMenuItem(
+                  value: 0.8,
+                  child: Text('Width: 90%'),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            TextFormField(
+              initialValue: config.borderRadius.toString(),
+              onChanged: (value) {
+                setState(() {
+                  config = config.copyWith(borderRadius: double.parse(value));
+                });
+              },
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: 'Border Radius',
+                border: const OutlineInputBorder(),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            CheckboxListTile(
+              title: const Text('Close on click outside'),
+              value: config.closeOnClickOutside,
+              onChanged: (value) {
+                setState(() {
+                  config = config.copyWith(closeOnClickOutside: value);
+                });
+              },
+            ),
+            const SizedBox(width: 20),
+            CheckboxListTile(
+              title: const Text('Close on Esc Pressed'),
+              value: config.closeOnEscapeKey,
+              onChanged: (value) {
+                setState(() {
+                  config = config.copyWith(closeOnEscapeKey: value);
+                });
+              },
+            ),
+            const SizedBox(width: 20),
+            CheckboxListTile(
+              title: const Text('Enable edge drag'),
+              value: config.dragEnabled,
+              onChanged: (value) {
+                setState(() {
+                  config = config.copyWith(enableEdgeDrag: value);
+                });
+              },
+            ),
+            const SizedBox(height: 50),
+            ElevatedButton(
+              onPressed: () {
+                _showDrawer();
+              },
+              child: const Text('Show Drawer'),
+            ),
+          ],
         ),
       ),
     );
   }
+}
 
-  void _wishlist() {}
+class SurveryForm extends StatelessWidget {
+  const SurveryForm({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        children: [
+          const SizedBox(height: 20),
+          Text('Survey Form', style: Theme.of(context).textTheme.titleLarge),
+          const SizedBox(height: 20),
+          TextFormField(
+            decoration: InputDecoration(
+              labelText: 'Name',
+              border: const OutlineInputBorder(),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          TextFormField(
+            decoration: InputDecoration(
+              labelText: 'Email',
+              border: const OutlineInputBorder(),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Submit'),
+          ),
+        ],
+      ),
+    );
+  }
 }
