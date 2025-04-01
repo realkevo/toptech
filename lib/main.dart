@@ -96,7 +96,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void _showDrawer() {
     showDrawer(
       context,
-      builder: (context) => const SurveyForm(),
+      builder: (context) => const DrawerContent(),
       config: config,
       onClose: () {
         debugPrint('Drawer closed');
@@ -111,9 +111,9 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Removing AppBar and replacing with Row
+      // Reducing the height of the header container
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60), // Set the height for the header
+        preferredSize: Size.fromHeight(50), // Set a smaller height (50) for the header
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -125,10 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Color(0xFF1E3C72), // Mid blue
               ],
             ),
-
-
           ),
-
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -136,7 +133,7 @@ class _MyHomePageState extends State<MyHomePage> {
               Text(
                 widget.title,
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: 18, // Reduced font size to make it look balanced
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
@@ -154,15 +151,32 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class SurveyForm extends StatelessWidget {
-  const SurveyForm({super.key});
+
+class DrawerContent extends StatelessWidget {
+  const DrawerContent({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
-      child:Center(
-        child: Text('coming soon...'),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            Colors.black, // Start color
+            Colors.blue,  // End color
+          ],
+          begin: Alignment.topLeft, // Gradient starts from the top left
+          end: Alignment.bottomRight, // Gradient ends at the bottom right
+        ),
+      ),
+      child:
+      Center(
+        child: const Text(
+          'Coming Soon...',
+          style: TextStyle(
+            color: Colors.white, // Change text color to white for better visibility
+            fontSize: 18,
+          ),
+        ),
       ),
     );
   }
