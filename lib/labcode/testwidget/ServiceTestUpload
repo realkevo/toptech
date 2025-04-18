@@ -1,0 +1,153 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+
+// Service Model Class (with sectionTitle)
+class Service {
+  String serviceTitle;
+  String serviceDescription;
+  String servicePriceKsh;
+  String servicePriceUsd;
+  String sectionTitle;
+
+  Service({
+    required this.serviceTitle,
+    required this.serviceDescription,
+    required this.servicePriceKsh,
+    required this.servicePriceUsd,
+    required this.sectionTitle,
+  });
+
+  // Convert Service object to a Map (used to upload to Firestore)
+  Map<String, dynamic> toMap() {
+    return {
+      'serviceTitle': serviceTitle,
+      'serviceDescription': serviceDescription,
+      'servicePriceKsh': servicePriceKsh,
+      'servicePriceUsd': servicePriceUsd,
+      'sectionTitle': sectionTitle,
+    };
+  }
+
+  // Factory constructor to create Service from a Map (Firestore data)
+  factory Service.fromMap(Map<String, dynamic> map) {
+    return Service(
+      serviceTitle: map['serviceTitle'] ?? '',
+      serviceDescription: map['serviceDescription'] ?? '',
+      servicePriceKsh: map['servicePriceKsh'] ?? '',
+      servicePriceUsd: map['servicePriceUsd'] ?? '',
+      sectionTitle: map['sectionTitle'] ?? '',
+    );
+  }
+}
+
+// Firestore Service to upload data to Firebase Firestore
+class FirestoreService {
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
+
+  // Method to add a service to Firestore
+  Future<void> addService(Service service) async {
+    try {
+      await _db.collection('servicesData').add(service.toMap());
+    } catch (e) {
+      print('Error adding service: $e');
+    }
+  }
+}
+
+// AddServicePage - UI for adding a service
+class AddServicePage extends StatefulWidget {
+  @override
+  _AddServicePageState createState() => _AddServicePageState();
+}
+
+class _AddServicePageState extends State<AddServicePage> {
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _priceKshController = TextEditingController();
+  final TextEditingController _priceUsdController = TextEditingController();
+  final TextEditingController _sectionTitleController = TextEditingController();
+
+  final FirestoreService _firestoreService = FirestoreService();
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    _priceKshController.dispose();
+    _priceUsdController.dispose();
+    _sectionTitleController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Add a New Service')),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: _titleController,
+              decoration: InputDecoration(labelText: 'Service Title'),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              controller: _descriptionController,
+              decoration: InputDecoration(labelText: 'Service Description'),
+            ),
+            SizedBox(height: 10),
+            TextField(
+              controller: _priceKshController,
+              decoration: InputDecoration(labelText: 'Service Price (Ksh)'),
+              keyboardType: TextInputType.number,
+            ),
+            SizedBox(height: 10),
+            TextField(
+              controller: _priceUsdController,
+              decoration: InputDecoration(labelText: 'Service Price (USD)'),
+              keyboardType: TextInputType.number,
+            ),
+            SizedBox(height: 10),
+            TextField(
+              controller: _sectionTitleController,
+              decoration: InputDecoration(labelText: 'Section Title'),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                final String title = _titleController.text;
+                final String description = _descriptionController.text;
+                final String priceKsh = _priceKshController.text;
+                final String priceUsd = _priceUsdController.text;
+                final String sectionTitle = _sectionTitleController.text;
+
+                final service = Service(
+                  serviceTitle: title,
+                  serviceDescription: description,
+                  servicePriceKsh: priceKsh,
+                  servicePriceUsd: priceUsd,
+                  sectionTitle: sectionTitle,
+                );
+
+                _firestoreService.addService(service);
+
+                _titleController.clear();
+                _descriptionController.clear();
+                _priceKshController.clear();
+                _priceUsdController.clear();
+                _sectionTitleController.clear();
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Service added successfully!')),
+                );
+              },
+              child: Text('Add Service'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
