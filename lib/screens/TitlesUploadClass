@@ -1,0 +1,125 @@
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class Titles {
+  final String titleOne;
+  final String titleTwo;
+  final String titleThree;
+  final String titleFour;
+  final String titleFive;
+  final String titleSix;
+  final String titleSeven;
+  final String titleEight;
+  final String titleNine;
+  final String titleTen;
+
+  Titles({
+    required this.titleOne,
+    required this.titleTwo,
+    required this.titleThree,
+    required this.titleFour,
+    required this.titleFive,
+    required this.titleSix,
+    required this.titleSeven,
+    required this.titleEight,
+    required this.titleNine,
+    required this.titleTen,
+  });
+
+  Map<String, String> toMap() {
+    return {
+      'titleOne': titleOne,
+      'titleTwo': titleTwo,
+      'titleThree': titleThree,
+      'titleFour': titleFour,
+      'titleFive': titleFive,
+      'titleSix': titleSix,
+      'titleSeven': titleSeven,
+      'titleEight': titleEight,
+      'titleNine': titleNine,
+      'titleTen': titleTen,
+    };
+  }
+
+  Future<void> uploadToFirestore() async {
+    await FirebaseFirestore.instance.collection('titles').add(toMap());
+  }
+}
+
+class TitlesFormPage extends StatefulWidget {
+  @override
+  _TitlesFormPageState createState() => _TitlesFormPageState();
+}
+
+class _TitlesFormPageState extends State<TitlesFormPage> {
+  final _formKey = GlobalKey<FormState>();
+  final _controllers = List.generate(10, (_) => TextEditingController());
+
+  void _uploadTitles() async {
+    if (_formKey.currentState!.validate()) {
+      final titles = Titles(
+        titleOne: _controllers[0].text,
+        titleTwo: _controllers[1].text,
+        titleThree: _controllers[2].text,
+        titleFour: _controllers[3].text,
+        titleFive: _controllers[4].text,
+        titleSix: _controllers[5].text,
+        titleSeven: _controllers[6].text,
+        titleEight: _controllers[7].text,
+        titleNine: _controllers[8].text,
+        titleTen: _controllers[9].text,
+      );
+
+      await titles.uploadToFirestore();
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Titles uploaded successfully')),
+      );
+
+      _controllers.forEach((controller) => controller.clear());
+    }
+  }
+
+  @override
+  void dispose() {
+    for (var controller in _controllers) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Enter Titles')),
+      body: Padding(
+        padding: EdgeInsets.all(16),
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            children: [
+              for (int i = 0; i < 10; i++)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: TextFormField(
+                    controller: _controllers[i],
+                    decoration: InputDecoration(
+                      labelText: 'Title ${i + 1}',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) =>
+                        value == null || value.isEmpty ? 'Enter a title' : null,
+                  ),
+                ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _uploadTitles,
+                child: Text('Upload to Firestore'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
