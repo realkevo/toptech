@@ -1,56 +1,114 @@
-import 'package:anydrawer/anydrawer.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:toptech/screens/mainuploadclass.dart';
+import 'package:anydrawer/anydrawer.dart';
+import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart';
 import 'package:toptech/stateTv/desktophomepagedisplay.dart';
-import 'package:toptech/stk/stkpush.dart';
-import 'package:toptech/uploaddata/uploaddata.dart';
-import 'package:toptech/widgets/advert_containerdisplay.dart';
-import 'package:toptech/widgets/splash_screen.dart';
-import 'firebase_options.dart';
-import 'labcode/testwidget/testwidget.dart';
 
-import 'package:flutter/material.dart';
-//import 'home_page_display.dart'; // Make sure this file exists
+// Replace this with your actual Firebase options class
+import 'firebase_options.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-      demoProjectId: "toptech-1dc04",
-      options: DefaultFirebaseOptions.currentPlatform,);
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return
-      MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home:  Scaffold(
-        body: Mainuploadclass(),
-      ),
-    );
-  }
-}
-
-
-
-
-/*void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     demoProjectId: "toptech-1dc04",
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const MyApp());
+  runApp(const MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: HomeSplash(),
+  ));
+}
+
+class WelcomeDrawerDataUpload {
+  String? welcomeImageBase64;
+  String? welcomeMessage;
+  String? drawerBannerBase64;
+  String? drawerAboutUs;
+  String? drawerService;
+  String? drawerContacts;
+  String? drawerCatalogue;
+  String? drawerFaqs;
+
+  WelcomeDrawerDataUpload({
+    this.welcomeImageBase64,
+    this.welcomeMessage,
+    this.drawerBannerBase64,
+    this.drawerAboutUs,
+    this.drawerService,
+    this.drawerContacts,
+    this.drawerCatalogue,
+    this.drawerFaqs,
+  });
+
+  factory WelcomeDrawerDataUpload.fromFirestore(Map<String, dynamic> map) {
+    return WelcomeDrawerDataUpload(
+      welcomeImageBase64: map['welcomeImageBase64'],
+      welcomeMessage: map['welcomeMessage'],
+      drawerBannerBase64: map['drawerBannerBase64'],
+      drawerAboutUs: map['drawerAboutUs'],
+      drawerService: map['drawerService'],
+      drawerContacts: map['drawerContacts'],
+      drawerCatalogue: map['drawerCatalogue'],
+      drawerFaqs: map['drawerFaqs'],
+    );
+  }
+}
+
+class HomeSplash extends StatelessWidget {
+  const HomeSplash({super.key});
+
+  Future<WelcomeDrawerDataUpload?> _fetchData() async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('welcome_drawer_data')
+        .orderBy('welcomeMessage', descending: true)
+        .limit(1)
+        .get();
+
+    if (snapshot.docs.isNotEmpty) {
+      return WelcomeDrawerDataUpload.fromFirestore(snapshot.docs.first.data());
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FlutterSplashScreen(
+      duration: const Duration(seconds: 4),
+      nextScreen: const MyApp(),
+      backgroundColor: Colors.white,
+      splashScreenBody: FutureBuilder<WelcomeDrawerDataUpload?>(
+        future: _fetchData(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (!snapshot.hasData) {
+            return const Center(child: Text("No splash data found"));
+          }
+
+          final data = snapshot.data!;
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (data.welcomeImageBase64 != null)
+                Image.memory(base64Decode(data.welcomeImageBase64!), height: 200),
+              const SizedBox(height: 20),
+              if (data.welcomeMessage != null)
+                Text(
+                  data.welcomeMessage!,
+                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                ),
+            ],
+          );
+        },
+      ),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -58,8 +116,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-      MaterialApp.router(
+    return MaterialApp.router(
       title: 'techforce.co.ke',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -67,7 +124,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       routerDelegate: AnyDrawerRouterDelegate(
-        builder: (context) => const MyHomePage(title: 'Techforce',),
+        builder: (context) => const MyHomePage(title: 'Techforce'),
       ),
     );
   }
@@ -92,7 +149,6 @@ class AnyDrawerRouterDelegate extends RouterDelegate<Uri>
         if (!route.didPop(result)) {
           return false;
         }
-
         notifyListeners();
         return true;
       },
@@ -111,7 +167,6 @@ class AnyDrawerRouterDelegate extends RouterDelegate<Uri>
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
   final String title;
 
   @override
@@ -119,7 +174,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  DrawerConfig config = const DrawerConfig(side: DrawerSide.left); // Set the drawer to slide from the left
+  DrawerConfig config = const DrawerConfig(side: DrawerSide.left);
   final AnyDrawerController controller = AnyDrawerController();
 
   @override
@@ -133,33 +188,23 @@ class _MyHomePageState extends State<MyHomePage> {
       context,
       builder: (context) => const DrawerContent(),
       config: config,
-      onClose: () {
-        debugPrint('Drawer closed');
-      },
-      onOpen: () {
-        debugPrint('Drawer opened');
-      },
+      onClose: () => debugPrint('Drawer closed'),
+      onOpen: () => debugPrint('Drawer opened'),
       controller: controller,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return
-      Scaffold(
-      // Reducing the height of the header container
+    return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(50), // Set a smaller height (50) for the header
+        preferredSize: const Size.fromHeight(50),
         child: Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             gradient: LinearGradient(
+              colors: [Color(0xFF0A0E21), Color(0xFF0A0E21), Color(0xFF1E3C72)],
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              colors: [
-                Color(0xFF0A0E21), // Dark blue
-                Color(0xFF0A0E21), // Slightly lighter blue
-                Color(0xFF1E3C72), // Mid blue
-              ],
             ),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -168,43 +213,92 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               IconButton(
                 icon: const Icon(Icons.menu, color: Colors.white),
-                onPressed: _showDrawer, // Show the drawer when the button is pressed
+                onPressed: _showDrawer,
               ),
             ],
           ),
         ),
       ),
-      body: Homepagedisplay(), // Your main content
+      body: const Center(
+        child:
+
+        Homepagedisplay(),
+
+      ),
     );
   }
-}*/
-
+}
 
 class DrawerContent extends StatelessWidget {
   const DrawerContent({super.key});
 
+  Future<WelcomeDrawerDataUpload?> _fetchData() async {
+    final snapshot = await FirebaseFirestore.instance
+        .collection('welcome_drawer_data')
+        .orderBy('welcomeMessage', descending: true)
+        .limit(1)
+        .get();
+
+    if (snapshot.docs.isNotEmpty) {
+      return WelcomeDrawerDataUpload.fromFirestore(snapshot.docs.first.data());
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Colors.black, // Start color
-            Colors.blue,  // End color
-          ],
-          begin: Alignment.topLeft, // Gradient starts from the top left
-          end: Alignment.bottomRight, // Gradient ends at the bottom right
-        ),
-      ),
-      child:
-      Center(
-        child: const Text(
-          'Coming Soon...',
-          style: TextStyle(
-            color: Colors.white, // Change text color to white for better visibility
-            fontSize: 18,
+    return FutureBuilder<WelcomeDrawerDataUpload?>(
+      future: _fetchData(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator(color: Colors.white));
+        }
+
+        if (!snapshot.hasData) {
+          return const Center(child: Text('No drawer data available', style: TextStyle(color: Colors.white)));
+        }
+
+        final data = snapshot.data!;
+        return Container(
+          padding: const EdgeInsets.all(16),
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.black, Colors.blue],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
           ),
-        ),
+          child: ListView(
+            children: [
+              if (data.drawerBannerBase64 != null)
+                Container(
+                  height: 150,
+                  margin: const EdgeInsets.only(bottom: 16),
+                  child: Image.memory(base64Decode(data.drawerBannerBase64!), fit: BoxFit.cover),
+                ),
+              if (data.drawerAboutUs != null) _drawerItem('About Us', data.drawerAboutUs!),
+              if (data.drawerService != null) _drawerItem('Services', data.drawerService!),
+              if (data.drawerContacts != null) _drawerItem('Contacts', data.drawerContacts!),
+              if (data.drawerCatalogue != null) _drawerItem('Catalogue', data.drawerCatalogue!),
+              if (data.drawerFaqs != null) _drawerItem('FAQs', data.drawerFaqs!),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _drawerItem(String title, String content) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title, style: const TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 4),
+          Text(content, style: const TextStyle(fontSize: 14, color: Colors.white70)),
+          const Divider(color: Colors.white30),
+        ],
       ),
     );
   }

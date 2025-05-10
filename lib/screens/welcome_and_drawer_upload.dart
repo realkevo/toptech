@@ -35,7 +35,19 @@ class WelcomeDrawerDataUpload {
       'drawerCatalogue': drawerCatalogue,
       'drawerFaqs': drawerFaqs,
     };
+
   }
+  factory WelcomeDrawerDataUpload.fromFirestore(Map<String, dynamic> data) {
+    return WelcomeDrawerDataUpload(
+      welcomeImageBase64: data['welcomeImageBase64'],
+      welcomeMessage: data['welcomeMessage'],
+      drawerBannerBase64: data['drawerBannerBase64'],
+      drawerAboutUs: data['drawerAboutUs'],
+      drawerService: data['drawerService'],
+      drawerContacts: data['drawerContacts'],
+      drawerCatalogue: data['drawerCatalogue'],
+      drawerFaqs: data['drawerFaqs'],
+    );}
 
   Future<void> uploadToFirestore() async {
     CollectionReference collection = FirebaseFirestore.instance.collection('welcome_drawer_data');
