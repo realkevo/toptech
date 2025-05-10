@@ -4,12 +4,46 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:toptech/screens/mainuploadclass.dart';
 import 'package:toptech/stateTv/desktophomepagedisplay.dart';
 import 'package:toptech/stk/stkpush.dart';
+import 'package:toptech/uploaddata/uploaddata.dart';
 import 'package:toptech/widgets/advert_containerdisplay.dart';
 import 'package:toptech/widgets/splash_screen.dart';
 import 'firebase_options.dart';
 import 'labcode/testwidget/testwidget.dart';
 
+import 'package:flutter/material.dart';
+//import 'home_page_display.dart'; // Make sure this file exists
+
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+      demoProjectId: "toptech-1dc04",
+      options: DefaultFirebaseOptions.currentPlatform,);
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return
+      MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      home:  Scaffold(
+        body: Mainuploadclass(),
+      ),
+    );
+  }
+}
+
+
+
+
+/*void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     demoProjectId: "toptech-1dc04",
@@ -24,7 +58,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
+    return
+      MaterialApp.router(
       title: 'techforce.co.ke',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -110,7 +145,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return
+      Scaffold(
       // Reducing the height of the header container
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(50), // Set a smaller height (50) for the header
@@ -130,14 +166,6 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                widget.title,
-                style: TextStyle(
-                  fontSize: 18, // Reduced font size to make it look balanced
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
               IconButton(
                 icon: const Icon(Icons.menu, color: Colors.white),
                 onPressed: _showDrawer, // Show the drawer when the button is pressed
@@ -149,7 +177,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Homepagedisplay(), // Your main content
     );
   }
-}
+}*/
 
 
 class DrawerContent extends StatelessWidget {

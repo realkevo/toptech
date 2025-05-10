@@ -4,6 +4,7 @@ import 'package:toptech/screens/headerdataupload.dart';
 import 'package:toptech/screens/remarkupload.dart';
 import 'package:toptech/screens/serviceupload.dart';
 import 'package:toptech/screens/teamupload.dart';
+import 'package:toptech/screens/welcome_and_drawer_upload.dart';
 
 import 'adcontainerupload.dart';
 import 'footerdataupload.dart';
@@ -37,6 +38,7 @@ Scaffold(
             AddServicePage(),
             RemarkUploadClass(),
             UploadFooterData(),
+            WelcomeDrawerUploadPage(),
             TeamUploadClass(),
             HeaderDataUpload(),
             AddContainerUpload(),
