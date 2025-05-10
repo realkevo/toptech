@@ -1,14 +1,16 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
+
+import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart';
+import 'package:anydrawer/anydrawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:anydrawer/anydrawer.dart';
-import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart';
+import 'package:flutter/material.dart';
 import 'package:toptech/stateTv/desktophomepagedisplay.dart';
 
 // Replace this with your actual Firebase options class
 import 'firebase_options.dart';
 
+//cleaned code
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
