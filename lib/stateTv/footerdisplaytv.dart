@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:convert'; // For base64 decoding
 import 'dart:typed_data'; // For image byte manipulation
@@ -321,3 +321,370 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
     );
   }
 }
+*/
+
+
+//Clickable footer 
+
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:url_launcher/url_launcher.dart'; // For launching URLs
+import 'dart:convert'; // For base64 decoding
+import 'dart:typed_data'; // For image byte manipulation
+
+class FooterDisplayTv extends StatefulWidget {
+  @override
+  _FooterDisplayTvState createState() => _FooterDisplayTvState();
+}
+
+class _FooterDisplayTvState extends State<FooterDisplayTv> {
+  Future<Map<String, String>> fetchFooterData() async {
+    try {
+      var querySnapshot =
+          await FirebaseFirestore.instance.collection('footerData').get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        var document = querySnapshot.docs[0];
+        return {
+          'githubIcon': document['githubIcon'],
+          'xIcon': document['xIcon'],
+          'redditIcon': document['redditIcon'],
+          'facebookIcon': document['facebookIcon'],
+          'partnerOneIcon': document['partnerOneIcon'],
+          'partnerTwoIcon': document['partnerTwoIcon'],
+          'partnerThreeIcon': document['partnerThreeIcon'],
+          'copyRightIcon': document['copyRightIcon'],
+        };
+      } else {
+        return {};
+      }
+    } catch (e) {
+      print("Error fetching footer data: $e");
+      return {};
+    }
+  }
+
+  Image _decodeBase64ToImage(String base64String) {
+    try {
+      Uint8List bytes = base64Decode(base64String);
+      return Image.memory(bytes, fit: BoxFit.contain);
+    } catch (e) {
+      print("Error decoding base64: $e");
+      return Image.asset('assets/placeholder.png', fit: BoxFit.contain);
+    }
+  }
+
+  void _launchURL(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      print('Could not launch $url');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double heightFactor = MediaQuery.of(context).size.height;
+    double widthFactor = MediaQuery.of(context).size.width;
+
+    return Container(
+      width: widthFactor,
+      padding: EdgeInsets.symmetric(
+          horizontal: widthFactor * 0.05, vertical: heightFactor * 0.012),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xFF0A0E21),
+            Color(0xFF12233F),
+            Color(0xFF1E3C72),
+          ],
+        ),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(7.0),
+          topRight: Radius.circular(7.0),
+        ),
+      ),
+      child: FutureBuilder<Map<String, String>>(
+        future: fetchFooterData(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(child: Text("Error loading data"));
+          }
+
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Center(child: Text("No data available"));
+          }
+
+          var footerData = snapshot.data!;
+
+          return Padding(
+            padding: const EdgeInsets.all(7.0),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Social Icons
+                    Flexible(
+                      flex: 2,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              "Follow us",
+                              style: TextStyle(
+                                fontSize: heightFactor * 0.014,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          footerData['githubIcon'] != null
+                              ? InkWell(
+                                  onTap: () => _launchURL(
+                                      "https://github.com/realkevo"),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        margin:
+                                            EdgeInsets.symmetric(vertical: 5),
+                                        height: 20,
+                                        width: 20,
+                                        child: _decodeBase64ToImage(
+                                            footerData['githubIcon']!),
+                                      ),
+                                      Text(
+                                        "github",
+                                        style: TextStyle(
+                                          fontSize: heightFactor * 0.014,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : SizedBox.shrink(),
+                          footerData['xIcon'] != null
+                              ? InkWell(
+                                  onTap: () => _launchURL(
+                                      "https://x.com/3ealkevo?t=Vz8FYnpgVXQ7ncx8I_AJkQ&s=09"),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        margin:
+                                            EdgeInsets.symmetric(vertical: 5),
+                                        height: 20,
+                                        width: 20,
+                                        child: _decodeBase64ToImage(
+                                            footerData['xIcon']!),
+                                      ),
+                                      Text(
+                                        "X",
+                                        style: TextStyle(
+                                          fontSize: heightFactor * 0.014,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : SizedBox.shrink(),
+                          footerData['redditIcon'] != null
+                              ? InkWell(
+                                  onTap: () => _launchURL(
+                                      "https://www.reddit.com/u/Thuranira_alex/s/ECvrLiAn4X"),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        margin:
+                                            EdgeInsets.symmetric(vertical: 5),
+                                        height: 20,
+                                        width: 20,
+                                        child: _decodeBase64ToImage(
+                                            footerData['redditIcon']!),
+                                      ),
+                                      Text(
+                                        "reddit",
+                                        style: TextStyle(
+                                          fontSize: heightFactor * 0.014,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : SizedBox.shrink(),
+                          footerData['facebookIcon'] != null
+                              ? InkWell(
+                                  onTap: () => _launchURL(
+                                      "https://www.linkedin.com/in/kelvin-thuranira-485844231?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"),
+                                  child: Row(
+                                    children: [
+                                      Container(
+                                        margin:
+                                            EdgeInsets.symmetric(vertical: 5),
+                                        height: 20,
+                                        width: 20,
+                                        child: _decodeBase64ToImage(
+                                            footerData['facebookIcon']!),
+                                      ),
+                                      Text(
+                                        "linkedin",
+                                        style: TextStyle(
+                                          fontSize: heightFactor * 0.014,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : SizedBox.shrink(),
+                        ],
+                      ),
+                    ),
+
+                    // Address
+                    Flexible(
+                      flex: 3,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "P.O Box 600-63 Nairobi, Kenya",
+                            style: TextStyle(
+                              fontSize: heightFactor * 0.014,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Text(
+                            "Mombasa Road, Platnum Plaza flr 2",
+                            style: TextStyle(
+                              fontSize: heightFactor * 0.014,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // Partners
+                    Flexible(
+                      flex: 2,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(7.0),
+                            topRight: Radius.circular(7.0),
+                          ),
+                          color: Colors.deepOrange,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 2.0),
+                                child: Text(
+                                  "Partners and sponsors",
+                                  style: TextStyle(
+                                    fontSize: heightFactor * 0.024,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              color: Colors.white,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      footerData['partnerOneIcon'] != null
+                                          ? Container(
+                                              margin: EdgeInsets.symmetric(
+                                                  horizontal: 5),
+                                              height: 20,
+                                              width: 20,
+                                              child: _decodeBase64ToImage(
+                                                  footerData[
+                                                      'partnerOneIcon']!),
+                                            )
+                                          : SizedBox.shrink(),
+                                      footerData['partnerTwoIcon'] != null
+                                          ? Container(
+                                              margin: EdgeInsets.symmetric(
+                                                  horizontal: 5),
+                                              height: 20,
+                                              width: 20,
+                                              child: _decodeBase64ToImage(
+                                                  footerData[
+                                                      'partnerTwoIcon']!),
+                                            )
+                                          : SizedBox.shrink(),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      footerData['partnerThreeIcon'] != null
+                                          ? Container(
+                                              height: 20,
+                                              width: 20,
+                                              child: _decodeBase64ToImage(
+                                                  footerData[
+                                                      'partnerThreeIcon']!),
+                                            )
+                                          : SizedBox.shrink(),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                // Copyright
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    footerData['copyRightIcon'] != null
+                        ? Container(
+                            margin: EdgeInsets.symmetric(horizontal: 5),
+                            height: 15,
+                            width: 15,
+                            child: _decodeBase64ToImage(
+                                footerData['copyRightIcon']!),
+                          )
+                        : SizedBox.shrink(),
+                    Text(
+                      "2025 Copyright",
+                      style: TextStyle(
+                        fontSize: heightFactor * 0.015,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
