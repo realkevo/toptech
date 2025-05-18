@@ -3,14 +3,13 @@ import 'dart:convert';
 import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart';
 import 'package:anydrawer/anydrawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:toptech/stateTv/desktophomepagedisplay.dart';
 
-// Replace this with your actual Firebase options class
 import 'firebase_options.dart';
 
-//cleaned code
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -59,20 +58,48 @@ class WelcomeDrawerDataUpload {
   }
 }
 
-class HomeSplash extends StatelessWidget {
+class HomeSplash extends StatefulWidget {
   const HomeSplash({super.key});
 
-  Future<WelcomeDrawerDataUpload?> _fetchData() async {
-    final snapshot = await FirebaseFirestore.instance
-        .collection('welcome_drawer_data')
-        .orderBy('welcomeMessage', descending: true)
-        .limit(1)
-        .get();
+  @override
+  State<HomeSplash> createState() => _HomeSplashState();
+}
 
-    if (snapshot.docs.isNotEmpty) {
-      return WelcomeDrawerDataUpload.fromFirestore(snapshot.docs.first.data());
+class _HomeSplashState extends State<HomeSplash> {
+  WelcomeDrawerDataUpload? _data;
+  bool _hasConnection = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    final connectivityResult = await Connectivity().checkConnectivity();
+    final isConnected = connectivityResult != ConnectivityResult.none;
+
+    if (!isConnected) {
+      setState(() => _hasConnection = false);
+      return;
     }
-    return null;
+
+    try {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('welcome_drawer_data')
+          .orderBy('welcomeMessage', descending: true)
+          .limit(1)
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+        setState(() {
+          _data =
+              WelcomeDrawerDataUpload.fromFirestore(snapshot.docs.first.data());
+        });
+      }
+    } catch (e) {
+      // Optionally log error or ignore silently
+    }
   }
 
   @override
@@ -81,36 +108,37 @@ class HomeSplash extends StatelessWidget {
       duration: const Duration(seconds: 4),
       nextScreen: const MyApp(),
       backgroundColor: Colors.white,
-      splashScreenBody: FutureBuilder<WelcomeDrawerDataUpload?>(
-        future: _fetchData(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
+      splashScreenBody: _buildSplashContent(),
+    );
+  }
 
-          if (!snapshot.hasData) {
-            return const Center(child: Text("No splash data found"));
-          }
+  Widget _buildSplashContent() {
+    if (!_hasConnection) {
+      return const Center(
+        child: Text(
+          "You're offline",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+      );
+    }
 
-          final data = snapshot.data!;
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              if (data.welcomeImageBase64 != null)
-                Image.memory(base64Decode(data.welcomeImageBase64!),
-                    height: 200),
-              const SizedBox(height: 20),
-              if (data.welcomeMessage != null)
-                Text(
-                  data.welcomeMessage!,
-                  style: const TextStyle(
-                      fontSize: 22, fontWeight: FontWeight.bold),
-                  textAlign: TextAlign.center,
-                ),
-            ],
-          );
-        },
-      ),
+    if (_data == null) {
+      return const SizedBox(); // No loading UI, keep it blank
+    }
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        if (_data!.welcomeImageBase64 != null)
+          Image.memory(base64Decode(_data!.welcomeImageBase64!), height: 200),
+        const SizedBox(height: 20),
+        if (_data!.welcomeMessage != null)
+          Text(
+            _data!.welcomeMessage!,
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+          ),
+      ],
     );
   }
 }
@@ -137,7 +165,6 @@ class MyApp extends StatelessWidget {
 class AnyDrawerRouterDelegate extends RouterDelegate<Uri>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<Uri> {
   AnyDrawerRouterDelegate({required this.builder});
-
   final WidgetBuilder builder;
 
   @override
@@ -150,9 +177,7 @@ class AnyDrawerRouterDelegate extends RouterDelegate<Uri>
         ),
       ],
       onPopPage: (route, result) {
-        if (!route.didPop(result)) {
-          return false;
-        }
+        if (!route.didPop(result)) return false;
         notifyListeners();
         return true;
       },
@@ -161,17 +186,14 @@ class AnyDrawerRouterDelegate extends RouterDelegate<Uri>
 
   @override
   GlobalKey<NavigatorState> get navigatorKey => GlobalKey<NavigatorState>();
-
   @override
   Uri? get currentConfiguration => null;
-
   @override
   Future<void> setNewRoutePath(Uri configuration) async {}
 }
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
-
   final String title;
 
   @override
@@ -252,15 +274,9 @@ class DrawerContent extends StatelessWidget {
     return FutureBuilder<WelcomeDrawerDataUpload?>(
       future: _fetchData(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-              child: CircularProgressIndicator(color: Colors.white));
-        }
-
-        if (!snapshot.hasData) {
-          return const Center(
-              child: Text('No drawer data available',
-                  style: TextStyle(color: Colors.white)));
+        if (snapshot.connectionState != ConnectionState.done ||
+            !snapshot.hasData) {
+          return const SizedBox(); // Silently ignore loading here too
         }
 
         final data = snapshot.data!;
