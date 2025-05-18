@@ -40,10 +40,7 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
             padding: EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: Colors.transparent,
-              border: Border.all(
-                color: Colors.lightGreenAccent,
-                width: 2,
-              ),
+              // Border removed here
               borderRadius: BorderRadius.circular(12),
               gradient: LinearGradient(
                 begin: Alignment.topLeft,

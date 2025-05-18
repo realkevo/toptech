@@ -97,12 +97,14 @@ class HomeSplash extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (data.welcomeImageBase64 != null)
-                Image.memory(base64Decode(data.welcomeImageBase64!), height: 200),
+                Image.memory(base64Decode(data.welcomeImageBase64!),
+                    height: 200),
               const SizedBox(height: 20),
               if (data.welcomeMessage != null)
                 Text(
                   data.welcomeMessage!,
-                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 22, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
             ],
@@ -169,6 +171,7 @@ class AnyDrawerRouterDelegate extends RouterDelegate<Uri>
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
+
   final String title;
 
   @override
@@ -222,10 +225,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       body: const Center(
-        child:
-
-        Homepagedisplay(),
-
+        child: Homepagedisplay(),
       ),
     );
   }
@@ -253,11 +253,14 @@ class DrawerContent extends StatelessWidget {
       future: _fetchData(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator(color: Colors.white));
+          return const Center(
+              child: CircularProgressIndicator(color: Colors.white));
         }
 
         if (!snapshot.hasData) {
-          return const Center(child: Text('No drawer data available', style: TextStyle(color: Colors.white)));
+          return const Center(
+              child: Text('No drawer data available',
+                  style: TextStyle(color: Colors.white)));
         }
 
         final data = snapshot.data!;
@@ -276,13 +279,19 @@ class DrawerContent extends StatelessWidget {
                 Container(
                   height: 150,
                   margin: const EdgeInsets.only(bottom: 16),
-                  child: Image.memory(base64Decode(data.drawerBannerBase64!), fit: BoxFit.cover),
+                  child: Image.memory(base64Decode(data.drawerBannerBase64!),
+                      fit: BoxFit.cover),
                 ),
-              if (data.drawerAboutUs != null) _drawerItem('About Us', data.drawerAboutUs!),
-              if (data.drawerService != null) _drawerItem('Services', data.drawerService!),
-              if (data.drawerContacts != null) _drawerItem('Contacts', data.drawerContacts!),
-              if (data.drawerCatalogue != null) _drawerItem('Catalogue', data.drawerCatalogue!),
-              if (data.drawerFaqs != null) _drawerItem('FAQs', data.drawerFaqs!),
+              if (data.drawerAboutUs != null)
+                _drawerItem('About Us', data.drawerAboutUs!),
+              if (data.drawerService != null)
+                _drawerItem('Services', data.drawerService!),
+              if (data.drawerContacts != null)
+                _drawerItem('Contacts', data.drawerContacts!),
+              if (data.drawerCatalogue != null)
+                _drawerItem('Catalogue', data.drawerCatalogue!),
+              if (data.drawerFaqs != null)
+                _drawerItem('FAQs', data.drawerFaqs!),
             ],
           ),
         );
@@ -296,9 +305,14 @@ class DrawerContent extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title, style: const TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold)),
+          Text(title,
+              style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold)),
           const SizedBox(height: 4),
-          Text(content, style: const TextStyle(fontSize: 14, color: Colors.white70)),
+          Text(content,
+              style: const TextStyle(fontSize: 14, color: Colors.white70)),
           const Divider(color: Colors.white30),
         ],
       ),

@@ -1,7 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:convert'; // For base64 decoding
 import 'dart:typed_data'; // For image byte manipulation
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart'; // For opening links
 
 class FooterDisplayTv extends StatefulWidget {
   @override
@@ -9,18 +11,15 @@ class FooterDisplayTv extends StatefulWidget {
 }
 
 class _FooterDisplayTvState extends State<FooterDisplayTv> {
-  // Method to fetch data from Firestore
+  // Fetch data from Firestore
   Future<Map<String, String>> fetchFooterData() async {
     try {
-      // Get the first document from the 'footerData' collection
       var querySnapshot =
-      await FirebaseFirestore.instance.collection('footerData').get();
+          await FirebaseFirestore.instance.collection('footerData').get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        // Assuming the first document contains the data
         var document = querySnapshot.docs[0];
 
-        // Retrieve the base64-encoded strings
         return {
           'githubIcon': document['githubIcon'],
           'xIcon': document['xIcon'],
@@ -40,14 +39,24 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
     }
   }
 
-  // Method to decode base64 and convert to Image widget
+  // Decode base64 image
   Image _decodeBase64ToImage(String base64String) {
     try {
       Uint8List bytes = base64Decode(base64String);
-      return Image.memory(bytes, fit: BoxFit.contain); // Use BoxFit.contain to ensure the image fits well
+      return Image.memory(bytes, fit: BoxFit.contain);
     } catch (e) {
       print("Error decoding base64: $e");
-      return Image.asset('assets/placeholder.png', fit: BoxFit.contain); // Use a placeholder in case of error
+      return Image.asset('assets/placeholder.png', fit: BoxFit.contain);
+    }
+  }
+
+  // Launch external URL
+  void _launchURL(String url) async {
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      print("Could not launch $url");
     }
   }
 
@@ -58,15 +67,18 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
 
     return Container(
       width: widthFactor,
-      padding: EdgeInsets.symmetric(horizontal: widthFactor * 0.05, vertical: heightFactor * 0.012), // Further reduced vertical padding
+      padding: EdgeInsets.symmetric(
+        horizontal: widthFactor * 0.05,
+        vertical: heightFactor * 0.012,
+      ),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
           colors: [
-            Color(0xFF0A0E21), // Dark blue
-            Color(0xFF12233F), // Slightly lighter blue
-            Color(0xFF1E3C72), // Mid blue
+            Color(0xFF0A0E21),
+            Color(0xFF12233F),
+            Color(0xFF1E3C72),
           ],
         ),
         borderRadius: BorderRadius.only(
@@ -91,11 +103,10 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
             padding: const EdgeInsets.all(7.0),
             child: Column(
               children: [
-                // Row for main content
+                // Social Media Links
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    // Left Column - Socials
                     Flexible(
                       flex: 2,
                       child: Column(
@@ -112,87 +123,19 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
                               ),
                             ),
                           ),
-                          footerData['githubIcon'] != null
-                              ? Row(
-                            children: [
-                              Container(
-                                margin: EdgeInsets.symmetric(vertical: 5),
-                                height: 20, // Adjusted height
-                                width: 20, // Adjusted width
-                                child: _decodeBase64ToImage(footerData['githubIcon']!),
-                              ),
-                              Text(
-                                "github",
-                                style: TextStyle(
-                                  fontSize: heightFactor * 0.014,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          )
-                              : SizedBox.shrink(),
-                          footerData['xIcon'] != null
-                              ? Row(
-                            children: [
-                              Container(
-                                margin: EdgeInsets.symmetric(vertical: 5),
-                                height: 20,
-                                width: 20,
-                                child: _decodeBase64ToImage(footerData['xIcon']!),
-                              ),
-                              Text(
-                                "X",
-                                style: TextStyle(
-                                  fontSize: heightFactor * 0.014,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          )
-                              : SizedBox.shrink(),
-                          footerData['redditIcon'] != null
-                              ? Row(
-                            children: [
-                              Container(
-                                margin: EdgeInsets.symmetric(vertical: 5),
-                                height: 20,
-                                width: 20,
-                                child: _decodeBase64ToImage(footerData['redditIcon']!),
-                              ),
-                              Text(
-                                "reddit",
-                                style: TextStyle(
-                                  fontSize: heightFactor * 0.014,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          )
-                              : SizedBox.shrink(),
-                          footerData['facebookIcon'] != null
-                              ? Row(
-                            children: [
-                              Container(
-                                margin: EdgeInsets.symmetric(vertical: 5),
-                                height: 20,
-                                width: 20,
-                                child: _decodeBase64ToImage(footerData['facebookIcon']!),
-                              ),
-                              Text(
-                                "linkedin",
-                                style: TextStyle(
-                                  fontSize: heightFactor * 0.014,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          )
-                              : SizedBox.shrink(),
+                          _buildSocialLink(footerData['githubIcon'], 'GitHub',
+                              'https://github.com/realkevo'),
+                          _buildSocialLink(
+                              footerData['xIcon'], 'X', 'https://twitter.com'),
+                          _buildSocialLink(footerData['redditIcon'], 'Reddit',
+                              'https://reddit.com'),
+                          _buildSocialLink(footerData['facebookIcon'],
+                              'LinkedIn', 'https://linkedin.com'),
                         ],
                       ),
                     ),
 
-                    // Center Column - PO Box and Address
+                    // Address Section
                     Flexible(
                       flex: 3,
                       child: Column(
@@ -216,7 +159,7 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
                       ),
                     ),
 
-                    // Right Column - Partners
+                    // Partners Section
                     Flexible(
                       flex: 2,
                       child: Container(
@@ -244,45 +187,9 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
                                 ),
                               ),
                             ),
-                            Container(
-                              color: Colors.white,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      footerData['partnerOneIcon'] != null
-                                          ? Container(
-                                        margin: EdgeInsets.symmetric(horizontal: 5),
-                                        height: 20,
-                                        width: 20,
-                                        child: _decodeBase64ToImage(footerData['partnerOneIcon']!),
-                                      )
-                                          : SizedBox.shrink(),
-                                      footerData['partnerTwoIcon'] != null
-                                          ? Container(
-                                        margin: EdgeInsets.symmetric(horizontal: 5),
-                                        height: 20,
-                                        width: 20,
-                                        child: _decodeBase64ToImage(footerData['partnerTwoIcon']!),
-                                      )
-                                          : SizedBox.shrink(),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      footerData['partnerThreeIcon'] != null
-                                          ? Container(
-                                        height: 20,
-                                        width: 20,
-                                        child: _decodeBase64ToImage(footerData['partnerThreeIcon']!),
-                                      )
-                                          : SizedBox.shrink(),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
+                            _buildPartnerLogo(footerData['partnerOneIcon']),
+                            _buildPartnerLogo(footerData['partnerTwoIcon']),
+                            _buildPartnerLogo(footerData['partnerThreeIcon']),
                           ],
                         ),
                       ),
@@ -290,11 +197,9 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
                   ],
                 ),
 
-                // Bottom row for copyright
+                // Copyright Section
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     footerData['copyRightIcon'] != null
                         ? Container(
@@ -304,12 +209,11 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
                       child: _decodeBase64ToImage(footerData['copyRightIcon']!),
                     )
                         : SizedBox.shrink(),
+                    SizedBox(width: 5),
                     Text(
-                      "2025 Copyright",
+                      "© 2025 Your Company. All Rights Reserved.",
                       style: TextStyle(
-                        fontSize: heightFactor * 0.015,
-                        color: Colors.white,
-                      ),
+                          fontSize: heightFactor * 0.014, color: Colors.white),
                     ),
                   ],
                 ),
@@ -319,5 +223,43 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
         },
       ),
     );
+  }
+
+  // Helper function to build social links
+  Widget _buildSocialLink(String? base64Icon, String label, String url) {
+    if (base64Icon != null) {
+      return InkWell(
+        onTap: () => _launchURL(url),
+        child: Row(
+          children: [
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 5),
+              height: 20,
+              width: 20,
+              child: _decodeBase64ToImage(base64Icon),
+            ),
+            SizedBox(width: 6),
+            Text(
+              label,
+              style: TextStyle(fontSize: 14, color: Colors.white),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return SizedBox.shrink();
+    }
+  }
+
+  // Helper function to build partner logos
+  Widget _buildPartnerLogo(String? base64Icon) {
+    return base64Icon != null
+        ? Container(
+            margin: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+            height: 20,
+            width: 20,
+            child: _decodeBase64ToImage(base64Icon),
+          )
+        : SizedBox.shrink();
   }
 }
