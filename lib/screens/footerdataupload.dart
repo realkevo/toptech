@@ -10,7 +10,7 @@ class FooterUploadData {
   String redditIcon;
   String facebookIcon;
   //commit this
-
+//with token
   // partners
   String partnerOneIcon;
   String partnerTwoIcon;
