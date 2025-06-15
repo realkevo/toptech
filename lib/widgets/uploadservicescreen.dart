@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UploadServiceScreen extends StatefulWidget {
+  const UploadServiceScreen({super.key});
+
   @override
   _UploadServiceScreenState createState() => _UploadServiceScreenState();
 }

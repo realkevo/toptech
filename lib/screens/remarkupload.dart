@@ -135,6 +135,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class RemarkUploadClass extends StatefulWidget {
+  const RemarkUploadClass({super.key});
+
   @override
   _RemarkUploadClassState createState() => _RemarkUploadClassState();
 }

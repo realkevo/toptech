@@ -432,6 +432,8 @@ class Databaseservice {
 
 
 class ServiceDisplayPage extends StatelessWidget {
+  const ServiceDisplayPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -499,7 +501,7 @@ class ServiceDisplayPage extends StatelessWidget {
 
               // Main content - List of Services
               Expanded(
-                child: Container(
+                child: SizedBox(
                   height: MediaQuery.of(context).size.height * 0.9,
                   child: SingleChildScrollView(
                     child: Column(
@@ -606,7 +608,7 @@ class ServiceDisplayPage extends StatelessWidget {
       child: Column(
         children: [
           if (services.isNotEmpty && serviceData.HeadBannerImage != null)
-            Container(
+            SizedBox(
               height: 100,
               child: Image.memory(
                 base64Decode(serviceData.HeadBannerImage!),

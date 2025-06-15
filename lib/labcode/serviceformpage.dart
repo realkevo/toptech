@@ -307,14 +307,15 @@ class Databaseservice {
 */
 import 'dart:convert'; // To encode the image to Base64
 import 'dart:typed_data'; // To use Uint8List
-import 'dart:html' as html; // For image picking on Flutter Web
+// For image picking on Flutter Web
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:toptech/labcode/ui/servicedisplaypage.dart';
 
 class ServiceFormPage extends StatefulWidget {
+  const ServiceFormPage({super.key});
+
   @override
   _ServiceFormPageState createState() => _ServiceFormPageState();
 }

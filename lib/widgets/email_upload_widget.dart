@@ -36,6 +36,8 @@ class MailUploadWidget {
 }
 
 class MailUploadPage extends StatefulWidget {
+  const MailUploadPage({super.key});
+
   @override
   _MailUploadPageState createState() => _MailUploadPageState();
 }
@@ -117,7 +119,7 @@ class _MailUploadPageState extends State<MailUploadPage> {
     return
       Padding(
       padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-      child:       Container(
+      child:       SizedBox(
         width: MediaQuery.sizeOf(context).width * 0.9,
         child: Padding(
           padding: EdgeInsets.all(10.0),

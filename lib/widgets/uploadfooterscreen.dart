@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Uploadfooterscreen extends StatefulWidget {
+  const Uploadfooterscreen({super.key});
+
   @override
   _Uploadfooterscreen createState() => _Uploadfooterscreen();
 }

@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:toptech/screens/mainuploadclass.dart';
 import 'package:toptech/stateTv/desktophomepagedisplay.dart';
 
 import 'firebase_options.dart';
@@ -19,7 +20,9 @@ void main() async {
 
   runApp(const MaterialApp(
     debugShowCheckedModeBanner: false,
-    home: HomeSplash(),
+    home:
+        Mainuploadclass(),
+   // HomeSplash(),
   ));
 }
 

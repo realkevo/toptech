@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ServiceDisplayClass extends StatefulWidget {
+  const ServiceDisplayClass({super.key});
+
   @override
   _ServiceDisplayClassState createState() => _ServiceDisplayClassState();
 }
@@ -13,7 +15,7 @@ class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
   Stream<List<Map<String, dynamic>>> fetchServices() {
     return _firestore.collection('servicesData').snapshots().map(
           (snapshot) => snapshot.docs
-          .map((doc) => doc.data() as Map<String, dynamic>)
+          .map((doc) => doc.data())
           .toList(),
     );
   }

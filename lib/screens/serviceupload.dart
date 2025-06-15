@@ -9,6 +9,8 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -73,6 +75,8 @@ class FirestoreService {
 
 // AddServicePage - UI for adding a service
 class AddServicePage extends StatefulWidget {
+  const AddServicePage({super.key});
+
   @override
   _AddServicePageState createState() => _AddServicePageState();
 }
@@ -88,7 +92,7 @@ class _AddServicePageState extends State<AddServicePage> {
   @override
   Widget build(BuildContext context) {
     return
-      Container(
+      SizedBox(
         width: 360,
         height: 400,
         child: Column(

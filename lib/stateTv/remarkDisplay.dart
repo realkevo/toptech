@@ -152,13 +152,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class RemarkDisplayClass extends StatefulWidget {
+  const RemarkDisplayClass({super.key});
+
   @override
   _RemarkDisplayClassState createState() => _RemarkDisplayClassState();
 }
 
 class _RemarkDisplayClassState extends State<RemarkDisplayClass> {
   List<DocumentSnapshot> _remarks = [];
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
   bool _isPointerDown = false;
 
   @override

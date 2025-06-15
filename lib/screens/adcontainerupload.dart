@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddContainerUpload extends StatefulWidget {
+  const AddContainerUpload({super.key});
+
   @override
   _AddContainerUploadState createState() => _AddContainerUploadState();
 }
@@ -42,8 +44,8 @@ class _AddContainerUploadState extends State<AddContainerUpload> {
 
   // Method to pick an image (toptechIcon)
   Future<void> _pickImage() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
     if (image != null) {
       // Convert the image to bytes

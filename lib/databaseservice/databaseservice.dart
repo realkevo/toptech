@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import'package:cloud_firestore/cloud_firestore.dart';
 /*class DatabaseService {
   final FirebaseFirestore _firebase =
@@ -16,7 +15,6 @@ import'package:cloud_firestore/cloud_firestore.dart';
     }
   }
 }*/
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Databaseservice {
   String? service_title;

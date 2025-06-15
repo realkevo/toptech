@@ -51,11 +51,13 @@ class WelcomeDrawerDataUpload {
 
   Future<void> uploadToFirestore() async {
     CollectionReference collection = FirebaseFirestore.instance.collection('welcome_drawer_data');
-    await collection.add(this.toMap());
+    await collection.add(toMap());
   }
 }
 
 class WelcomeDrawerUploadPage extends StatefulWidget {
+  const WelcomeDrawerUploadPage({super.key});
+
   @override
   _WelcomeDrawerUploadPageState createState() => _WelcomeDrawerUploadPageState();
 }
@@ -131,7 +133,9 @@ class _WelcomeDrawerUploadPageState extends State<WelcomeDrawerUploadPage> {
     setState(() {
       _welcomeImageBase64 = null;
       _drawerBannerBase64 = null;
-      _controllers.forEach((c) => c.clear());
+      for (var c in _controllers) {
+        c.clear();
+      }
     });
   }
 
@@ -155,7 +159,7 @@ class _WelcomeDrawerUploadPageState extends State<WelcomeDrawerUploadPage> {
     ];
 
     return
-      Container(
+      SizedBox(
         width: MediaQuery.sizeOf(context).width *0.8,
         height: MediaQuery.sizeOf(context).height *0.8,
 
@@ -202,11 +206,11 @@ class _WelcomeDrawerUploadPageState extends State<WelcomeDrawerUploadPage> {
                 SizedBox(height: 24),
                 ElevatedButton(
                   onPressed: _uploadData,
-                  child: Text('Upload Data'),
                   style: ElevatedButton.styleFrom(
                     minimumSize: Size(double.infinity, 50),
                     textStyle: TextStyle(fontSize: 18),
                   ),
+                  child: Text('Upload Data'),
                 ),
               ],
             ),

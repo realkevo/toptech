@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class SafaricomSTKForm extends StatefulWidget {
+  const SafaricomSTKForm({super.key});
+
   @override
   _SafaricomSTKFormState createState() => _SafaricomSTKFormState();
 }
@@ -16,8 +18,7 @@ class _SafaricomSTKFormState extends State<SafaricomSTKForm> {
 
   // Function to get the Access Token
   Future<String> getAccessToken() async {
-    String basicAuth = 'Basic '
-        + base64Encode(utf8.encode('$consumerKey:$consumerSecret'));
+    String basicAuth = 'Basic ${base64Encode(utf8.encode('$consumerKey:$consumerSecret'))}';
     final response = await http.get(
       Uri.parse(
           'https://sandbox.safaricom.co.ke/oauth/v1/generate?grant_type=client_credentials'

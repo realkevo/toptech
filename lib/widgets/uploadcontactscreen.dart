@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Uploadcontactscreen extends StatefulWidget {
+  const Uploadcontactscreen({super.key});
+
   @override
   _Uploadcontactscreen createState() => _Uploadcontactscreen();
 }

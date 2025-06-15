@@ -6,6 +6,8 @@ import 'dart:typed_data';
 import 'package:image_picker/image_picker.dart';
 
 class HeaderDataUpload extends StatefulWidget {
+  const HeaderDataUpload({super.key});
+
   @override
   _HeaderDataUploadState createState() => _HeaderDataUploadState();
 }
@@ -39,8 +41,8 @@ class _HeaderDataUploadState extends State<HeaderDataUpload> {
   }
 
   Future<void> _pickImage() async {
-    final ImagePicker _picker = ImagePicker();
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
     if (image != null) {
       // Convert the image to bytes

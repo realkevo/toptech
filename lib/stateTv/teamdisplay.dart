@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TeamDisplay extends StatefulWidget {
+  const TeamDisplay({super.key});
+
   @override
   _TeamDisplayState createState() => _TeamDisplayState();
 }
 
 class _TeamDisplayState extends State<TeamDisplay> {
   List<DocumentSnapshot> _teams = []; // Store fetched remarks
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {

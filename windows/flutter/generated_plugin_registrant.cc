@@ -17,7 +17,7 @@ void RegisterPlugins(flutter::PluginRegistry* registry) {
   CloudFirestorePluginCApiRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("CloudFirestorePluginCApi"));
   ConnectivityPlusWindowsPluginRegisterWithRegistrar(
-          registry->GetRegistrarForPlugin("ConnectivityPlusWindowsPlugin"));
+      registry->GetRegistrarForPlugin("ConnectivityPlusWindowsPlugin"));
   FileSelectorWindowsRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("FileSelectorWindows"));
   FirebaseCorePluginCApiRegisterWithRegistrar(
@@ -25,5 +25,5 @@ void RegisterPlugins(flutter::PluginRegistry* registry) {
   FirebaseStoragePluginCApiRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("FirebaseStoragePluginCApi"));
   UrlLauncherWindowsRegisterWithRegistrar(
-          registry->GetRegistrarForPlugin("UrlLauncherWindows"));
+      registry->GetRegistrarForPlugin("UrlLauncherWindows"));
 }

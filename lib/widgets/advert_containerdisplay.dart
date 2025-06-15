@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class SloganDisplayWidget extends StatelessWidget {
+  const SloganDisplayWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Align(

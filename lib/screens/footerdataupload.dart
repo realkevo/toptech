@@ -9,6 +9,7 @@ class FooterUploadData {
   String xIcon;
   String redditIcon;
   String facebookIcon;
+  //commit this
 
   // partners
   String partnerOneIcon;
@@ -57,6 +58,8 @@ class FooterUploadData {
 }
 
 class UploadFooterData extends StatefulWidget {
+  const UploadFooterData({super.key});
+
   @override
   _UploadFooterDataState createState() => _UploadFooterDataState();
 }
@@ -88,7 +91,7 @@ class _UploadFooterDataState extends State<UploadFooterData> {
   @override
   Widget build(BuildContext context) {
     return
-      Container(
+      SizedBox(
         height: 500,
         width: 400,
         child: Padding(
