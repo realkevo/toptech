@@ -3,7 +3,9 @@ import 'dart:typed_data'; // For image byte manipulation
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart'; // For opening links
+import 'package:url_launcher/url_launcher.dart';
+
+import '../screens/mainuploadclass.dart'; // For opening links
 
 class FooterDisplayTv extends StatefulWidget {
   const FooterDisplayTv({super.key});
@@ -13,11 +15,9 @@ class FooterDisplayTv extends StatefulWidget {
 }
 
 class _FooterDisplayTvState extends State<FooterDisplayTv> {
-  // Fetch data from Firestore
   Future<Map<String, String>> fetchFooterData() async {
     try {
-      var querySnapshot =
-      await FirebaseFirestore.instance.collection('footerData').get();
+      var querySnapshot = await FirebaseFirestore.instance.collection('footerData').get();
 
       if (querySnapshot.docs.isNotEmpty) {
         var document = querySnapshot.docs[0];
@@ -31,6 +31,8 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
           'partnerTwoIcon': document['partnerTwoIcon'],
           'partnerThreeIcon': document['partnerThreeIcon'],
           'copyRightIcon': document['copyRightIcon'],
+          'poBoxAddress': document['poBoxAddress'],
+          'streetAddress': document['streetAddress'],
         };
       } else {
         return {};
@@ -41,7 +43,6 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
     }
   }
 
-  // Decode base64 image
   Image _decodeBase64ToImage(String base64String) {
     try {
       Uint8List bytes = base64Decode(base64String);
@@ -52,7 +53,6 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
     }
   }
 
-  // Launch external URL with proper mode for Android/iOS
   Future<void> _launchURL(String url) async {
     final uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
@@ -125,14 +125,10 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
                               ),
                             ),
                           ),
-                          _buildSocialLink(footerData['githubIcon'], 'GitHub',
-                              'https://github.com/realkevo'),
-                          _buildSocialLink(
-                              footerData['xIcon'], 'X', 'https://twitter.com'),
-                          _buildSocialLink(footerData['redditIcon'], 'Reddit',
-                              'https://reddit.com'),
-                          _buildSocialLink(footerData['facebookIcon'],
-                              'LinkedIn', 'https://linkedin.com'),
+                          _buildSocialLink(footerData['githubIcon'], 'GitHub', 'https://github.com/realkevo'),
+                          _buildSocialLink(footerData['xIcon'], 'X', 'https://twitter.com'),
+                          _buildSocialLink(footerData['redditIcon'], 'Reddit', 'https://reddit.com'),
+                          _buildSocialLink(footerData['facebookIcon'], 'LinkedIn', 'https://linkedin.com'),
                         ],
                       ),
                     ),
@@ -144,19 +140,19 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            "P.O Box 600-63 Nairobi, Kenya",
+                            footerData['poBoxAddress'] ?? 'P.O Box Not Available',
                             style: TextStyle(
                               fontSize: heightFactor * 0.014,
                               color: Colors.white,
                             ),
                           ),
-                          /*Text(
-                            "Mombasa Road, Platnum Plaza flr 2",
+                          Text(
+                            footerData['streetAddress'] ?? 'Street Address Not Available',
                             style: TextStyle(
                               fontSize: heightFactor * 0.014,
                               color: Colors.white,
                             ),
-                          ),*/
+                          ),
                         ],
                       ),
                     ),
@@ -178,8 +174,7 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
                             FittedBox(
                               fit: BoxFit.scaleDown,
                               child: Padding(
-                                padding:
-                                const EdgeInsets.only(left: 2.0, right: 2.0),
+                                padding: const EdgeInsets.only(left: 2.0, right: 2.0),
                                 child: Text(
                                   "Partners and sponsors",
                                   style: TextStyle(
@@ -213,11 +208,23 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
                     )
                         : const SizedBox.shrink(),
                     const SizedBox(width: 5),
-                    Text(
-                      "© 2025 Your Company. All Rights Reserved.",
-                      style: TextStyle(
-                          fontSize: heightFactor * 0.014, color: Colors.white),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const Mainuploadclass()),
+                        );
+                      },
+                      child: Text(
+                        "© 2025 Your Company. All Rights Reserved.",
+                        style: TextStyle(fontSize: heightFactor * 0.014, color: Colors.white),
+                      ),
                     ),
+
+                    /*  Text(
+                      "© 2025 Your Company. All Rights Reserved.",
+                      style: TextStyle(fontSize: heightFactor * 0.014, color: Colors.white),
+                    ),*/
                   ],
                 ),
               ],
@@ -228,7 +235,6 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
     );
   }
 
-  // Helper function to build social links
   Widget _buildSocialLink(String? base64Icon, String label, String url) {
     if (base64Icon != null) {
       return GestureDetector(
@@ -254,7 +260,6 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
     }
   }
 
-  // Helper function to build partner logos
   Widget _buildPartnerLogo(String? base64Icon) {
     return base64Icon != null
         ? Container(
