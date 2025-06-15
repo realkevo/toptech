@@ -134,56 +134,48 @@ class Remark {
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-// This widget lets you upload a remark with a name and a description.
-// The timestamp is automatically generated and added upon upload.
 class RemarkUploadClass extends StatefulWidget {
   @override
   _RemarkUploadClassState createState() => _RemarkUploadClassState();
 }
 
 class _RemarkUploadClassState extends State<RemarkUploadClass> {
-  // Controllers for text form fields
   final TextEditingController _remarkNameController = TextEditingController();
   final TextEditingController _remarkDescriController = TextEditingController();
 
-  // Method to upload data to Firestore
   Future<void> _uploadData() async {
-    // Get values from text fields
     String name = _remarkNameController.text.trim();
-    String specialty = _remarkDescriController.text.trim();
+    String description = _remarkDescriController.text.trim();
 
-    // Check if both fields are filled
-    if (name.isNotEmpty && specialty.isNotEmpty) {
-      // Capture the current timestamp
+    if (name.isNotEmpty && description.isNotEmpty) {
       DateTime now = DateTime.now();
 
-      // Store only day,month, and year in a convenient format
-      String timestamp = "${now.day}/${now.month}/${now.year}";
+      // Format date string as day/month/year
+      String formattedDate = "${now.day.toString().padLeft(2,'0')}/${now.month.toString().padLeft(2,'0')}/${now.year}";
 
-      // Create a Remark object with the data
-      Remark teamMember = Remark(
+      Remark remark = Remark(
         remarkName: name,
-        remarkDescription: specialty,
-        remarkDate: timestamp,
-        timestamp: now, // Store the raw timestamp for proper sorting
+        remarkDescription: description,
+        remarkDate: formattedDate, // only store formatted string, no Timestamp field anymore
       );
 
       try {
-        // Upload to Firestore
-        await teamMember.uploadToFirestore();
-
-        // Provide feedback to the user
+        await remark.uploadToFirestore();
         ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Data uploaded successfully!')));
+          SnackBar(content: Text('Data uploaded successfully!')),
+        );
+        _remarkNameController.clear();
+        _remarkDescriController.clear();
       } catch (e) {
         print("Error uploading data: $e");
-
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Error uploading data')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error uploading data')),
+        );
       }
     } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Please fill in all fields')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please fill in all fields')),
+      );
     }
   }
 
@@ -193,67 +185,54 @@ class _RemarkUploadClassState extends State<RemarkUploadClass> {
       color: Colors.orange,
       height: 300,
       width: 400,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Enter remarks data",
-                style: Theme.of(context).textTheme.headlineMedium),
-            // Text field for the name
-            TextFormField(
-              controller: _remarkNameController,
-              decoration: InputDecoration(labelText: 'Remarker Name'),
-            ),
-            // Text field for the remark’s description
-            TextFormField(
-              controller: _remarkDescriController,
-              decoration: InputDecoration(labelText: 'Remark Distribution'),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _uploadData,
-              child: Text('Upload Data'),
-            ),
-          ],
-        ),
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Enter remarks data",
+            style: Theme.of(context).textTheme.headlineMedium,
+          ),
+          TextFormField(
+            controller: _remarkNameController,
+            decoration: InputDecoration(labelText: 'Remarker Name'),
+          ),
+          TextFormField(
+            controller: _remarkDescriController,
+            decoration: InputDecoration(labelText: 'Remark Distribution'),
+          ),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: _uploadData,
+            child: Text('Upload Data'),
+          ),
+        ],
       ),
     );
   }
 }
 
 class Remark {
-  String remarkName;
-  String remarkDescription;
-  String remarkDate;
-  DateTime timestamp;
+  final String remarkName;
+  final String remarkDescription;
+  final String remarkDate; // human-readable formatted date string
 
-  Remark({required this.remarkName, required this.remarkDescription, required this.remarkDate, required this.timestamp});
+  Remark({
+    required this.remarkName,
+    required this.remarkDescription,
+    required this.remarkDate,
+  });
 
-// Method to upload team member data to Firestore
   Future<void> uploadToFirestore() async {
-    try {
-      // Reference to Firestore 'remarkData' collection
-      CollectionReference services = FirebaseFirestore.instance.collection('remarkData');
+    CollectionReference remarksCollection =
+        FirebaseFirestore.instance.collection('remarkData');
 
-      // Prepare data to upload (convert Remark object to a map)
-      Map<String, dynamic> teamData = {
-        "remarkName": remarkName,
-        "remarkDescription": remarkDescription,
-        "remarkDate": remarkDate, // This is a human-readable format
-        "timestamp": timestamp, // This is a proper timestamp for easy sorting
-      };
+    Map<String, dynamic> data = {
+      "remarkName": remarkName,
+      "remarkDescription": remarkDescription,
+      "remarkDate": remarkDate, // just a formatted string
+    };
 
-      // Perform the upload
-      var docRef = await services.add(teamData);
-      String remarkId = docRef.id;
-
-      print("Data uploaded successfully with remarkId: $remarkId");
-
-    } catch (e) {
-      // Handle any errors gracefully
-      print("Error uploading data: $e");
-
-    }
+    await remarksCollection.add(data);
   }
 }
