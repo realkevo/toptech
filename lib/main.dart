@@ -21,8 +21,8 @@ void main() async {
   runApp(const MaterialApp(
     debugShowCheckedModeBanner: false,
     home:
-        Mainuploadclass(),
-   // HomeSplash(),
+        //Mainuploadclass(),
+    HomeSplash(),
   ));
 }
 

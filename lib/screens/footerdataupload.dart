@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:convert'; // For base64 encoding
+import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'dart:typed_data'; // For image byte manipulation
+import 'dart:typed_data';
 
 class FooterUploadData {
   String githubIcon;
   String xIcon;
   String redditIcon;
   String facebookIcon;
-  //commit this
-//with token
-  // partners
+
+  // Partners
   String partnerOneIcon;
   String partnerTwoIcon;
   String partnerThreeIcon;
@@ -19,7 +18,10 @@ class FooterUploadData {
   // Copyright
   String copyRightIcon;
 
-  // Constructor
+  // Addresses
+  String poBoxAddress;
+  String streetAddress;
+
   FooterUploadData({
     required this.githubIcon,
     required this.xIcon,
@@ -29,16 +31,15 @@ class FooterUploadData {
     required this.partnerTwoIcon,
     required this.partnerThreeIcon,
     required this.copyRightIcon,
+    required this.poBoxAddress,
+    required this.streetAddress,
   });
 
-  // Method to upload data to Firestore
   Future<void> uploadFooterData() async {
     try {
-      // Create a reference to the Firestore collection
       CollectionReference footerDataCollection =
       FirebaseFirestore.instance.collection('footerData');
 
-      // Set the data
       await footerDataCollection.add({
         'githubIcon': githubIcon,
         'xIcon': xIcon,
@@ -48,6 +49,8 @@ class FooterUploadData {
         'partnerTwoIcon': partnerTwoIcon,
         'partnerThreeIcon': partnerThreeIcon,
         'copyRightIcon': copyRightIcon,
+        'poBoxAddress': poBoxAddress,
+        'streetAddress': streetAddress,
       });
 
       print("Footer data uploaded successfully!");
@@ -66,6 +69,7 @@ class UploadFooterData extends StatefulWidget {
 
 class _UploadFooterDataState extends State<UploadFooterData> {
   final ImagePicker _picker = ImagePicker();
+
   String? _githubIconBase64;
   String? _xIconBase64;
   String? _redditIconBase64;
@@ -75,160 +79,135 @@ class _UploadFooterDataState extends State<UploadFooterData> {
   String? _partnerThreeIconBase64;
   String? _copyRightIconBase64;
 
-  // Method to pick and convert image to base64
+  final TextEditingController _poBoxController = TextEditingController();
+  final TextEditingController _streetAddressController = TextEditingController();
+
   Future<String> _pickImageAndConvertToBase64() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
-      // Convert to bytes
       final bytes = await image.readAsBytes();
-      // Convert bytes to Base64
       return base64Encode(Uint8List.fromList(bytes));
     }
-    return ''; // Return an empty string if no image selected
+    return '';
   }
 
-  // UI for selecting images
+  @override
+  void dispose() {
+    _poBoxController.dispose();
+    _streetAddressController.dispose();
+    super.dispose();
+  }
+
+  Widget _buildImagePickerTile(String title, Function(String) onSelected) {
+    return ListTile(
+      title: Text(title),
+      trailing: const Icon(Icons.add_a_photo),
+      onTap: () async {
+        String base64 = await _pickImageAndConvertToBase64();
+        onSelected(base64);
+        setState(() {});
+      },
+    );
+  }
+
+  Widget _displayImage(String? base64) {
+    return (base64 == null || base64.isEmpty)
+        ? const Text("No image selected")
+        : Image.memory(base64Decode(base64));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return
-      SizedBox(
-        height: 500,
-        width: 400,
-        child: Padding(
-          padding: const EdgeInsets.all(3.0),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Text("Upload Footer Data", style:
-                  TextStyle(
-                    fontSize: 20,
-                  ),),
-                // Github Icon Picker
-                ListTile(
-                  title: Text('Select Github Icon'),
-                  trailing: Icon(Icons.add_a_photo),
-                  onTap: () async {
-                    _githubIconBase64 = await _pickImageAndConvertToBase64();
-                    setState(() {});
-                  },
-                ),
-                _githubIconBase64 == null
-                    ? Text("No image selected")
-                    : Image.memory(base64Decode(_githubIconBase64!)),
+    return SizedBox(
+      height: 800,
+      width: 400,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              const Text(
+                "Upload Footer Data",
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              ),
 
-                // X Icon Picker
-                ListTile(
-                  title: Text('Select X Icon'),
-                  trailing: Icon(Icons.add_a_photo),
-                  onTap: () async {
-                    _xIconBase64 = await _pickImageAndConvertToBase64();
-                    setState(() {});
-                  },
+              const SizedBox(height: 15),
+              TextField(
+                controller: _poBoxController,
+                decoration: const InputDecoration(
+                  labelText: "P.O Box Address",
+                  border: OutlineInputBorder(),
                 ),
-                _xIconBase64 == null
-                    ? Text("No image selected")
-                    : Image.memory(base64Decode(_xIconBase64!)),
-
-                // Reddit Icon Picker
-                ListTile(
-                  title: Text('Select Reddit Icon'),
-                  trailing: Icon(Icons.add_a_photo),
-                  onTap: () async {
-                    _redditIconBase64 = await _pickImageAndConvertToBase64();
-                    setState(() {});
-                  },
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: _streetAddressController,
+                decoration: const InputDecoration(
+                  labelText: "Street Address",
+                  border: OutlineInputBorder(),
                 ),
-                _redditIconBase64 == null
-                    ? Text("No image selected")
-                    : Image.memory(base64Decode(_redditIconBase64!)),
+              ),
+              const SizedBox(height: 20),
 
-                // Facebook Icon Picker
-                ListTile(
-                  title: Text('Select Facebook Icon'),
-                  trailing: Icon(Icons.add_a_photo),
-                  onTap: () async {
-                    _facebookIconBase64 = await _pickImageAndConvertToBase64();
-                    setState(() {});
-                  },
-                ),
-                _facebookIconBase64 == null
-                    ? Text("No image selected")
-                    : Image.memory(base64Decode(_facebookIconBase64!)),
+              _buildImagePickerTile('Select Github Icon', (value) => _githubIconBase64 = value),
+              _displayImage(_githubIconBase64),
 
-                // Partner One Icon Picker
-                ListTile(
-                  title: Text('Select Partner One Icon'),
-                  trailing: Icon(Icons.add_a_photo),
-                  onTap: () async {
-                    _partnerOneIconBase64 = await _pickImageAndConvertToBase64();
-                    setState(() {});
-                  },
-                ),
-                _partnerOneIconBase64 == null
-                    ? Text("No image selected")
-                    : Image.memory(base64Decode(_partnerOneIconBase64!)),
+              _buildImagePickerTile('Select X Icon', (value) => _xIconBase64 = value),
+              _displayImage(_xIconBase64),
 
-                // Partner Two Icon Picker
-                ListTile(
-                  title: Text('Select Partner Two Icon'),
-                  trailing: Icon(Icons.add_a_photo),
-                  onTap: () async {
-                    _partnerTwoIconBase64 = await _pickImageAndConvertToBase64();
-                    setState(() {});
-                  },
-                ),
-                _partnerTwoIconBase64 == null
-                    ? Text("No image selected")
-                    : Image.memory(base64Decode(_partnerTwoIconBase64!)),
+              _buildImagePickerTile('Select Reddit Icon', (value) => _redditIconBase64 = value),
+              _displayImage(_redditIconBase64),
 
-                // Partner Three Icon Picker
-                ListTile(
-                  title: Text('Select Partner Three Icon'),
-                  trailing: Icon(Icons.add_a_photo),
-                  onTap: () async {
-                    _partnerThreeIconBase64 = await _pickImageAndConvertToBase64();
-                    setState(() {});
-                  },
-                ),
-                _partnerThreeIconBase64 == null
-                    ? Text("No image selected")
-                    : Image.memory(base64Decode(_partnerThreeIconBase64!)),
+              _buildImagePickerTile('Select Facebook Icon', (value) => _facebookIconBase64 = value),
+              _displayImage(_facebookIconBase64),
 
-                // Copyright Icon Picker
-                ListTile(
-                  title: Text('Select Copyright Icon'),
-                  trailing: Icon(Icons.add_a_photo),
-                  onTap: () async {
-                    _copyRightIconBase64 = await _pickImageAndConvertToBase64();
-                    setState(() {});
-                  },
-                ),
-                _copyRightIconBase64 == null
-                    ? Text("No image selected")
-                    : Image.memory(base64Decode(_copyRightIconBase64!)),
+              _buildImagePickerTile('Select Partner One Icon', (value) => _partnerOneIconBase64 = value),
+              _displayImage(_partnerOneIconBase64),
 
-                // Upload Button
-                ElevatedButton(
-                  onPressed: () {
-                    FooterUploadData footerData = FooterUploadData(
-                      githubIcon: _githubIconBase64 ?? '',
-                      xIcon: _xIconBase64 ?? '',
-                      redditIcon: _redditIconBase64 ?? '',
-                      facebookIcon: _facebookIconBase64 ?? '',
-                      partnerOneIcon: _partnerOneIconBase64 ?? '',
-                      partnerTwoIcon: _partnerTwoIconBase64 ?? '',
-                      partnerThreeIcon: _partnerThreeIconBase64 ?? '',
-                      copyRightIcon: _copyRightIconBase64 ?? '',
+              _buildImagePickerTile('Select Partner Two Icon', (value) => _partnerTwoIconBase64 = value),
+              _displayImage(_partnerTwoIconBase64),
+
+              _buildImagePickerTile('Select Partner Three Icon', (value) => _partnerThreeIconBase64 = value),
+              _displayImage(_partnerThreeIconBase64),
+
+              _buildImagePickerTile('Select Copyright Icon', (value) => _copyRightIconBase64 = value),
+              _displayImage(_copyRightIconBase64),
+
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  if (_poBoxController.text.isEmpty || _streetAddressController.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Please enter both addresses')),
                     );
-                    footerData.uploadFooterData();
-                  },
-                  child: Text("Upload Footer Data"),
-                ),
-              ],
-            ),
+                    return;
+                  }
+
+                  FooterUploadData footerData = FooterUploadData(
+                    githubIcon: _githubIconBase64 ?? '',
+                    xIcon: _xIconBase64 ?? '',
+                    redditIcon: _redditIconBase64 ?? '',
+                    facebookIcon: _facebookIconBase64 ?? '',
+                    partnerOneIcon: _partnerOneIconBase64 ?? '',
+                    partnerTwoIcon: _partnerTwoIconBase64 ?? '',
+                    partnerThreeIcon: _partnerThreeIconBase64 ?? '',
+                    copyRightIcon: _copyRightIconBase64 ?? '',
+                    poBoxAddress: _poBoxController.text,
+                    streetAddress: _streetAddressController.text,
+                  );
+
+                  footerData.uploadFooterData();
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Footer data uploaded!')),
+                  );
+                },
+                child: const Text("Upload Footer Data"),
+              ),
+            ],
           ),
         ),
-      );
+      ),
+    );
   }
 }
-

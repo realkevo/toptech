@@ -150,13 +150,13 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
                               color: Colors.white,
                             ),
                           ),
-                          Text(
+                          /*Text(
                             "Mombasa Road, Platnum Plaza flr 2",
                             style: TextStyle(
                               fontSize: heightFactor * 0.014,
                               color: Colors.white,
                             ),
-                          ),
+                          ),*/
                         ],
                       ),
                     ),
