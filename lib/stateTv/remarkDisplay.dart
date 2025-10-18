@@ -56,29 +56,29 @@ class _RemarkDisplayClassState extends State<RemarkDisplayClass> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:
-      const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 20, top: 40),
+      padding: const EdgeInsets.only(left: 8.0, right: 8.0, bottom: 20, top: 40),
       child: Column(
         children: [
-          const Text(
-            "REVIEWS",
-            style: TextStyle(
-              color: Colors.lightGreen,
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
+          // Only show "REVIEWS" title when the data is fetched and loaded
+          if (!_isLoading)
+            const Text(
+              "REVIEWS",
+              style: TextStyle(
+                color: Colors.lightGreen,
+                fontSize: 15,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
           const SizedBox(height: 20),
+
           // Show loading indicator only when data is still loading
           if (_isLoading)
             const Center(child: CircularProgressIndicator()),
+
           if (!_isLoading)
             StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance.collection('remarkData').snapshots(),
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                 // return const Center(child: CircularProgressIndicator());
-                }
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                   return const Center(child: Text('No remarks found.'));
                 }

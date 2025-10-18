@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:toptech/stateTv/teamdisplay.dart';
-
 import 'footerdisplaytv.dart';
 import 'remarkDisplay.dart';
 
@@ -99,14 +98,16 @@ class _HomepagedisplayState extends State<Homepagedisplay>
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  const Text(
-                    "SERVICES",
-                    style: TextStyle(
-                      color: Colors.lightGreen,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold,
+                  // Only show "SERVICES" title once data is fetched
+                  if (_allServices.isNotEmpty)
+                    const Text(
+                      "SERVICES",
+                      style: TextStyle(
+                        color: Colors.lightGreen,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
                   const SizedBox(height: 10),
                   AnimatedBuilder(
                     animation: _fadeController,
@@ -118,7 +119,7 @@ class _HomepagedisplayState extends State<Homepagedisplay>
                           final isHovered = _hoveredIndexes.contains(index);
 
                           return SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.4,
+                            width: MediaQuery.of(context).size.width * 0.7,
                             child: Opacity(
                               opacity: _fadeAnimation.value,
                               child: MouseRegion(
@@ -191,16 +192,18 @@ class _HomepagedisplayState extends State<Homepagedisplay>
                       );
                     },
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: ElevatedButton(
-                      onPressed: _loadMore,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.lightGreen,
+                  // Show "Load More" button only if there are services
+                  if (_allServices.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: ElevatedButton(
+                        onPressed: _loadMore,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.lightGreen,
+                        ),
+                        child: const Text('Load More'),
                       ),
-                      child: const Text('Load More'),
                     ),
-                  ),
                   const SizedBox(height: 20),
                   const RemarkDisplayClass(),
                   const SizedBox(height: 20),

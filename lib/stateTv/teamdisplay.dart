@@ -41,24 +41,17 @@ class _TeamDisplayState extends State<TeamDisplay> {
       );
     }
   }
-//first wash
+
   @override
   Widget build(BuildContext context) {
-    final double size = MediaQuery.of(context).size.width * 0.4; // fixed square size
-    final double padding = 20.0;
+
+    final double size = MediaQuery.of(context).size.width * 0.87; // fixed square size
+    final double padding = 2.0;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 50),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 30), // Reduced vertical padding
       child: Column(
         children: [
-          const Text(
-            "OUR TEAM",
-            style: TextStyle(
-              color: Colors.lightGreen,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
           StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance.collection('teamData').snapshots(),
             builder: (context, snapshot) {
@@ -66,34 +59,47 @@ class _TeamDisplayState extends State<TeamDisplay> {
                 return const Center(child: Text('No team found.'));
               }
 
+              // Data is loaded, update _teams list
               _teams = snapshot.data!.docs;
 
-              return Container(
-                width: size,
-                height: size,
-                padding: EdgeInsets.all(padding),
-                decoration: BoxDecoration(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadius.circular(12),
-                  // border removed to make square border invisible
-                ),
-                child: PageView.builder(
-                  controller: _pageController,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: _teams.length,
-                  itemBuilder: (context, index) {
-                    final member = _teams[index];
-                    final name = member['MemberName'] ?? '';
-                    final specialty = member['MemberSpecialty'] ?? '';
-                    final experience = member['MemberExperience'] ?? '';
+              // Now that the data is loaded, show the title and the content
+              return Column(
+                children: [
+                  const Text(
+                    "OUR TEAM",
+                    style: TextStyle(
+                      color: Colors.lightGreen,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Container(
+                    width: size,
+                    height: 250,
+                    padding: EdgeInsets.all(padding),
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: PageView.builder(
+                      controller: _pageController,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: _teams.length,
+                      itemBuilder: (context, index) {
+                        final member = _teams[index];
+                        final name = member['MemberName'] ?? '';
+                        final specialty = member['MemberSpecialty'] ?? '';
+                        final experience = member['MemberExperience'] ?? '';
 
-                    return _ZoomableCard(
-                      name: name,
-                      specialty: specialty,
-                      experience: experience,
-                    );
-                  },
-                ),
+                        return _ZoomableCard(
+                          name: name,
+                          specialty: specialty,
+                          experience: experience,
+                        );
+                      },
+                    ),
+                  ),
+                ],
               );
             },
           ),
