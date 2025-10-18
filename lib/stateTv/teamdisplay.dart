@@ -9,38 +9,34 @@ class TeamDisplay extends StatefulWidget {
 }
 
 class _TeamDisplayState extends State<TeamDisplay> {
-  List<DocumentSnapshot> _teams = []; // Store fetched remarks
-  final ScrollController _scrollController = ScrollController();
+  final PageController _pageController = PageController(viewportFraction: 1);
+  List<DocumentSnapshot> _teams = [];
+  int _currentPage = 0;
 
   @override
   void initState() {
     super.initState();
-    _startAutoplay();
+    _startAutoScroll();
   }
 
-  void _startAutoplay() {
-    Future.delayed(Duration(seconds: 5), () {
-      if (_teams.isNotEmpty) {
-        _scrollToNextRemark();
-        _startAutoplay(); // Restart autoplay
-      }
-    });
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
-  void _scrollToNextRemark() {
-    if (_scrollController.hasClients) {
-      double targetOffset = _scrollController.offset + 250; // Adjust this value based on your item width
+  void _startAutoScroll() async {
+    while (mounted) {
+      await Future.delayed(const Duration(seconds: 4));
+      if (_teams.isEmpty || !_pageController.hasClients) continue;
 
-      if (targetOffset >= _scrollController.position.maxScrollExtent) {
-        // If we reach the end, reset to the start
-        _scrollController.jumpTo(0);
-        targetOffset = 250; // Move to the first item in the second list
+      _currentPage++;
+      if (_currentPage >= _teams.length) {
+        _currentPage = 0;
       }
-
-      // Animate to the target offset
-      _scrollController.animateTo(
-        targetOffset,
-        duration: Duration(seconds: 6), // Duration for the scroll
+      _pageController.animateToPage(
+        _currentPage,
+        duration: const Duration(milliseconds: 800),
         curve: Curves.easeInOut,
       );
     }
@@ -48,106 +44,184 @@ class _TeamDisplayState extends State<TeamDisplay> {
 
   @override
   Widget build(BuildContext context) {
-    return
-      Padding(
-        padding: const EdgeInsets.only(left: 8.0, right: 8.0,
-            bottom: 30,
-        top: 50),
+    final double size = MediaQuery.of(context).size.width * 0.4; // fixed square size
+    final double padding = 20.0;
 
-
-        child: Column(
-          children: [
-            Text("OUR TEAM",
-              style: TextStyle(
-                color: Colors.lightGreen,
-                fontSize: 15,
-                fontWeight: FontWeight.bold,
-
-              ),),
-            StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection('teamData').
-              snapshots(),
-              builder: (context, snapshot) {
-               /* if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                }*/
-
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return Center(child: Text('No team  found.'));
-                }
-
-                // Store the fetched remarks
-                _teams = snapshot.data!.docs;
-
-                // Create a duplicated list for seamless scrolling
-                List<DocumentSnapshot> duplicatedRemarks = [..._teams, ..._teams];
-
-                return SingleChildScrollView(
-                  controller: _scrollController,
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    spacing: 13,
-                    children: duplicatedRemarks.map((currentMember) {
-                      var name = currentMember['MemberName'];
-                      var specialty = currentMember['MemberSpecialty'];
-                      var experience = currentMember['MemberExperience'];
-
-                      return
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(7.0),
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Color(0xFF0A0E21), // Dark blue
-                                Color(0xFF12233F), // Slightly lighter blue
-                                Color(0xFF1E3C72), // Mid blue
-                              ],
-                            ),
-
-
-                          ),
-
-                          width: 250,
-                          height: 150,
-                          // Set the width of each item
-                          child:
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child:
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-
-                              children: [
-                                Text(
-                                  name,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                SizedBox(height: 4),
-                                Text( specialty,
-                                  style: TextStyle(
-                                      color: Colors.white
-                                  ),),
-                                SizedBox(height: 4),
-                                Text(experience,
-                                  style: TextStyle(
-                                      color: Colors.white
-                                  ),),
-                              ],
-                            ),
-                          ),
-                        );
-                    }).toList(),
-                  ),
-                );
-              },
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 50),
+      child: Column(
+        children: [
+          const Text(
+            "OUR TEAM",
+            style: TextStyle(
+              color: Colors.lightGreen,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
-          ],
+          ),
+          StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance.collection('teamData').snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                return const Center(child: Text('No team found.'));
+              }
+
+              _teams = snapshot.data!.docs;
+
+              return Container(
+                width: size,
+                height: size,
+                padding: EdgeInsets.all(padding),
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(12),
+                  // border removed to make square border invisible
+                ),
+                child: PageView.builder(
+                  controller: _pageController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: _teams.length,
+                  itemBuilder: (context, index) {
+                    final member = _teams[index];
+                    final name = member['MemberName'] ?? '';
+                    final specialty = member['MemberSpecialty'] ?? '';
+                    final experience = member['MemberExperience'] ?? '';
+
+                    return _ZoomableCard(
+                      name: name,
+                      specialty: specialty,
+                      experience: experience,
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ZoomableCard extends StatefulWidget {
+  final String name;
+  final String specialty;
+  final String experience;
+
+  const _ZoomableCard({
+    Key? key,
+    required this.name,
+    required this.specialty,
+    required this.experience,
+  }) : super(key: key);
+
+  @override
+  State<_ZoomableCard> createState() => _ZoomableCardState();
+}
+
+class _ZoomableCardState extends State<_ZoomableCard>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  bool _hovering = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    _animation = Tween<double>(begin: 1.0, end: 1.1).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  void _onEnter(bool hover) {
+    setState(() {
+      _hovering = hover;
+      if (hover) {
+        _controller.forward();
+      } else {
+        _controller.reverse();
+      }
+    });
+  }
+
+  void _onTapDown(_) {
+    _controller.forward();
+  }
+
+  void _onTapUp(_) {
+    _controller.reverse();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => _onEnter(true),
+      onExit: (_) => _onEnter(false),
+      child: GestureDetector(
+        onTapDown: _onTapDown,
+        onTapUp: _onTapUp,
+        onTapCancel: () => _controller.reverse(),
+        child: AnimatedBuilder(
+          animation: _animation,
+          builder: (context, child) {
+            return Transform.scale(
+              scale: _animation.value,
+              child: child,
+            );
+          },
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    widget.name,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    widget.specialty,
+                    style: const TextStyle(
+                      color: Colors.white70,
+                      fontSize: 18,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    widget.experience,
+                    style: const TextStyle(
+                      color: Colors.white60,
+                      fontSize: 16,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
-      );
+      ),
+    );
   }
 }

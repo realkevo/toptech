@@ -1,5 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+/*import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'footerdisplaytv.dart';
+import 'remarkDisplay.dart';
 
 class ServiceDisplayClass extends StatefulWidget {
   const ServiceDisplayClass({super.key});
@@ -8,104 +10,130 @@ class ServiceDisplayClass extends StatefulWidget {
   _ServiceDisplayClassState createState() => _ServiceDisplayClassState();
 }
 
-class _ServiceDisplayClassState extends State<ServiceDisplayClass> {
+class _ServiceDisplayClassState extends State<ServiceDisplayClass>
+    with TickerProviderStateMixin {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final ScrollController _scrollController = ScrollController();
+  List<Map<String, dynamic>> _allServices = [];
+  int _visibleCount = 3;
 
-  Stream<List<Map<String, dynamic>>> fetchServices() {
-    return _firestore.collection('servicesData').snapshots().map(
-          (snapshot) => snapshot.docs
-          .map((doc) => doc.data())
-          .toList(),
+  late AnimationController _fadeController;
+  late Animation<double> _fadeAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _fadeController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
     );
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(_fadeController);
+
+    _fetchServices();
+  }
+
+  Future<void> _fetchServices() async {
+    final snapshot = await _firestore.collection('servicesData').get();
+    setState(() {
+      _allServices = snapshot.docs.map((doc) => doc.data()).toList();
+    });
+    _fadeController.forward();
+  }
+
+  void _loadMore() async {
+    if (_visibleCount >= _allServices.length) return;
+    await _fadeController.reverse();
+    setState(() {
+      _visibleCount += 3;
+    });
+    await _fadeController.forward();
+  }
+
+  @override
+  void dispose() {
+    _fadeController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.sizeOf(context).height * 0.7,
-      alignment: Alignment.center,
-      child: StreamBuilder<List<Map<String, dynamic>>>(
-        stream: fetchServices(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No services available'));
-          }
+    final List<Map<String, dynamic>> visibleServices =
+    _allServices.take(_visibleCount).toList();
 
-          var services = snapshot.data!;
-
-          return Container(
-            width: MediaQuery.sizeOf(context).width * 0.9,
-            padding: EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: Colors.transparent,
-              // Border removed here
-              borderRadius: BorderRadius.circular(12),
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  Color(0xFF0A0E21),
-                  Color(0xFF1E3C72),
-                ],
-              ),
-            ),
-            child: ListView.builder(
-              controller: _scrollController,
-              physics: BouncingScrollPhysics(),
-              itemCount: services.length,
-              itemBuilder: (context, index) {
-                var serviceData = services[index];
-
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: Container(
-                    padding: EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      border: Border.all(
-                        color: Colors.lightGreenAccent,
-                        width: 1.5,
+    return Column(
+      children: [
+        AnimatedBuilder(
+          animation: _fadeController,
+          builder: (context, child) {
+            return Column(
+              children: visibleServices
+                  .map(
+                    (service) => Opacity(
+                  opacity: _fadeAnimation.value,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        gradient: const LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            Color(0xFF0A0E21),
+                            Color(0xFF1E3C72),
+                          ],
+                        ),
                       ),
-                      borderRadius: BorderRadius.circular(10),
-                      gradient: LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          Color(0xFF0A0E21),
-                          Color(0xFF1E3C72),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            service['serviceTitle'] ?? 'No Title',
+                            style: const TextStyle(
+                              color: Colors.lightGreen,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            service['serviceDescription'] ?? 'No Description',
+                            style: const TextStyle(color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
                         ],
                       ),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          serviceData['serviceTitle'] ?? 'No Title',
-                          style: TextStyle(
-                            color: Colors.lightGreen,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          serviceData['serviceDescription'] ?? 'No Description',
-                          style: TextStyle(color: Colors.white),
-                          textAlign: TextAlign.center,
-                        ),
-                      ],
-                    ),
                   ),
-                );
-              },
+                ),
+              )
+                  .toList(),
+            );
+          },
+        ),
+
+        const SizedBox(height: 10),
+
+        if (_visibleCount < _allServices.length)
+          ElevatedButton(
+            onPressed: _loadMore,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.lightGreen,
             ),
-          );
-        },
-      ),
+            child: const Text('Load More'),
+          ),
+
+        const SizedBox(height: 20),
+
+        // Keeping RemarkDisplay and Footer isolated
+        const RemarkDisplayClass(),
+
+        const SizedBox(height: 20),
+
+        // Memoize or make footer constant if possible
+        const FooterDisplayTv(),
+      ],
     );
   }
 }
+*/

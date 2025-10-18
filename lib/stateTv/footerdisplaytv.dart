@@ -67,107 +67,90 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
     double heightFactor = MediaQuery.of(context).size.height;
     double widthFactor = MediaQuery.of(context).size.width;
 
-    return Container(
-      width: widthFactor,
-      padding: EdgeInsets.symmetric(
-        horizontal: widthFactor * 0.05,
-        vertical: heightFactor * 0.012,
-      ),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Color(0xFF0A0E21),
-            Color(0xFF12233F),
-            Color(0xFF1E3C72),
-          ],
-        ),
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(7.0),
-          topRight: Radius.circular(7.0),
-        ),
-      ),
-      child: FutureBuilder<Map<String, String>>(
-        future: fetchFooterData(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Center(child: Text("Error loading data"));
-          }
+    return FutureBuilder<Map<String, String>>(
+      future: fetchFooterData(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return const Center(child: Text("Error loading data"));
+        }
 
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text("No data available"));
-          }
+        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Center(child: Text("No data available"));
+        }
 
-          var footerData = snapshot.data!;
+        var footerData = snapshot.data!;
 
-          return Padding(
-            padding: const EdgeInsets.all(7.0),
-            child: Column(
-              children: [
-                // Social Media Links
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      flex: 2,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(
-                              "Follow us",
-                              style: TextStyle(
-                                fontSize: heightFactor * 0.014,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Divider(
+              color: Colors.grey.shade700,
+              thickness: 1,
+              indent: widthFactor * 0.05,
+              endIndent: widthFactor * 0.05,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: widthFactor * 0.05,
+                vertical: heightFactor * 0.012,
+              ),
+              child: Column(
+                children: [
+                  // Social Media Links, Addresses, and Partners Row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Flexible(
+                        flex: 2,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                "Follow us",
+                                style: TextStyle(
+                                  fontSize: heightFactor * 0.014,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
-                          ),
-                          _buildSocialLink(footerData['githubIcon'], 'GitHub', 'https://github.com/realkevo'),
-                          _buildSocialLink(footerData['xIcon'], 'X', 'https://twitter.com'),
-                          _buildSocialLink(footerData['redditIcon'], 'Reddit', 'https://reddit.com'),
-                          _buildSocialLink(footerData['facebookIcon'], 'LinkedIn', 'https://linkedin.com'),
-                        ],
-                      ),
-                    ),
-
-                    // Address Section
-                    Flexible(
-                      flex: 3,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            footerData['poBoxAddress'] ?? 'P.O Box Not Available',
-                            style: TextStyle(
-                              fontSize: heightFactor * 0.014,
-                              color: Colors.white,
-                            ),
-                          ),
-                          Text(
-                            footerData['streetAddress'] ?? 'Street Address Not Available',
-                            style: TextStyle(
-                              fontSize: heightFactor * 0.014,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    // Partners Section
-                    Flexible(
-                      flex: 2,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(7.0),
-                            topRight: Radius.circular(7.0),
-                          ),
-                          color: Colors.deepOrange,
+                            _buildSocialLink(footerData['githubIcon'], 'GitHub', 'https://github.com/realkevo'),
+                            _buildSocialLink(footerData['xIcon'], 'X', 'https://twitter.com'),
+                            _buildSocialLink(footerData['redditIcon'], 'Reddit', 'https://reddit.com'),
+                            _buildSocialLink(footerData['facebookIcon'], 'LinkedIn', 'https://linkedin.com'),
+                          ],
                         ),
+                      ),
+
+                      Flexible(
+                        flex: 3,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              footerData['poBoxAddress'] ?? 'P.O Box Not Available',
+                              style: TextStyle(
+                                fontSize: heightFactor * 0.014,
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              footerData['streetAddress'] ?? 'Street Address Not Available',
+                              style: TextStyle(
+                                fontSize: heightFactor * 0.014,
+                                color: Colors.white,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      Flexible(
+                        flex: 2,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -191,47 +174,43 @@ class _FooterDisplayTvState extends State<FooterDisplayTv> {
                           ],
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
 
-                // Copyright Section
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    footerData['copyRightIcon'] != null
-                        ? Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 5),
-                      height: 15,
-                      width: 15,
-                      child: _decodeBase64ToImage(footerData['copyRightIcon']!),
-                    )
-                        : const SizedBox.shrink(),
-                    const SizedBox(width: 5),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const Mainuploadclass()),
-                        );
-                      },
-                      child: Text(
-                        "© 2025 Your Company. All Rights Reserved.",
-                        style: TextStyle(fontSize: heightFactor * 0.014, color: Colors.white),
+                  const SizedBox(height: 10),
+
+                  // Copyright Row with some spacing
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (footerData['copyRightIcon'] != null)
+                        Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 5),
+                          height: 15,
+                          width: 15,
+                          child: _decodeBase64ToImage(footerData['copyRightIcon']!),
+                        ),
+                      const SizedBox(width: 5),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const Mainuploadclass()),
+                          );
+                        },
+                        child: Text(
+                          "© 2025 Your Company. All Rights Reserved.",
+                          style: TextStyle(fontSize: heightFactor * 0.014, color: Colors.white),
+                        ),
                       ),
-                    ),
-
-                    /*  Text(
-                      "© 2025 Your Company. All Rights Reserved.",
-                      style: TextStyle(fontSize: heightFactor * 0.014, color: Colors.white),
-                    ),*/
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
-          );
-        },
-      ),
+          ],
+        );
+      },
     );
   }
 

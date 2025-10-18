@@ -1,29 +1,20 @@
 import 'dart:convert';
-
-import 'package:another_flutter_splash_screen/another_flutter_splash_screen.dart';
 import 'package:anydrawer/anydrawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:toptech/screens/mainuploadclass.dart';
-import 'package:toptech/stateTv/desktophomepagedisplay.dart';
-
+import 'package:toptech/stateTv/homepage_displayTv.dart';
 import 'firebase_options.dart';
+// To re-enable the splash screen, you would import 'splash_screen.dart'
+// and change runApp to: runApp(const MaterialApp(home: SplashScreen()));
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-    demoProjectId: "toptech-1dc04",
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  runApp(const MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home:
-        //Mainuploadclass(),
-    HomeSplash(),
-  ));
+  runApp(const MyApp()); // Runs the main application directly
 }
 
 class WelcomeDrawerDataUpload {
@@ -57,91 +48,6 @@ class WelcomeDrawerDataUpload {
       drawerContacts: map['drawerContacts'],
       drawerCatalogue: map['drawerCatalogue'],
       drawerFaqs: map['drawerFaqs'],
-    );
-  }
-}
-
-class HomeSplash extends StatefulWidget {
-  const HomeSplash({super.key});
-
-  @override
-  State<HomeSplash> createState() => _HomeSplashState();
-}
-
-class _HomeSplashState extends State<HomeSplash> {
-  WelcomeDrawerDataUpload? _data;
-  bool _hasConnection = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadData();
-  }
-
-  Future<void> _loadData() async {
-    final connectivityResult = await Connectivity().checkConnectivity();
-    final isConnected = connectivityResult != ConnectivityResult.none;
-
-    if (!isConnected) {
-      setState(() => _hasConnection = false);
-      return;
-    }
-
-    try {
-      final snapshot = await FirebaseFirestore.instance
-          .collection('welcome_drawer_data')
-          .orderBy('welcomeMessage', descending: true)
-          .limit(1)
-          .get();
-
-      if (snapshot.docs.isNotEmpty) {
-        setState(() {
-          _data =
-              WelcomeDrawerDataUpload.fromFirestore(snapshot.docs.first.data());
-        });
-      }
-    } catch (e) {
-      // Optionally log error or ignore silently
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FlutterSplashScreen(
-      duration: const Duration(seconds: 4),
-      nextScreen: const MyApp(),
-      backgroundColor: Colors.white,
-      splashScreenBody: _buildSplashContent(),
-    );
-  }
-
-  Widget _buildSplashContent() {
-    if (!_hasConnection) {
-      return const Center(
-        child: Text(
-          "You're offline",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-      );
-    }
-
-    if (_data == null) {
-      return const SizedBox(); // No loading UI, keep it blank
-    }
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        if (_data!.welcomeImageBase64 != null)
-          Image.memory(base64Decode(_data!.welcomeImageBase64!), height: 200),
-        const SizedBox(height: 20),
-        if (_data!.welcomeMessage != null)
-          Text(
-            _data!.welcomeMessage!,
-            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.center,
-          ),
-      ],
     );
   }
 }
@@ -277,9 +183,8 @@ class DrawerContent extends StatelessWidget {
     return FutureBuilder<WelcomeDrawerDataUpload?>(
       future: _fetchData(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done ||
-            !snapshot.hasData) {
-          return const SizedBox(); // Silently ignore loading here too
+        if (snapshot.connectionState != ConnectionState.done || !snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator(color: Colors.white));
         }
 
         final data = snapshot.data!;
@@ -301,16 +206,11 @@ class DrawerContent extends StatelessWidget {
                   child: Image.memory(base64Decode(data.drawerBannerBase64!),
                       fit: BoxFit.cover),
                 ),
-              if (data.drawerAboutUs != null)
-                _drawerItem('About Us', data.drawerAboutUs!),
-              if (data.drawerService != null)
-                _drawerItem('Services', data.drawerService!),
-              if (data.drawerContacts != null)
-                _drawerItem('Contacts', data.drawerContacts!),
-              if (data.drawerCatalogue != null)
-                _drawerItem('Catalogue', data.drawerCatalogue!),
-              if (data.drawerFaqs != null)
-                _drawerItem('FAQs', data.drawerFaqs!),
+              if (data.drawerAboutUs != null) _drawerItem('About Us', data.drawerAboutUs!),
+              if (data.drawerService != null) _drawerItem('Services', data.drawerService!),
+              if (data.drawerContacts != null) _drawerItem('Contacts', data.drawerContacts!),
+              if (data.drawerCatalogue != null) _drawerItem('Catalogue', data.drawerCatalogue!),
+              if (data.drawerFaqs != null) _drawerItem('FAQs', data.drawerFaqs!),
             ],
           ),
         );
