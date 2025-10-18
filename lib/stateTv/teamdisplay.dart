@@ -41,7 +41,7 @@ class _TeamDisplayState extends State<TeamDisplay> {
       );
     }
   }
-
+//first wash
   @override
   Widget build(BuildContext context) {
     final double size = MediaQuery.of(context).size.width * 0.4; // fixed square size
