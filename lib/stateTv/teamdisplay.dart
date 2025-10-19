@@ -56,7 +56,7 @@ class _TeamDisplayState extends State<TeamDisplay> {
             stream: FirebaseFirestore.instance.collection('teamData').snapshots(),
             builder: (context, snapshot) {
               if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                return const Center(child: Text('No team found.'));
+                return const Center(child: Text(''));
               }
 
               // Data is loaded, update _teams list

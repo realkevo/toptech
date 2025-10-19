@@ -4,19 +4,25 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:toptech/stateTv/homepage_displayTv.dart';
+import 'package:toptech/stateTv/privacy_policyTv.dart';
 import 'firebase_options.dart';
-// To re-enable the splash screen, you would import 'splash_screen.dart'
-// and change runApp to: runApp(const MaterialApp(home: SplashScreen()));
+
+// --- ROUTE DEFINITIONS ---
+class AppPaths {
+  static const String home = '/';
+  static const String privacy = '/privacy';
+}
+// -------------------------
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  runApp(const MyApp()); // Runs the main application directly
+  runApp(const MyApp());
 }
 
+// Data model for Firestore data.
 class WelcomeDrawerDataUpload {
   String? welcomeImageBase64;
   String? welcomeMessage;
@@ -52,6 +58,7 @@ class WelcomeDrawerDataUpload {
   }
 }
 
+// The root of your application, configured to use the custom router.
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -64,54 +71,93 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      routerDelegate: AnyDrawerRouterDelegate(
-        builder: (context) => const MyHomePage(title: 'Techforce'),
-      ),
+      routerDelegate: AppRouterDelegate(),
+      routeInformationParser: AppRouteInformationParser(),
     );
   }
 }
 
-class AnyDrawerRouterDelegate extends RouterDelegate<Uri>
-    with ChangeNotifier, PopNavigatorRouterDelegateMixin<Uri> {
-  AnyDrawerRouterDelegate({required this.builder});
-  final WidgetBuilder builder;
+// --- PWA ROUTING LOGIC ---
+
+class AppRouteInformationParser extends RouteInformationParser<String> {
+  @override
+  Future<String> parseRouteInformation(RouteInformation routeInformation) async {
+    return routeInformation.location ?? AppPaths.home;
+  }
+
+  @override
+  RouteInformation? restoreRouteInformation(String configuration) {
+    return RouteInformation(location: configuration);
+  }
+}
+
+class AppRouterDelegate extends RouterDelegate<String>
+    with ChangeNotifier, PopNavigatorRouterDelegateMixin<String> {
+  String _currentPath = AppPaths.home;
+
+  @override
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  @override
+  String? get currentConfiguration => _currentPath;
+
+  @override
+  Future<void> setNewRoutePath(String configuration) async {
+    _currentPath = configuration;
+    notifyListeners();
+  }
 
   @override
   Widget build(BuildContext context) {
+    Widget currentPage;
+    if (_currentPath == AppPaths.privacy) {
+      currentPage = const PrivacyAndPolicy();
+    } else {
+      currentPage = const Homepagedisplay();
+    }
+
     return Navigator(
       key: navigatorKey,
       pages: [
         MaterialPage(
-          child: builder(context),
+          key: ValueKey(_currentPath),
+          child: AppShell(
+            child: currentPage,
+          ),
         ),
       ],
       onPopPage: (route, result) {
-        if (!route.didPop(result)) return false;
-        notifyListeners();
-        return true;
+        if (_currentPath != AppPaths.home) {
+          setNewRoutePath(AppPaths.home);
+          return true;
+        }
+        return false;
       },
     );
   }
+}
+// ---------------------------
 
+/// AppShell provides the consistent background, AppBar, and Material context
+/// for all pages within the app.
+class AppShell extends StatefulWidget {
+  final Widget child;
+  const AppShell({super.key, required this.child});
   @override
-  GlobalKey<NavigatorState> get navigatorKey => GlobalKey<NavigatorState>();
-  @override
-  Uri? get currentConfiguration => null;
-  @override
-  Future<void> setNewRoutePath(Uri configuration) async {}
+  State<AppShell> createState() => _AppShellState();
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  DrawerConfig config = const DrawerConfig(side: DrawerSide.left);
+class _AppShellState extends State<AppShell> {
   final AnyDrawerController controller = AnyDrawerController();
+
+  void _showDrawer() {
+    showDrawer(
+      context,
+      builder: (context) => DrawerContent(controller: controller),
+      config: const DrawerConfig(side: DrawerSide.left),
+      controller: controller,
+    );
+  }
 
   @override
   void dispose() {
@@ -119,51 +165,43 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-  void _showDrawer() {
-    showDrawer(
-      context,
-      builder: (context) => const DrawerContent(),
-      config: config,
-      onClose: () => debugPrint('Drawer closed'),
-      onOpen: () => debugPrint('Drawer opened'),
-      controller: controller,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(50),
-        child: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF0A0E21), Color(0xFF0A0E21), Color(0xFF1E3C72)],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.menu, color: Colors.white),
-                onPressed: _showDrawer,
-              ),
-            ],
-          ),
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xFF0A0E21),
+            Color(0xFF12233F),
+            Color(0xFF1E3C72),
+          ],
         ),
       ),
-      body: const Center(
-        child: Homepagedisplay(),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(50),
+          child: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            leading: IconButton(
+              icon: const Icon(Icons.menu, color: Colors.white),
+              onPressed: _showDrawer,
+            ),
+          ),
+        ),
+        body: widget.child,
       ),
     );
   }
 }
 
+// The content of your slide-out drawer.
 class DrawerContent extends StatelessWidget {
-  const DrawerContent({super.key});
+  final AnyDrawerController controller;
+  const DrawerContent({super.key, required this.controller});
 
   Future<WelcomeDrawerDataUpload?> _fetchData() async {
     final snapshot = await FirebaseFirestore.instance
@@ -184,7 +222,7 @@ class DrawerContent extends StatelessWidget {
       future: _fetchData(),
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done || !snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator(color: Colors.white));
+          return const Center(child: CircularProgressIndicator());
         }
 
         final data = snapshot.data!;
@@ -206,11 +244,17 @@ class DrawerContent extends StatelessWidget {
                   child: Image.memory(base64Decode(data.drawerBannerBase64!),
                       fit: BoxFit.cover),
                 ),
-              if (data.drawerAboutUs != null) _drawerItem('About Us', data.drawerAboutUs!),
-              if (data.drawerService != null) _drawerItem('Services', data.drawerService!),
-              if (data.drawerContacts != null) _drawerItem('Contacts', data.drawerContacts!),
-              if (data.drawerCatalogue != null) _drawerItem('Catalogue', data.drawerCatalogue!),
-              if (data.drawerFaqs != null) _drawerItem('FAQs', data.drawerFaqs!),
+              if (data.drawerAboutUs != null)
+                _drawerItem(context, 'About Us', data.drawerAboutUs!),
+              if (data.drawerService != null)
+                _drawerItem(context, 'Services', data.drawerService!),
+              if (data.drawerContacts != null)
+                _drawerItem(context, 'Contacts', data.drawerContacts!),
+              if (data.drawerCatalogue != null)
+                _drawerItem(context, 'Catalogue', data.drawerCatalogue!),
+              if (data.drawerFaqs != null) _drawerItem(context, 'FAQs', data.drawerFaqs!),
+              const Divider(color: Colors.white30, height: 20),
+              _privacyPolicyLink(context),
             ],
           ),
         );
@@ -218,7 +262,7 @@ class DrawerContent extends StatelessWidget {
     );
   }
 
-  Widget _drawerItem(String title, String content) {
+  Widget _drawerItem(BuildContext context, String title, String content) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0),
       child: Column(
@@ -234,6 +278,37 @@ class DrawerContent extends StatelessWidget {
               style: const TextStyle(fontSize: 14, color: Colors.white70)),
           const Divider(color: Colors.white30),
         ],
+      ),
+    );
+  }
+
+  // Click handler that closes the drawer and navigates correctly.
+  Widget _privacyPolicyLink(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        // Use the controller to close the drawer.
+        controller.close();
+
+        // Find the router delegate and tell it to navigate to the new path.
+        (Router.of(context).routerDelegate as AppRouterDelegate)
+            .setNewRoutePath(AppPaths.privacy);
+      },
+      child: const Padding(
+        padding: EdgeInsets.symmetric(vertical: 12.0),
+        child: Row(
+          children: [
+            Icon(Icons.shield_outlined, color: Colors.white),
+            SizedBox(width: 12),
+            Text(
+              'Privacy Policy',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

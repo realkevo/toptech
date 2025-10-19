@@ -72,20 +72,20 @@ class _RemarkDisplayClassState extends State<RemarkDisplayClass> {
           const SizedBox(height: 20),
 
           // Show loading indicator only when data is still loading
-          if (_isLoading)
-            const Center(child: CircularProgressIndicator()),
+
 
           if (!_isLoading)
             StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance.collection('remarkData').snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return const Center(child: Text('No remarks found.'));
+                  return const Center(child: Text(''));
                 }
 
                 var currentRemark = _remarks[_currentIndex];
                 var name = currentRemark['remarkName'] ?? 'Anonymous';
-                var description = currentRemark['remarkDescription'] ?? 'No description';
+                var description = currentRemark['remarkDescription']
+                    ?? '';
                 var date = currentRemark['remarkDate'] ?? '';
 
                 return GestureDetector(
