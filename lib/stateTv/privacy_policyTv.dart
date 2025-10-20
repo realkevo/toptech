@@ -70,7 +70,7 @@ class PrivacyAndPolicy extends StatelessWidget {
             _buildListItem(
                 'Personal Data: Eye does not collect or store personal data on external servers.'),
             _buildListItem(
-                'Usage Data: The app may collect anonymous data such as device model, Android version, and crash logs to improve performance.'),
+                'Usage Data: The app may collect anonymous data such as device model, Android version, and crash logs to improve performance. All this is collected offline and handled offline. Does not leave the users device'),
             _buildListItem(
                 'Advertising Data: Eye integrates Google AdMob, which may collect advertising identifiers, IP address, and interaction data. See Google’s privacy policy for details.'),
 
@@ -87,8 +87,6 @@ class PrivacyAndPolicy extends StatelessWidget {
 
             _buildSectionHeader('4. Third-Party Services', newContext),
             _buildListItem('Google AdMob – for displaying ads.'),
-            _buildListItem('Firebase Crashlytics (if used) – for crash diagnostics.'),
-            _buildListItem('Firebase Hosting or your custom server – for update checks only (no personal data).'),
 
             _buildSectionHeader('5. User Rights', newContext),
             _buildListItem('Deny app permissions such as storage or camera at any time.'),
@@ -103,13 +101,13 @@ class PrivacyAndPolicy extends StatelessWidget {
 
             _buildSectionHeader('7. Policy Updates', newContext),
             _buildBodyText(
-              'This policy may be updated periodically. Updates will be posted within the app and on the official website. Continued use of the app indicates acceptance of the updated terms.',
+              ' Updates will be posted within the app and on the official website. Continued use of the app indicates acceptance of the updated terms.',
             ),
 
             _buildSectionHeader('8. Contact Information', newContext),
-            _buildListItem('Email: support@youremail.com'),
-            _buildListItem('Developer: Your Name or Company'),
-            _buildListItem('Website: https://yourdomain.com'),
+            _buildListItem('Email: support.toptech.com'),
+            _buildListItem('Developer: toptech'),
+            _buildListItem('Website: https://toptech-1dc04.web.app/#/privacy'),
 
             const SizedBox(height: 32),
             _buildBodyText(
